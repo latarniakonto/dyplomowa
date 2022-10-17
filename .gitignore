@@ -1,0 +1,9 @@
+venv/
+*.tmp
+*.log
+IBFF/logs/
+IBFF/static/
+node_modules
+*.sql
+*.sqlite3
+.vscode/
