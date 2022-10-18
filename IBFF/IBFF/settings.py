@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framwework.authtoken',
     'django_registration',
     'djoser',
-    'widget_tweaks'
+    'widget_tweaks',
+    'users'
 ]
 
 MIDDLEWARE = [
