@@ -1,6 +1,7 @@
 venv/
 *.tmp
 *.log
+*.pyc
 IBFF/logs/
 IBFF/static/
 node_modules
