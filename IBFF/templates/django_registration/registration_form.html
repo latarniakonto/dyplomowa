@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="container custom-container bg-white">
+        <h2 class="text-center mb-3">Create Your Account</h2>
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-group mb-3">
+                <span class="input-group-text">
+                    <i class="bi bi-person-fill"></i>
+                </span>
+                {% render_field form.username class="form-control" id="form-username" placeholder="Username" %}
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">
+                    <i class="bi bi-envelope-fill"></i>
+                </span>
+                {% render_field form.email class="form-control" id="form-email" placeholder="Email Adress" %}
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">
+                    <i class="bi bi-lock-fill"></i>
+                </span>
+                {% render_field form.password1 class="form-control" id="form-password1" placeholder="Password" %}
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">
+                    <i class="bi bi-lock-fill"></i>
+                  </span>
+                {% render_field form.password2 class="form-control" id="form-password2" placeholder="Confirm Password" %}
+              </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary mb-3">Create Account</button>
+            </div>
+            {% if form.errors %}
+                <div class="text-danger">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+          </form>
+          <div class="text-center pb-1">
+            <p>
+              Already have an account?
+              <a href="{% url 'login' %}" class="form-link">Login</a>
+            </p>
+          </div>
+    </div>
+{% endblock %}
