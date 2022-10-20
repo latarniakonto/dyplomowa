@@ -5,7 +5,7 @@ from users.models import IBFFUser
 
 class IBFFUserAdmin(UserAdmin):
     model = IBFFUser
-    list_display = ["username"]
+    list_display = ['username']
 
 
 admin.site.register(IBFFUser, IBFFUserAdmin)
