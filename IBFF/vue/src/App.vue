@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="app-main">
     <v-main>
       <router-view />
     </v-main>
@@ -19,3 +19,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style>
+  .app-main {
+    background-color: gainsboro;
+  }
+</style>
