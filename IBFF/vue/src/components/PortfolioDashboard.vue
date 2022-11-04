@@ -18,7 +18,7 @@
         role="tablist"
       >
         <li class="nav-item dashboard-tab" role="presentation">
-        <button
+          <button
             class="nav-link"
             :class="{ active: resourcesTabActive }"
             @click="resourcesTabActive = toggleTabs()"
@@ -29,12 +29,12 @@
             role="tab"
             aria-controls="resources"
             :aria-selected="resourcesTabActive"
-        >
+          >
             Resources
-        </button>
+          </button>
         </li>
         <li class="nav-item" role="presentation">
-        <button
+          <button
             class="nav-link dashboard-tab"
             :class="{ active: performanceTabActive }"
             @click="performanceTabActive = toggleTabs()"
@@ -45,10 +45,10 @@
             role="tab"
             aria-controls="performance"
             :aria-selected="performanceTabActive"
-        >
+          >
             Performance
-        </button>
-        <button
+          </button>
+          <button
             class="nav-link dashboard-tab"
             :class="{ active: otherTabActive }"
             @click="otherTabActive = toggleTabs()"
@@ -59,12 +59,12 @@
             role="tab"
             aria-controls="other"
             :aria-selected="otherTabActive"
-        >
+          >
             Other
-        </button>
+          </button>
         </li>
       </ul>
-      </div>
+    </div>
     <div class="tab-content" id="dashboard-tabs-content">
       <div
         class="tab-pane fade show"
@@ -73,6 +73,7 @@
         role="tabpanel"
         aria-labelledby="resources-tab"
       >
+        <resources-tab />
       </div>
       <div
         class="tab-pane fade show"
@@ -88,16 +89,21 @@
         id="other"
         role="tabpanel"
         aria-labelledby="other-tab"
-      >
-      </div>
+      ></div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import ResourcesTab from "./ResourcesTab.vue";
+
 export default defineComponent({
   name: "PortfolioDashboard",
+
+  components: {
+    ResourcesTab,
+  },
 
   data() {
     return {
@@ -151,6 +157,6 @@ export default defineComponent({
   padding-right: 4px;
   text-align: center;
   display: inline-flex;
-
+  
 }
 </style>

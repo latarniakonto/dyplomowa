@@ -2,7 +2,7 @@
   <v-container color="white">
     <v-row no-gutters align="start">
       <v-col cols="3">
-        <v-sheet height="450" rounded class="ma-3 pa-3">
+        <v-sheet height="470" rounded class="ma-3 pa-3">
           <portfolio-dashboard/>
         </v-sheet>
       </v-col>
