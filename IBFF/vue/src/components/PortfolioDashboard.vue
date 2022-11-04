@@ -119,76 +119,38 @@ export default defineComponent({
 </script>
 
 <style>
-button.btn-icon {
+.dashboard-nav .nav-item .nav-link.active {
   background-color: #f6f6f6;
   color: rgba(0, 0, 0, 0.87);
   border-color: #a4a4a4;
-  z-index: 3;
+  border-bottom-color: white;
 }
 
-button.btn-icon:hover {
-  background-color: #ededed;
-  color: rgba(0, 0, 0, 0.87);
-  border-color: #393939;
-  z-index: 3;
+.dashboard-nav .nav-item .nav-link {
+  /* background-color: white; */
+  color: gray;
+  border-bottom-color: #a4a4a4;
 }
 
-button.btn-icon:active:focus {
-  background-color: #ededed;
-  color: rgba(0, 0, 0, 0.87);
-  border-color: #393939;
-  z-index: 3;
-}
-
-button.btn-icon-pressed:hover {
-  background-color: #ededed;
-  color: rgba(0, 0, 0, 0.87);
-  border-color: #393939;
-  z-index: 3;
-}
-
-button.btn-icon-pressed {
-  background-color: #ededed;
-  color: rgba(0, 0, 0, 0.87);
-  border-color: #393939;
-}
-
-.input-group > button.btn-icon-pressed {
-  z-index: 3;
-}
-
-button.btn-icon-pressed:active:focus {
-  background-color: #ededed;
-  color: rgba(0, 0, 0, 0.87);
-  border-color: #393939;
-  z-index: 3;
-}
-
-input[type="number"]:disabled {
+.nav-tabs-container
+.nav-tabs
+.nav-link:hover:not(.dashboard-nav .nav-item .nav-link.active) {
   background-color: #f6f6f6;
-  color: rgba(0, 0, 0, 0.87);
-  letter-spacing: 0.15px;
-  line-height: 24px;
-  border-color: #a4a4a4;
-  -moz-appearance: textfield;
+  border-bottom-color: #a4a4a4;
 }
 
-input[type="number"]:enabled {
-  background-color: #f6f6f6;
-  color: rgba(0, 0, 0, 0.87);
-  letter-spacing: 0.15px;
-  line-height: 24px;
-  border-color: #a4a4a4;
-  -moz-appearance: textfield;
+.nav-tabs-container .nav-tabs {
+  border-bottom-color: #a4a4a4;
+  justify-content: space-between;
 }
 
-/* input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-} */
+.nav  li  button {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 4px;
+  padding-right: 4px;
+  text-align: center;
+  display: inline-flex;
 
-.form-floating > label {
-  z-index: 5;
 }
 </style>
