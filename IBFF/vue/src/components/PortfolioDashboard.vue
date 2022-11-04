@@ -9,95 +9,86 @@
       :items="[2022, 2021, 2020]"
       model-value="2022"
       class="mb-2"
+      style="height: 60px"
     ></v-select>
-    <div class="position-relative">
-      <h6>Deposit</h6>
-      <div
-        v-if="!addPressed && !substractPressed && !editPressed"
-        class="input-group mb-2"
+    <div class="nav-tabs-container">
+      <ul
+        class="nav nav-tabs mb-2 dashboard-nav"
+        id="dashboard-nav-tabs"
+        role="tablist"
       >
-        <input
-          v-model="text"
-          :disabled="true"
-          type="number"
-          class="form-control bg-main-color"
-        />
-        <button class="btn btn-outline-secondary btn-icon" @click="toggleAdd()">
-          <i class="bi bi-plus-square"></i>
-        </button>
-        <button class="btn btn-outline-secondary btn-icon" @click="toggleSubstract()">
-          <i class="bi bi-dash-square"></i>
-        </button>
-        <button class="btn btn-outline-secondary btn-icon" @click="toggleEdit()">
-          <i class="bi bi-pencil-square"></i>
-        </button>
-      </div>
-      <div v-else class="form-floating input-group mb-2">
-        <input
-          v-model="currentText"
-          :disabled="false"
-          id="input-deposit"
-          type="number"
-          class="form-control bg-main-color"
-        />
-        <label for="input-deposit">{{ text }}</label>
+        <li class="nav-item dashboard-tab" role="presentation">
         <button
-          class="btn btn-outline-secondary"
-          :class="{
-            'btn-icon': !addPressed,
-            'btn-icon-pressed': addPressed,
-          }"
-          @click="toggleAdd()"
+            class="nav-link"
+            :class="{ active: resourcesTabActive }"
+            @click="resourcesTabActive = toggleTabs()"
+            id="resources-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#resources"
+            type="button"
+            role="tab"
+            aria-controls="resources"
+            :aria-selected="resourcesTabActive"
         >
-          <i class="bi bi-plus-square"></i>
+            Resources
+        </button>
+        </li>
+        <li class="nav-item" role="presentation">
+        <button
+            class="nav-link dashboard-tab"
+            :class="{ active: performanceTabActive }"
+            @click="performanceTabActive = toggleTabs()"
+            id="performance-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#performance"
+            type="button"
+            role="tab"
+            aria-controls="performance"
+            :aria-selected="performanceTabActive"
+        >
+            Performance
         </button>
         <button
-          class="btn btn-outline-secondary"
-          :class="{
-            'btn-icon': !substractPressed,
-            'btn-icon-pressed': substractPressed,
-          }"
-          @click="toggleSubstract()"
+            class="nav-link dashboard-tab"
+            :class="{ active: otherTabActive }"
+            @click="otherTabActive = toggleTabs()"
+            id="other-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#other"
+            type="button"
+            role="tab"
+            aria-controls="other"
+            :aria-selected="otherTabActive"
         >
-          <i class="bi bi-dash-square"></i>
+            Other
         </button>
-        <button
-          class="btn btn-outline-secondary"
-          :class="{
-            'btn-icon': !editPressed,
-            'btn-icon-pressed': editPressed,
-          }"
-          @click="toggleEdit()"
-        >
-          <i class="bi bi-pencil-square"></i>
-        </button>
+        </li>
+      </ul>
       </div>
-      <h6>Cash on hand</h6>
-      <div class="input-group mb-2">
-        <input
-          :disabled="true"
-          type="number"
-          class="form-control bg-main-color"
-          value="2000"
-        />
+    <div class="tab-content" id="dashboard-tabs-content">
+      <div
+        class="tab-pane fade show"
+        :class="{ active: resourcesTabActive }"
+        id="resources"
+        role="tabpanel"
+        aria-labelledby="resources-tab"
+      >
       </div>
-      <h6>No. of transaction</h6>
-      <div class="input-group mb-2">
-        <input
-          :disabled="true"
-          type="number"
-          class="form-control bg-main-color"
-          value="9"
-        />
+      <div
+        class="tab-pane fade show"
+        :class="{ active: performanceTabActive }"
+        id="performance"
+        role="tabpanel"
+        aria-labelledby="performance-tab"
+      >
       </div>
-      <h6>Transaction cost</h6>
-      <div class="input-group mb-2">
-        <input
-          :disabled="true"
-          type="number"
-          class="form-control bg-main-color"
-          value="120"
-        />
+      <div
+        class="tab-pane fade show"
+        :class="{ active: otherTabActive }"
+        id="other"
+        role="tabpanel"
+        aria-labelledby="other-tab"
+      >
       </div>
     </div>
   </div>
@@ -110,43 +101,18 @@ export default defineComponent({
 
   data() {
     return {
-      addPressed: false as Boolean,
-      substractPressed: false as Boolean,
-      editPressed: false as Boolean,
-      text: "30000" as String,
-      currentText: "" as String,
+      resourcesTabActive: true as Boolean,
+      performanceTabActive: false as Boolean,
+      otherTabActive: false as Boolean,
     };
   },
 
   methods: {
-    toggleAdd: function () {
-      this.substractPressed = this.editPressed = false;
-      if (!this.addPressed) {
-        this.currentText = "";
-      } else {
-        this.text = String(Number(this.text) + Number(this.currentText));
-      }
-      this.addPressed = !this.addPressed;
-    },
-
-    toggleSubstract: function () {
-      this.addPressed = this.editPressed = false;
-      if (!this.substractPressed) {
-        this.currentText = "";
-      } else {
-        this.text = String(Number(this.text) - Number(this.currentText));
-      }
-      this.substractPressed = !this.substractPressed;
-    },
-
-    toggleEdit: function () {
-      this.substractPressed = this.addPressed = false;
-      if (!this.editPressed) {
-        this.currentText = "";
-      } else {
-        this.text = this.currentText === "" ? this.text : this.currentText;
-      }
-      this.editPressed = !this.editPressed;
+    toggleTabs: function (newActiveTab: Boolean): Boolean {
+      this.resourcesTabActive = false;
+      this.performanceTabActive = false;
+      this.otherTabActive = false;
+      return true;
     },
   },
 });
