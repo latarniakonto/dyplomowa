@@ -1,9 +1,9 @@
 <template>
-  <div class="position-relative">
+  <div class="resources position-relative">
     <h6>Deposit</h6>
     <div
       v-if="!addPressed && !substractPressed && !editPressed"
-      class="input-group mb-2"
+      class="form-floating input-group mb-2"
     >
       <input
         v-model="text"
@@ -215,5 +215,26 @@ input::-webkit-inner-spin-button {
 
 .form-floating > label {
   z-index: 5;
+  margin: -8px;
+}
+
+.resources .form-floating .form-control:not(:placeholder-shown):disabled {
+  height: 38px;
+  padding-top: 0.375rem;
+  padding-right: 0.75rem;
+  padding-bottom: 0.375rem;
+  padding-left: 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.resources .form-floating .form-control:not(:placeholder-shown):enabled {
+  height: 38px;
+  padding-top: 1.25rem;
+  padding-right: 0.75rem;
+  padding-bottom: 0.375rem;
+  padding-left: 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
 }
 </style>
