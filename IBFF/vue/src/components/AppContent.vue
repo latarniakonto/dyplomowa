@@ -107,6 +107,15 @@
               </tbody>
             </table>
           </div>
+          <div class="table-tools">
+            <div class="container-select">
+              <p class="text-select mt-3 mr-6 position-relative top-0">Rows per page:</p>
+              <select class="form-select form-select-md mt-1">
+                <option value="5" selected>5</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
         </v-sheet>
       </v-col>
     </v-row>
@@ -137,5 +146,41 @@ tbody tr {
    line-height: 30px;
    min-height: 30px;
    height: 30px;
+}
+
+.container-select {
+  display: inline-flex;
+}
+
+.container-select .form-select{
+  width: 40px;
+  height: 40px;
+  border-radius: 0%;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom-color: #a4a4a4;
+  cursor: pointer;
+  background-color: #f6f6f6;
+  background-position-x: 1.5rem;
+  text-indent: 7px;
+  padding-right: 0px;
+  direction: rtl;
+}
+
+.container-select .form-select:hover{  
+  background-color: #ededed;
+  border-bottom-color: #393939;
+}
+
+.container-select .form-select:focus{  
+  background-color: #ededed;
+  box-shadow: none;
+  border-color: white;
+  border-bottom-color: #393939;
+}
+
+.container-select .text-select {
+  line-height: 12px;
 }
 </style>
