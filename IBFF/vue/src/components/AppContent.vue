@@ -152,6 +152,10 @@ tbody tr {
   display: inline-flex;
 }
 
+.container-select .text-select {
+  color: grey;
+}
+
 .container-select .form-select{
   width: 40px;
   height: 40px;
@@ -161,8 +165,10 @@ tbody tr {
   border-left: none;
   border-bottom-color: #a4a4a4;
   cursor: pointer;
-  background-color: #f6f6f6;
-  background-position-x: 1.5rem;
+  background: url('https://api.iconify.design/mdi/menu-down.svg?color=%23757575&width=24&height=24') no-repeat center center / contain;
+  background-size: 50%;
+  background-color: #f6f6f6;  
+  background-position-x: 1.3rem;
   text-indent: 7px;
   padding-right: 0px;
   direction: rtl;
