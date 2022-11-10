@@ -109,11 +109,18 @@
           </div>
           <div class="table-tools">
             <div class="container-select">
-              <p class="text-select mt-3 mr-6 position-relative top-0">Rows per page:</p>
-              <select class="form-select form-select-md mt-1">
+              <p class="text-select mt-3 mr-6">Rows per page:</p>
+              <select class="form-select form-select-md mt-1 mr-6">
                 <option value="5" selected>5</option>
                 <option value="10">10</option>
               </select>
+              <p class="text-select mt-3 mr-6">1-5 of 8</p>
+              <button id="app-content" class="btn btn-outline-secondary btn-icon mr-6">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button id="app-content" class="btn btn-outline-secondary btn-icon">
+                <i class="bi bi-chevron-right"></i>
+              </button>
             </div>
           </div>
         </v-sheet>
@@ -143,9 +150,13 @@ export default defineComponent({
 
 <style>
 tbody tr {
-   line-height: 30px;
+  line-height: 30px;
    min-height: 30px;
    height: 30px;
+}
+
+.table-tools {
+  float: right;
 }
 
 .container-select {
@@ -188,5 +199,15 @@ tbody tr {
 
 .container-select .text-select {
   line-height: 12px;
+}
+
+#app-content.btn-icon {
+  background-color: white;
+  border: none;
+}
+
+#app-content.btn-icon:hover {
+  background-color: #ededed;
+  border-color: #393939;
 }
 </style>
