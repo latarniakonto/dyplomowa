@@ -12,6 +12,8 @@
     "bootstrap": "^5.2.2",
     "bootstrap-icons": "^1.9.1",
     "core-js": "^3.8.3",
+    "primeicons": "^6.0.1",
+    "primevue": "^3.18.1",
     "roboto-fontface": "*",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
