@@ -16,13 +16,13 @@
       <div class="table-data">
         <DataTable
           ref="dt"
-          :value="stocks"
+          :value="assets"
           dataKey="id"
           :paginator="true"
           :rows="5"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[5, 10]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} assets"
           :scrollable="true"
         >
           <Column
@@ -70,13 +70,47 @@
               <button type="button" class="btn btn-warning btn-sm mr-1">
                 <i class="bi bi-pencil-fill"></i>
               </button>
-              <button type="button" class="btn btn-danger btn-sm">
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                @click="confirmDeleteAsset(slotProps.data)"
+              >
                 <i class="bi bi-trash3-fill"></i>
-              </button>           
+              </button>
             </template>
           </Column>
         </DataTable>
       </div>
+    </div>
+    <div class="table-crud">
+      <Dialog
+        v-model:visible="deleteAssetDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true"
+      >
+        <div class="confirmation-content">
+          <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+          <span v-if="asset"
+            >Are you sure you want to delete <b>{{ asset.ticker }}</b
+            >?</span
+          >
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            class="p-button-text"
+            @click="deleteAssetDialog = false"
+          />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            class="p-button-text"
+            @click="deleteasset()"
+          />
+        </template>
+      </Dialog>
     </div>
   </div>
 </template>
@@ -108,7 +142,9 @@ export default defineComponent({
 
   data() {
     return {
-      stocks: [
+      deleteAssetDialog: false as Boolean,
+      asset: {} as any,
+      assets: [
         {
           ticker: "$ITEM1" as String,
           total: "93" as String,
@@ -181,17 +217,36 @@ export default defineComponent({
           gain: "70.15%" as String,
           currentWeight: "30.78%" as String,
         },
-      ] as Array<Object>,
+      ] as Array<any>,
     };
   },
 
-  methods: {},
+  methods: {
+    confirmDeleteAsset(asset: any) {
+      this.asset = asset;
+      this.deleteAssetDialog = true;
+    },
+
+    deleteasset() {
+      this.assets = this.assets.filter(
+        (val) => val.ticker !== this.asset.ticker
+      );
+      this.deleteAssetDialog = false;
+      this.asset = {};
+      this.$toast.add({
+        severity: "success",
+        summary: "Successful",
+        detail: "Asset Deleted",
+        life: 3000,
+      });
+    },
+  },
 });
 </script>
 
 <style>
 .assets-table .table-toolbar {
-  background-color: #f6f6f6;  
+  background-color: #f6f6f6;
   height: 60px;
 }
 
@@ -222,6 +277,6 @@ export default defineComponent({
 }
 
 .p-datatable .p-paginator {
-  background: #f6f6f6;;
+  background: #f6f6f6;
 }
 </style>
