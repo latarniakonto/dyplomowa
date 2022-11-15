@@ -1,62 +1,81 @@
 <template>
-  <div class="assets-table">
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Ticker</th>
-            <th scope="col">Total</th>
-            <th scope="col">Average Price</th>
-            <th scope="col">Initial Weight</th>
-            <th scope="col">Current Price</th>
-            <th scope="col">Profit/Loss</th>
-            <th scope="col">Current Weight</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(stock, idx) in stocksToShow" :key="stock.ticker">
-            <th scope="row">{{ firstStockNumber + idx }}</th>
-            <td>{{ stock.ticker }}</td>
-            <td>{{ stock.total }}</td>
-            <td>{{ stock.buyPrice }}</td>
-            <td>{{ stock.initialWeight }}</td>
-            <td>{{ stock.currentPrice }}</td>
-            <td>{{ stock.gain }}</td>
-            <td>{{ stock.currentWeight }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="table-tools">
-      <div class="container-select">
-        <p class="text-select mt-3 mr-6">Rows per page:</p>
-        <select
-          @change="refreshStocksToShow()"
-          v-model="rowsPerPage"
-          class="form-select form-select-md mt-1 mr-6"
+  <div class="assets-table mt-8">
+    <div class="card" style="">
+      <div class="table-toolbar">
+        <Toolbar class="mb-4">
+          <template #start>
+            <Button
+              label="New"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              @click="openNew"
+            />
+          </template>
+        </Toolbar>
+      </div>
+      <div class="table-data">
+        <DataTable
+          ref="dt"
+          :value="stocks"
+          dataKey="id"
+          :paginator="true"
+          :rows="5"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[5, 10]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          :scrollable="true"
         >
-          <option value="5" selected>5</option>
-          <option value="10">10</option>
-        </select>
-        <p v-if="lastStockNumber < stocks.length" class="text-select mt-3 mr-6">{{ firstStockNumber }}-{{ lastStockNumber }} of {{ stocks.length }}</p>
-        <p v-else class="text-select mt-3 mr-6">{{ firstStockNumber }}-{{ stocks.length }} of {{ stocks.length }}</p>
-        <button
-          id="app-content"
-          class="btn btn-outline-secondary btn-icon mr-6"
-          :class="{ disabled: currentPagination === 1 }"
-          @click="refreshStocksToShow(--currentPagination)"
-        >
-          <i class="bi bi-chevron-left"></i>
-        </button>
-        <button
-          id="app-content"
-          class="btn btn-outline-secondary btn-icon"
-          :class="{ disabled: lastStockNumber > stocks.length }"
-          @click="refreshStocksToShow(++currentPagination)"
-        >
-          <i class="bi bi-chevron-right"></i>
-        </button>
+          <Column
+            field="ticker"
+            header="Ticker"
+            :sortable="true"
+            style="min-width: 2rem"
+          ></Column>
+          <Column
+            field="total"
+            header="Total"
+            :sortable="true"
+            style="min-width: 2rem"
+          ></Column>
+          <Column
+            field="buyPrice"
+            header="Buy Price"
+            :sortable="true"
+            style="min-width: 3rem"
+          >
+            <!-- <template #body="slotProps">
+              {{ formatCurrency(slotProps.data.price) }}
+            </template> -->
+          </Column>
+          <Column
+            field="initialWeight"
+            header="Initial Weight"
+            :sortable="true"
+            style="min-width: 3rem"
+          ></Column>
+          <Column
+            field="gain"
+            header="Profit/Loss"
+            :sortable="true"
+            style="min-width: 3rem"
+          ></Column>
+          <Column
+            field="currentWeight"
+            header="Current Weight"
+            :sortable="true"
+            style="min-width: 3rem"
+          ></Column>
+          <Column style="min-width: 1rem">
+            <template #body="slotProps">
+              <button type="button" class="btn btn-warning btn-sm mr-1">
+                <i class="bi bi-pencil-fill"></i>
+              </button>
+              <button type="button" class="btn btn-danger btn-sm">
+                <i class="bi bi-trash3-fill"></i>
+              </button>           
+            </template>
+          </Column>
+        </DataTable>
       </div>
     </div>
   </div>
@@ -65,21 +84,30 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import PortfolioDashboard from "./PortfolioDashboard.vue";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Row from "primevue/row";
+import Button from "primevue/button";
+import InputText from "primevue/inputtext";
+import Dialog from "primevue/dialog";
+import Toolbar from "primevue/toolbar";
 
 export default defineComponent({
   name: "AssetsTable",
 
   components: {
     PortfolioDashboard,
+    DataTable,
+    Column,
+    Row,
+    Button,
+    InputText,
+    Dialog,
+    Toolbar,
   },
 
   data() {
     return {
-      rowsPerPage: "5" as String,
-      currentPagination: 1 as number,
-      firstStockNumber: 1 as number,
-      lastStockNumber: 5 as number,
-      stocksToShow: [] as Array<Object>,
       stocks: [
         {
           ticker: "$ITEM1" as String,
@@ -145,7 +173,7 @@ export default defineComponent({
           currentWeight: "2.25%" as String,
         },
         {
-          ticker: "$ITEM1" as String,
+          ticker: "$ITEM8" as String,
           total: "350" as String,
           buyPrice: "$" as String,
           initialWeight: "19.57%" as String,
@@ -157,88 +185,43 @@ export default defineComponent({
     };
   },
 
-  methods: {
-    refreshStocksToShow: function (pagination: number = 1) {
-      this.currentPagination = pagination;
-      this.stocksToShow = [];
-      let index = Number(this.rowsPerPage) * (pagination - 1);
-
-      this.firstStockNumber = index + 1;
-      this.lastStockNumber = index + Number(this.rowsPerPage);            
-
-      for (let first = index; index < this.stocks.length && index < first + Number(this.rowsPerPage); index++) {
-        this.stocksToShow.push(this.stocks[index]);
-      }
-    },
-  },
-
-  created() {
-    this.refreshStocksToShow();
-  },
+  methods: {},
 });
 </script>
 
 <style>
-tbody tr {
-  line-height: 30px;
-  min-height: 30px;
-  height: 30px;
+.assets-table .table-toolbar {
+  background-color: #f6f6f6;  
+  height: 60px;
 }
 
-.table-tools {
-  float: right;
-}
-
-.container-select {
-  display: inline-flex;
-}
-
-.container-select .text-select {
-  color: grey;
-}
-
-.container-select .form-select {
-  width: 40px;
-  height: 40px;
-  border-radius: 0%;
-  border-top: none;
-  border-right: none;
-  border-left: none;
-  border-bottom-color: #a4a4a4;
-  cursor: pointer;
-  background: url("https://api.iconify.design/mdi/menu-down.svg?color=%23757575&width=24&height=24")
-    no-repeat center center / contain;
-  background-size: 50%;
+.table-toolbar .p-toolbar {
   background-color: #f6f6f6;
-  background-position-x: 1.3rem;
-  text-indent: 7px;
-  padding-right: 0px;
-  direction: rtl;
+  border-color: #a4a4a4;
+  padding: 0.3rem 0 0 0.3rem;
 }
 
-.container-select .form-select:hover {
-  background-color: #ededed;
-  border-bottom-color: #393939;
+.p-datatable-tbody {
+  min-height: 27.2rem;
+  max-height: 27.2rem;
 }
 
-.container-select .form-select:focus {
-  background-color: #ededed;
-  box-shadow: none;
-  border-color: white;
-  border-bottom-color: #393939;
+.table-data .p-datatable .p-datatable-thead tr th {
+  justify-content: end;
+  background-color: #f6f6f6;
 }
 
-.container-select .text-select {
-  line-height: 12px;
+.table-data .p-datatable .p-datatable-tbody tr td {
+  justify-content: end;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
 }
 
-#app-content.btn-icon {
-  background-color: white;
-  border: none;
+.assets-table .card {
+  border-color: #a4a4a4;
 }
 
-#app-content.btn-icon:hover {
-  background-color: #ededed;
-  border-color: #393939;
+.p-datatable .p-paginator {
+  background: #f6f6f6;;
 }
 </style>
