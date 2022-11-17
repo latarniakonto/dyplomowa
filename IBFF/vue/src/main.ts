@@ -11,6 +11,7 @@ import "primevue/resources/themes/md-light-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import ToastService from 'primevue/toastservice';
+import "primeflex/primeflex.css";
 
 loadFonts();
 
