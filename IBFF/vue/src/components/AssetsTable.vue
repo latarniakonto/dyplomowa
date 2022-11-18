@@ -8,7 +8,7 @@
               label="New"
               icon="pi pi-plus"
               class="p-button-success mr-2"
-              @click="addTransaction"
+              @click="addTransaction()"
             />
           </template>
         </Toolbar>
@@ -83,161 +83,11 @@
       </div>
     </div>
     <div class="table-crud">
-      <Dialog
-        v-model:visible="addTransactionDialog"
-        :style="{ width: '450px' }"
-        header="Transaction Details"
-        :modal="true"
-        class="p-fluid"
-      >
-        <div class="transaction-core">
-          <div class="field">
-            <label for="name">Ticker</label>
-            <InputText
-              id="ticker"
-              v-model.trim="transaction.ticker"
-              required="true"
-              autofocus
-              :class="{
-                'p-invalid': transactionSubmitted && !transaction.ticker,
-              }"
-            />
-            <small
-              class="p-error"
-              v-if="transactionSubmitted && !transaction.ticker"
-              >Ticker is required.</small
-            >
-          </div>
-          <div class="transaction-type">
-            <div
-              class="formgrid grid"
-              :class="{
-                'p-invalid':
-                  transactionSubmitted && !transaction.buy && !transaction.sell,
-              }"
-            >
-              <div class="field col">
-                <ToggleButton
-                  id="buy"
-                  v-model="transaction.buy"
-                  onLabel="Buy"
-                  offLabel="Buy transaction"
-                  onIcon="pi pi-check"
-                  offIcon="pi pi-times"
-                  :class="{
-                    'p-invalid':
-                      transactionSubmitted &&
-                      !transaction.buy &&
-                      !transaction.sell,
-                  }"
-                  @change="transaction.buy = setTransactionType()"
-                />
-              </div>
-              <div class="field col">
-                <ToggleButton
-                  id="sell"
-                  v-model="transaction.sell"
-                  onLabel="Sell"
-                  offLabel="Sell transaction"
-                  onIcon="pi pi-check"
-                  offIcon="pi pi-times"
-                  :class="{
-                    'p-invalid':
-                      transactionSubmitted &&
-                      !transaction.sell &&
-                      !transaction.buy,
-                  }"
-                  @change="transaction.sell = setTransactionType()"
-                />
-              </div>
-            </div>
-            <small
-              class="p-error"
-              v-if="
-                transactionSubmitted && !transaction.buy && !transaction.sell
-              "
-              >You need to specify transaction type.</small
-            >
-          </div>
-        </div>
-        <div class="transaction-parameters">
-          <div
-            class="formgrid grid"
-            :class="{
-              'p-invalid':
-                transactionSubmitted && (!transaction.price || !transaction.amount),
-            }"
-          >
-            <div class="field col">
-              <label for="price">Price</label>
-              <InputNumber
-                id="price"
-                v-model="transaction.price"
-                mode="currency"
-                currency="PLN"
-                :min="0.001"
-                :maxFractionDigits="3"
-                autofocus
-                required="true"
-                :class="{
-                  'p-invalid': transactionSubmitted && !transaction.price,
-                }"
-                @input="updateTransactionPrice($event)"
-              />
-            </div>
-            <div class="field col">
-              <label for="quantity">Amount</label>
-              <InputNumber
-                id="amount"
-                v-model="transaction.amount"
-                integeronly
-                :min="1"
-                autofocus
-                required="true"
-                :class="{
-                  'p-invalid': transactionSubmitted && !transaction.amount,
-                }"
-                @input="updateTransactionAmount($event)"
-              />
-            </div>
-          </div>
-          <small
-            class="p-error"
-            v-if="
-              transactionSubmitted &&
-              (!transaction.price || !transaction.amount)
-            "
-            >You need to specify transaction price and amount.</small
-          >
-          <div class="formgrid grid">
-            <div class="field col-6">
-              <label for="provision">Provision</label>
-              <InputNumber
-                id="provision"
-                v-model="transaction.provision"
-                mode="currency"
-                currency="PLN"
-                :min="0"
-                :maxFractionDigits="2"
-              />
-            </div>
-          </div>
-        </div>
-        <template #footer>
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            class="p-button-text"
-            @click="hideAddTransactionDialog"
-          />
-          <Button
-            label="Save"
-            icon="pi pi-check"
-            class="p-button-text"
-            @click="saveTransaction"
-          />
-        </template>
-      </Dialog>
+      <AddTransactionDialog
+        :addTransactionDialog="addTransactionDialog"
+        @transactionCanceled="handleTransactionCanceled()"
+        @transactionSubmitted="handleTransactionSubmitted($event)"
+      />
       <Dialog
         v-model:visible="deleteAssetDialog"
         :style="{ width: '450px' }"
@@ -282,6 +132,7 @@ import Dialog from "primevue/dialog";
 import Toolbar from "primevue/toolbar";
 import InputNumber from "primevue/inputnumber";
 import ToggleButton from "primevue/togglebutton";
+import AddTransactionDialog from "./AddTransactionDialog.vue";
 
 export default defineComponent({
   name: "AssetsTable",
@@ -297,14 +148,13 @@ export default defineComponent({
     Toolbar,
     InputNumber,
     ToggleButton,
+    AddTransactionDialog,
   },
 
   data() {
     return {
       addTransactionDialog: false as Boolean,
-      transactionSubmitted: false as Boolean,
       deleteAssetDialog: false as Boolean,
-      transaction: {} as any,
       asset: {} as any,
       assets: [
         {
@@ -403,57 +253,18 @@ export default defineComponent({
       });
     },
 
-    hideAddTransactionDialog() {
-      this.addTransactionDialog = false;
-      this.transactionSubmitted = false;
-    },
-
-    saveTransaction() {
-      this.transactionSubmitted = true;
-
-      if (this.transaction.ticker.trim()) {
-        this.asset.ticker = this.transaction.ticker.trim();
-        this.asset.buyPrice = this.transaction.price;
-        this.asset.total = this.transaction.amount;
-        this.assets.push(this.asset);
-        this.$toast.add({
-          severity: "success",
-          summary: "Successful",
-          detail: "Transaction Submitted",
-          life: 3000,
-        });
-      }
-
-      this.addTransactionDialog = false;
-      this.transaction = {};
-      this.asset = {};
-    },
-
     addTransaction() {
-      this.asset = {};
-      this.transaction = {};
-      this.transactionSubmitted = false;
       this.addTransactionDialog = true;
     },
 
-    setTransactionType(): Boolean {
-      this.transaction.buy = false;
-      this.transaction.sell = false;
-
-      return true;
+    handleTransactionCanceled() {
+      this.addTransactionDialog = false;
     },
 
-    updateTransactionPrice(e: any) {
-      // Component InputNumber doesn't support v-model to this extent.
-      // So here is a workaround.
-      this.transaction.price = e.value;
+    handleTransactionSubmitted(asset: any) {
+      this.addTransactionDialog = false;
+      this.assets.push(asset);
     },
-
-    updateTransactionAmount(e: any) {
-      // Component InputNumber doesn't support v-model to this extent.
-      // So here is a workaround.
-      this.transaction.amount = e.value;
-    }
   },
 });
 </script>
@@ -492,25 +303,5 @@ export default defineComponent({
 
 .p-datatable .p-paginator {
   background: #f6f6f6;
-}
-
-#buy.p-togglebutton.p-button.p-highlight {
-  background: green;
-}
-
-#sell.p-togglebutton.p-button.p-highlight {
-  background: red;
-}
-
-.p-togglebutton.p-button.p-invalid {
-  border-color: #b00020;
-}
-
-.p-dialog-content .transaction-type .grid.p-invalid {
-  height: 3rem;
-}
-
-.p-dialog-content .transaction-parameters .grid.p-invalid {
-  height: 5.6rem;
 }
 </style>
