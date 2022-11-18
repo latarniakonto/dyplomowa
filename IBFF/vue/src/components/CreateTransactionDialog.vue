@@ -1,11 +1,11 @@
 <template>
   <Dialog
-    :visible="addTransactionDialog"
+    :visible="createTransactionDialog"
     :style="{ width: '450px' }"
     header="Transaction Details"
     :modal="true"
     class="p-fluid"
-    @update:visible="hideAddTransactionDialog()"
+    @update:visible="cancelTransaction()"
   >
     <div class="transaction-core">
       <div class="field">
@@ -138,13 +138,13 @@
         label="Cancel"
         icon="pi pi-times"
         class="p-button-text"
-        @click="hideAddTransactionDialog()"
+        @click="cancelTransaction()"
       />
       <Button
         label="Save"
         icon="pi pi-check"
         class="p-button-text"
-        @click="saveTransaction()"
+        @click="submitTransaction()"
       />
     </template>
   </Dialog>
@@ -159,7 +159,7 @@ import InputNumber from "primevue/inputnumber";
 import ToggleButton from "primevue/togglebutton";
 
 export default defineComponent({
-  name: "AddTransactionDialog",
+  name: "CreateTransactionDialog",
 
   components: {
     Button,
@@ -170,7 +170,7 @@ export default defineComponent({
   },
 
   props: {
-    addTransactionDialog: {
+    createTransactionDialog: {
       required: true,
       type: Boolean,
       default: false,
@@ -191,14 +191,14 @@ export default defineComponent({
   },
 
   methods: {
-    hideAddTransactionDialog() {
+    cancelTransaction() {
       this.asset = {};
       this.transaction = {};
       this.transactionSubmitted = false;
       this.$emit("transactionCanceled");
     },
 
-    saveTransaction() {
+    submitTransaction() {
       this.transactionSubmitted = true;
       if (
         this.transaction.ticker &&

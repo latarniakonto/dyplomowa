@@ -8,7 +8,7 @@
               label="New"
               icon="pi pi-plus"
               class="p-button-success mr-2"
-              @click="addTransaction()"
+              @click="createTransaction()"
             />
           </template>
         </Toolbar>
@@ -83,8 +83,8 @@
       </div>
     </div>
     <div class="table-crud">
-      <AddTransactionDialog
-        :addTransactionDialog="addTransactionDialog"
+      <CreateTransactionDialog
+        :createTransactionDialog="createTransactionDialog"
         @transactionCanceled="handleTransactionCanceled()"
         @transactionSubmitted="handleTransactionSubmitted($event)"
       />
@@ -105,7 +105,7 @@ import Column from "primevue/column";
 import Row from "primevue/row";
 import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
-import AddTransactionDialog from "./AddTransactionDialog.vue";
+import CreateTransactionDialog from "./CreateTransactionDialog.vue";
 import DeleteAssetDialog from "./DeleteAssetDialog.vue";
 
 export default defineComponent({
@@ -117,13 +117,13 @@ export default defineComponent({
     Row,
     Button,
     Toolbar,
-    AddTransactionDialog,
+    CreateTransactionDialog,
     DeleteAssetDialog,
   },
 
   data() {
     return {
-      addTransactionDialog: false as Boolean,
+      createTransactionDialog: false as Boolean,
       deleteAssetDialog: false as Boolean,
       asset: {} as any,
       assets: [
@@ -227,16 +227,16 @@ export default defineComponent({
       });
     },
 
-    addTransaction() {
-      this.addTransactionDialog = true;
+    createTransaction() {
+      this.createTransactionDialog = true;
     },
 
     handleTransactionCanceled() {
-      this.addTransactionDialog = false;
+      this.createTransactionDialog = false;
     },
 
     handleTransactionSubmitted(asset: any) {
-      this.addTransactionDialog = false;
+      this.createTransactionDialog = false;
       this.assets.push(asset);
     },
   },
