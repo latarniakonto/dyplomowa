@@ -73,7 +73,7 @@
               <button
                 type="button"
                 class="btn btn-danger btn-sm"
-                @click="confirmDeleteAsset(slotProps.data)"
+                @click="deleteAsset(slotProps.data)"
               >
                 <i class="bi bi-trash3-fill"></i>
               </button>
@@ -88,67 +88,37 @@
         @transactionCanceled="handleTransactionCanceled()"
         @transactionSubmitted="handleTransactionSubmitted($event)"
       />
-      <Dialog
-        v-model:visible="deleteAssetDialog"
-        :style="{ width: '450px' }"
-        header="Confirm"
-        :modal="true"
-      >
-        <div class="confirmation-content">
-          <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-          <span v-if="asset"
-            >Are you sure you want to delete <b>{{ asset.ticker }}</b
-            >?</span
-          >
-        </div>
-        <template #footer>
-          <Button
-            label="No"
-            icon="pi pi-times"
-            class="p-button-text"
-            @click="deleteAssetDialog = false"
-          />
-          <Button
-            label="Yes"
-            icon="pi pi-check"
-            class="p-button-text"
-            @click="deleteasset()"
-          />
-        </template>
-      </Dialog>
+      <DeleteAssetDialog
+        :deleteAssetDialog="deleteAssetDialog"
+        :asset="asset"
+        @assetDeletionCanceled="handleAssetDeletionCanceled()"
+        @assetDeletionConfirmed="handleAssetDeletionConfirmed($event)"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import PortfolioDashboard from "./PortfolioDashboard.vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Row from "primevue/row";
 import Button from "primevue/button";
-import InputText from "primevue/inputtext";
-import Dialog from "primevue/dialog";
 import Toolbar from "primevue/toolbar";
-import InputNumber from "primevue/inputnumber";
-import ToggleButton from "primevue/togglebutton";
 import AddTransactionDialog from "./AddTransactionDialog.vue";
+import DeleteAssetDialog from "./DeleteAssetDialog.vue";
 
 export default defineComponent({
   name: "AssetsTable",
 
   components: {
-    PortfolioDashboard,
     DataTable,
     Column,
     Row,
     Button,
-    InputText,
-    Dialog,
     Toolbar,
-    InputNumber,
-    ToggleButton,
     AddTransactionDialog,
+    DeleteAssetDialog,
   },
 
   data() {
@@ -234,16 +204,20 @@ export default defineComponent({
   },
 
   methods: {
-    confirmDeleteAsset(asset: any) {
+    deleteAsset(asset: any) {
       this.asset = asset;
       this.deleteAssetDialog = true;
     },
 
-    deleteasset() {
-      this.assets = this.assets.filter(
-        (val) => val.ticker !== this.asset.ticker
-      );
+    handleAssetDeletionCanceled() {
       this.deleteAssetDialog = false;
+      this.asset = {};
+    },
+
+    handleAssetDeletionConfirmed(asset: any) {
+      this.assets = this.assets.filter((val) => val.ticker !== asset.ticker);
+      this.deleteAssetDialog = false;
+
       this.asset = {};
       this.$toast.add({
         severity: "success",
