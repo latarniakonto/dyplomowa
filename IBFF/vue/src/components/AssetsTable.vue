@@ -238,6 +238,12 @@ export default defineComponent({
     handleTransactionSubmitted(asset: any) {
       this.createTransactionDialog = false;
       this.assets.push(asset);
+      this.$toast.add({
+        severity: "success",
+        summary: "Successful",
+        detail: "Transaction Submitted",
+        life: 3000,
+      });
     },
   },
 });
