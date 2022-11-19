@@ -54,10 +54,16 @@
             style="min-width: 3rem"
           ></Column>
           <Column
+            field="currentPrice"
+            header="Current Price"
+            :sortable="true"
+            style="min-width: 3rem"
+          ></Column>
+          <Column
             field="gain"
             header="Profit/Loss"
             :sortable="true"
-            style="min-width: 3rem"
+            style="min-width: 8rem"
           ></Column>
           <Column
             field="currentWeight"
