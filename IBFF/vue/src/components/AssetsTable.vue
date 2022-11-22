@@ -73,7 +73,11 @@
           ></Column>
           <Column style="min-width: 1rem">
             <template #body="slotProps">
-              <button type="button" class="btn btn-warning btn-sm mr-1">
+              <button
+                type="button"
+                class="btn btn-warning btn-sm mr-1"
+                @click="analazyAsset(slotProps.data)"
+              >
                 <i class="bi bi-pencil-fill"></i>
               </button>
               <button
@@ -100,6 +104,11 @@
         @assetDeletionCanceled="handleAssetDeletionCanceled()"
         @assetDeletionConfirmed="handleAssetDeletionConfirmed($event)"
       />
+      <AnalyzeAssetDialog
+        :analyzeAssetDialog="analazyAssetDialog"
+        :asset="asset"
+        @asset-analysis-canceled="handleAssetAnalysisCanceled()"
+      />
     </div>
   </div>
 </template>
@@ -113,6 +122,7 @@ import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
 import CreateTransactionDialog from "./CreateTransactionDialog.vue";
 import DeleteAssetDialog from "./DeleteAssetDialog.vue";
+import AnalyzeAssetDialog from "./AnalyzeAssetDialog.vue";
 
 export default defineComponent({
   name: "AssetsTable",
@@ -125,12 +135,14 @@ export default defineComponent({
     Toolbar,
     CreateTransactionDialog,
     DeleteAssetDialog,
+    AnalyzeAssetDialog,
   },
 
   data() {
     return {
       createTransactionDialog: false as Boolean,
       deleteAssetDialog: false as Boolean,
+      analazyAssetDialog: false as Boolean,
       asset: {} as any,
       assets: [
         {
@@ -215,8 +227,27 @@ export default defineComponent({
       this.deleteAssetDialog = true;
     },
 
+    createTransaction() {
+      this.createTransactionDialog = true;
+    },
+
+    analazyAsset(asset: any) {
+      this.asset = asset;
+      this.analazyAssetDialog = true;
+    },
+
     handleAssetDeletionCanceled() {
       this.deleteAssetDialog = false;
+      this.asset = {};
+    },
+
+    handleTransactionCanceled() {
+      this.createTransactionDialog = false;
+      this.asset = {};
+    },
+
+    handleAssetAnalysisCanceled() {
+      this.analazyAssetDialog = false;
       this.asset = {};
     },
 
@@ -233,17 +264,10 @@ export default defineComponent({
       });
     },
 
-    createTransaction() {
-      this.createTransactionDialog = true;
-    },
-
-    handleTransactionCanceled() {
-      this.createTransactionDialog = false;
-    },
-
     handleTransactionSubmitted(asset: any) {
       this.createTransactionDialog = false;
       this.assets.push(asset);
+
       this.$toast.add({
         severity: "success",
         summary: "Successful",
