@@ -6,6 +6,7 @@
     :modal="true"
     @update:visible="cancelAssetAnalysis()"
   >
+    <OperationsTable/>
     <TransactionsTable/>
   </Dialog>
 </template>
@@ -16,6 +17,7 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputNumber from "primevue/inputnumber";
 import TransactionsTable from "./TransactionsTable.vue";
+import OperationsTable from "./OperationsTable.vue";
 
 export default defineComponent({
   name: "AnalyzeAssetDialog",
@@ -25,6 +27,7 @@ export default defineComponent({
     Dialog,
     InputNumber,
     TransactionsTable,
+    OperationsTable,
   },
 
   props: {
