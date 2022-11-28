@@ -1,7 +1,7 @@
 <template>
   <div class="tiles">
-    <div class="asset-info-tile mb-2 mr-2" @click="toggleAssetInfoTile(0)">
-      <div class="mb-2">
+    <div class="asset-info-tile mb-2 mr-2" :class="{ 'tile-active': assetInfoTiles[0] }" @click="toggleAssetInfoTile(0)">
+      <div class="mb-2"> 
         <span class="font-medium text-xl">Current Price</span>
       </div>
       <div v-if="!assetInfoTiles[0]">
@@ -22,7 +22,7 @@
         <span class="p-inputgroup-addon">PLN</span>
       </div>
     </div>
-    <div class="asset-info-tile mb-2 mr-2" @click="toggleAssetInfoTile(1)">
+    <div class="asset-info-tile mb-2 mr-2" :class="{ 'tile-active': assetInfoTiles[1] }" @click="toggleAssetInfoTile(1)">
       <div class="mb-2">
         <span class="font-medium text-xl">Total</span>
       </div>
@@ -40,7 +40,7 @@
         <span class="p-inputgroup-addon">No.</span>
       </div>
     </div>
-    <div class="asset-info-tile mb-2" @click="toggleAssetInfoTile(2)">
+    <div class="asset-info-tile mb-2" :class="{ 'tile-active': assetInfoTiles[2] }" @click="toggleAssetInfoTile(2)">
       <div class="mb-2">
         <span class="font-medium text-xl">Profit/Loss</span>
       </div>
@@ -54,11 +54,14 @@
           mode="decimal"
           autofocus
           required="true"
+          readonly="true"
+          class="input-blocked"
+          v-tooltip.bottom="`You can't edit this field.`"
         />
         <span class="p-inputgroup-addon">%</span>
       </div>
     </div>
-    <div class="asset-info-tile mb-2 mr-2" @click="toggleAssetInfoTile(3)">
+    <div class="asset-info-tile mb-2 mr-2" :class="{ 'tile-active': assetInfoTiles[3] }" @click="toggleAssetInfoTile(3)">
       <div class="mb-2">
         <span class="font-medium text-xl">Initial Weight</span>
       </div>
@@ -73,11 +76,14 @@
           v-bind:modelValue="asset.initialWeight"
           autofocus
           required="true"
+          readonly="true"
+          class="input-blocked"
+          v-tooltip.bottom="`You can't edit this field.`"
         />
         <span class="p-inputgroup-addon">%</span>
       </div>
     </div>
-    <div class="asset-info-tile mb-2 mr-2" @click="toggleAssetInfoTile(4)">
+    <div class="asset-info-tile mb-2 mr-2" :class="{ 'tile-active': assetInfoTiles[4] }" @click="toggleAssetInfoTile(4)">
       <div class="mb-2">
         <span class="font-medium text-xl">Current Weight</span>
       </div>
@@ -92,11 +98,14 @@
           v-bind:modelValue="asset.currentWeight"
           autofocus
           required="true"
+          readonly="true"
+          class="input-blocked"
+          v-tooltip.bottom="`You can't edit this field.`"
         />
         <span class="p-inputgroup-addon">%</span>
       </div>
     </div>
-    <div class="asset-info-tile mb-2" @click="toggleAssetInfoTile(5)">
+    <div class="asset-info-tile mb-2" :class="{ 'tile-active': assetInfoTiles[5] }" @click="toggleAssetInfoTile(5)">
       <div class="mb-2">
         <span class="font-medium text-xl">Buy Price</span>
       </div>
@@ -122,12 +131,17 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import InputNumber from "primevue/inputnumber";
+import Tooltip from "primevue/tooltip";
 
 export default defineComponent({
   name: "AssetInfo",
 
   components: {
     InputNumber,
+  },
+
+  directives: {
+    "tooltip": Tooltip,
   },
 
   props: {
@@ -174,7 +188,7 @@ export default defineComponent({
   padding: 1rem;
   border-radius: 4px;
   box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    0 1px 3px 0 rgba(92, 76, 76, 0.12);
   background-color: #f6f6f6;
   border-bottom-style: solid;
   border-bottom-width: 0.1rem;
@@ -182,9 +196,28 @@ export default defineComponent({
   display: inline-block;
 }
 
+.asset-info-tile.tile-active {
+  background-color: #ededed;
+  box-shadow: inset 0px 0px 6px #d3d3d3;
+}
+
 .asset-info-tile .p-inputnumber .p-inputnumber-input {
   width: 7rem;
   padding: 0.5rem;
+}
+
+.asset-info-tile .p-inputnumber.input-blocked .p-inputnumber-input {
+  border: 1px solid rgba(0, 0, 0, 0.38);
+  cursor: default;
+  background: rgba(255, 255, 255, 0.38);
+  color: rgba(0, 0, 0, 0.38);
+}
+
+.asset-info-tile .p-inputnumber.input-blocked .p-inputnumber-input:focus {
+  border: 1px solid rgba(0, 0, 0, 0.38);
+  background: rgba(255, 255, 255, 0.38);
+  color: rgba(0, 0, 0, 0.38);
+  box-shadow: none;
 }
 
 .asset-info-tile .p-inputgroup-addon {
@@ -197,8 +230,4 @@ export default defineComponent({
   background-color: #ededed;
 }
 
-.asset-info-tile:active {
-  background-color: #ededed;
-  box-shadow: inset 0px 0px 6px #d3d3d3;
-}
 </style>
