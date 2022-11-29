@@ -1,5 +1,5 @@
 <template>
-  <div class="assets-table mt-5">
+  <div class="assets-table">
     <div class="card" style="">
       <div class="table-toolbar">
         <Toolbar class="mb-4">
