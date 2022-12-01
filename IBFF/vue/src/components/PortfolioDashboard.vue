@@ -6,33 +6,7 @@
     <div class="dashboard-content">
       <div class="d-inline-block">
         <ResourcesInfo class="mr-4 mb-3" />
-        <div class="fees mr-4 mb-3">
-          <h5 class="mb-2 title">Fees</h5>
-          <div
-            class="tile mb-2"
-            :class="{ 'tile-active': assetInfoTiles[2] }"
-            @click="toggleAssetInfoTile(2)"
-          >
-            <div class="mb-2">
-              <span class="font-medium text-xl">Number of Transactions</span>
-            </div>
-            <div>
-              <span class="text-bluegray-900 text-2xl">9</span>
-            </div>
-          </div>
-          <div
-            class="tile mb-2"
-            :class="{ 'tile-active': assetInfoTiles[3] }"
-            @click="toggleAssetInfoTile(3)"
-          >
-            <div class="mb-2">
-              <span class="font-medium text-xl">Transactions Cost</span>
-            </div>
-            <div>
-              <span class="text-bluegray-900 text-2xl">120</span>
-            </div>
-          </div>
-        </div>
+        <FeesInfo class="mr-4 mb-3" />
         <div class="charts">
           <div class="charts-header">
             <h5 class="title mb-2">Allocation</h5>
@@ -100,13 +74,15 @@
 import { defineComponent } from "vue";
 import Chart from "primevue/chart";
 import ResourcesInfo from "./ResourcesInfo.vue";
+import FeesInfo from "./FeesInfo.vue";
 
 export default defineComponent({
   name: "PortfolioDashboard",
 
   components: {
     Chart,
-    ResourcesInfo
+    ResourcesInfo,
+    FeesInfo
   },
 
   data() {
@@ -213,18 +189,6 @@ export default defineComponent({
 
 .tile:hover {
   background-color: #ededed;
-}
-
-.fees {
-  display: inline-block;
-  width: 18.66rem;
-}
-
-.fees .title {
-  border-bottom: solid 2px;
-  border-bottom-color: #a4a4a4;
-  padding-left: 0.5rem;
-  padding-bottom: 0.5rem;
 }
 
 .performance {
