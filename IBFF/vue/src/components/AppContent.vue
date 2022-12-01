@@ -1,7 +1,7 @@
 <template>
   <div class="container app-content mt-3">
-    <TabMenu :model="items" class="mb-3"/>
-    <AssetsTable/>
+    <TabMenu :model="items" class="mb-3" />
+    <PortfolioDashboard />
   </div>
 </template>
 
@@ -36,9 +36,12 @@ export default defineComponent({
 <style>
 .app-content {
   display: block;
-  height: 47rem;
+  height: 48rem;
   background: white;
   padding: 1rem;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
   border-radius: 4px;
+  overflow: auto;
 }
 </style>

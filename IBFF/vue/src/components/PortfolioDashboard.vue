@@ -1,162 +1,312 @@
 <template>
-  <div class="">
-    <h5>
-      Portfolio name
-      <small class="text-muted">Year</small>
-    </h5>
-    <v-select
-      label="Year"
-      :items="[2022, 2021, 2020]"
-      model-value="2022"
-      class="mb-2"
-      style="height: 60px"
-    ></v-select>
-    <div class="nav-tabs-container">
-      <ul
-        class="nav nav-tabs mb-2 dashboard-nav"
-        id="dashboard-nav-tabs"
-        role="tablist"
-      >
-        <li class="nav-item dashboard-tab" role="presentation">
-          <button
-            class="nav-link"
-            :class="{ active: resourcesTabActive }"
-            @click="resourcesTabActive = toggleTabs()"
-            id="resources-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#resources"
-            type="button"
-            role="tab"
-            aria-controls="resources"
-            :aria-selected="resourcesTabActive"
-          >
-            Resources
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link dashboard-tab"
-            :class="{ active: performanceTabActive }"
-            @click="performanceTabActive = toggleTabs()"
-            id="performance-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#performance"
-            type="button"
-            role="tab"
-            aria-controls="performance"
-            :aria-selected="performanceTabActive"
-          >
-            Performance
-          </button>
-          <button
-            class="nav-link dashboard-tab"
-            :class="{ active: otherTabActive }"
-            @click="otherTabActive = toggleTabs()"
-            id="other-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#other"
-            type="button"
-            role="tab"
-            aria-controls="other"
-            :aria-selected="otherTabActive"
-          >
-            Other
-          </button>
-        </li>
-      </ul>
+  <div class="portfolio-dashboard">
+    <div class="dashboard-header">
+      <h4 class="mb-3">Portfolio name</h4>
     </div>
-    <div class="tab-content" id="dashboard-tabs-content">
-      <div
-        class="tab-pane fade show"
-        :class="{ active: resourcesTabActive }"
-        id="resources"
-        role="tabpanel"
-        aria-labelledby="resources-tab"
-      >
-        <resources-tab />
+    <div class="dashboard-content">
+      <div class="d-inline-block">
+        <div class="resources mr-4 mb-3">
+          <h5 class="mb-2 title">Resources</h5>
+          <div
+            class="tile mb-2 mr-2"
+            :class="{ 'tile-active': assetInfoTiles[0] }"
+            @click="toggleAssetInfoTile(0)"
+          >
+            <div class="mb-2">
+              <span class="font-medium text-xl">Deposit</span>
+            </div>
+            <div>
+              <span class="text-bluegray-900 text-2xl"> 30000</span>
+            </div>
+          </div>
+          <div
+            class="tile mb-2"
+            :class="{ 'tile-active': assetInfoTiles[1] }"
+            @click="toggleAssetInfoTile(1)"
+          >
+            <div class="mb-2">
+              <span class="font-medium text-xl">Cash on Hand</span>
+            </div>
+            <div>
+              <span class="text-bluegray-900 text-2xl">2000</span>
+            </div>
+          </div>
+          <div
+            class="tile"
+            :class="{ 'tile-active': assetInfoTiles[4] }"
+            @click="toggleAssetInfoTile(4)"
+          >
+            <div class="mb-2">
+              <span class="font-medium text-xl">Portfolio Value</span>
+            </div>
+            <div>
+              <span class="text-bluegray-900 text-2xl">77000</span>
+            </div>
+          </div>
+        </div>
+        <div class="fees mr-4 mb-3">
+          <h5 class="mb-2 title">Fees</h5>
+          <div
+            class="tile mb-2"
+            :class="{ 'tile-active': assetInfoTiles[2] }"
+            @click="toggleAssetInfoTile(2)"
+          >
+            <div class="mb-2">
+              <span class="font-medium text-xl">Number of Transactions</span>
+            </div>
+            <div>
+              <span class="text-bluegray-900 text-2xl">9</span>
+            </div>
+          </div>
+          <div
+            class="tile mb-2"
+            :class="{ 'tile-active': assetInfoTiles[3] }"
+            @click="toggleAssetInfoTile(3)"
+          >
+            <div class="mb-2">
+              <span class="font-medium text-xl">Transactions Cost</span>
+            </div>
+            <div>
+              <span class="text-bluegray-900 text-2xl">120</span>
+            </div>
+          </div>
+        </div>
+        <div class="charts">
+          <div class="charts-header">
+            <h5 class="title mb-2">Allocation</h5>
+          </div>
+          <div
+            class="charts-content tile"
+            :class="{ 'tile-active': assetInfoTiles[8] }"
+            @click="toggleAssetInfoTile(8)"
+          >
+            <Chart
+              type="pie"
+              :data="chartData"
+              :options="lightOptions"
+              @click="$event.stopPropagation()"
+            />
+          </div>
+        </div>
       </div>
-      <div
-        class="tab-pane fade show"
-        :class="{ active: performanceTabActive }"
-        id="performance"
-        role="tabpanel"
-        aria-labelledby="performance-tab"
-      >
+      <div class="d-inline-block align-top">
+        <div class="performance">
+          <h5 class="mb-2 title">Performance</h5>
+          <div
+            class="tile mb-2"
+            :class="{ 'tile-active': assetInfoTiles[6] }"
+            @click="toggleAssetInfoTile(6)"
+          >
+            <div class="mb-2">
+              <span class="font-medium text-xl">Annual Gain</span>
+            </div>
+            <div>
+              <span class="text-bluegray-900 text-2xl">47000</span>
+            </div>
+          </div>
+          <div
+            class="tile mb-2"
+            :class="{ 'tile-active': assetInfoTiles[5] }"
+            @click="toggleAssetInfoTile(5)"
+          >
+            <div class="mb-2">
+              <span class="font-medium text-xl">Annual Yield</span>
+            </div>
+            <div>
+              <span class="text-bluegray-900 text-2xl">156.67%</span>
+            </div>
+          </div>
+          <div
+            class="tile mb-2"
+            :class="{ 'tile-active': assetInfoTiles[7] }"
+            @click="toggleAssetInfoTile(7)"
+          >
+            <div class="mb-2">
+              <span class="font-medium text-xl">Total Annual Dividends</span>
+            </div>
+            <div>
+              <span class="text-bluegray-900 text-2xl">1200</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div
-        class="tab-pane fade show"
-        :class="{ active: otherTabActive }"
-        id="other"
-        role="tabpanel"
-        aria-labelledby="other-tab"
-      ></div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import ResourcesTab from "./ResourcesTab.vue";
+import Chart from "primevue/chart";
 
 export default defineComponent({
   name: "PortfolioDashboard",
 
   components: {
-    ResourcesTab,
+    Chart,
   },
 
   data() {
     return {
-      resourcesTabActive: true as Boolean,
-      performanceTabActive: false as Boolean,
-      otherTabActive: false as Boolean,
+      items: [
+        { label: "Home", icon: "bi bi-house" },
+        { label: "Assets", icon: "bi bi-wallet2" },
+        { label: "Transactions", icon: "bi bi-cash-coin" },
+        { label: "Operations", icon: "bi bi-boxes" },
+      ],
+      assetInfoTiles: [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ] as Array<Boolean>,
+      chartData: {
+        labels: ["A", "B", "C"],
+        datasets: [
+          {
+            data: [20, 1, 79],
+            backgroundColor: ["#42A5F5", "#66BB6A", "#FFA726"],
+            hoverBackgroundColor: ["#64B5F6", "#81C784", "#FFB74D"],
+          },
+        ],
+      },
+      lightOptions: {
+        plugins: {
+          legend: {
+            labels: {
+              color: "#495057",
+            },
+          },
+        },
+      },
     };
   },
 
   methods: {
-    toggleTabs: function (newActiveTab: Boolean): Boolean {
-      this.resourcesTabActive = false;
-      this.performanceTabActive = false;
-      this.otherTabActive = false;
-      return true;
+    toggleAssetInfoTile(index: number) {
+      for (let i = 0; i < this.assetInfoTiles.length; i++) {
+        if (i == index) {
+          continue;
+        }
+        this.assetInfoTiles[i] = false;
+      }
+
+      this.assetInfoTiles[index] = !this.assetInfoTiles[index];
     },
   },
 });
 </script>
 
 <style>
-.dashboard-nav .nav-item .nav-link.active {
+.tile {
+  cursor: pointer;
+  height: 7rem;
+  width: 18.666rem;
+  padding: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(92, 76, 76, 0.12);
   background-color: #f6f6f6;
-  color: rgba(0, 0, 0, 0.87);
-  border-color: #a4a4a4;
-  border-bottom-color: white;
-}
-
-.dashboard-nav .nav-item .nav-link {
-  /* background-color: white; */
-  color: gray;
+  border-bottom-style: solid;
+  border-bottom-width: 0.1rem;
   border-bottom-color: #a4a4a4;
+  display: inline-block;
 }
 
-.nav-tabs-container
-.nav-tabs
-.nav-link:hover:not(.dashboard-nav .nav-item .nav-link.active) {
-  background-color: #f6f6f6;
+.tile.tile-active {
+  background-color: #ededed;
+  box-shadow: inset 0px 0px 6px #d3d3d3;
+}
+
+.tile .p-inputnumber .p-inputnumber-input {
+  width: 7rem;
+  padding: 0.5rem;
+}
+
+.tile .p-inputnumber.input-blocked .p-inputnumber-input {
+  border: 1px solid rgba(0, 0, 0, 0.38);
+  cursor: default;
+  background: rgba(255, 255, 255, 0.38);
+  color: rgba(0, 0, 0, 0.38);
+}
+
+.tile .p-inputnumber.input-blocked .p-inputnumber-input:focus {
+  border: 1px solid rgba(0, 0, 0, 0.38);
+  background: rgba(255, 255, 255, 0.38);
+  color: rgba(0, 0, 0, 0.38);
+  box-shadow: none;
+}
+
+.tile .p-inputgroup-addon {
+  width: 3rem;
+  padding: 0.5rem;
+  background-color: #ededed;
+}
+
+.tile:hover {
+  background-color: #ededed;
+}
+
+.resources {
+  display: inline-block;
+  width: 38.332em;
+  padding-left: 0.5rem;
+}
+
+.resources .title {
+  border-bottom: solid 2px;
   border-bottom-color: #a4a4a4;
+  padding-left: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
-.nav-tabs-container .nav-tabs {
+.fees {
+  display: inline-block;
+  width: 18.66rem;
+}
+
+.fees .title {
+  border-bottom: solid 2px;
   border-bottom-color: #a4a4a4;
-  justify-content: space-between;
+  padding-left: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
-.nav  li  button {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  padding-left: 4px;
-  padding-right: 4px;
-  text-align: center;
-  display: inline-flex;
-  
+.performance {
+  display: inline-block;
+  width: 18.66rem;
+}
+
+.performance .title {
+  border-bottom: solid 2px;
+  border-bottom-color: #a4a4a4;
+  padding-left: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.portoflio-dashboard {
+  display: flex;
+}
+
+.charts {
+  width: 19.16rem;
+  display: block;
+  padding-left: 0.5rem;
+}
+
+.charts .charts-content {
+  width: 18.66rem;
+  height: 18.66rem;
+}
+
+.charts .title {
+  border-bottom: solid 2px;
+  border-bottom-color: #a4a4a4;
+  padding-left: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 </style>
