@@ -5,45 +5,7 @@
     </div>
     <div class="dashboard-content">
       <div class="d-inline-block">
-        <div class="resources mr-4 mb-3">
-          <h5 class="mb-2 title">Resources</h5>
-          <div
-            class="tile mb-2 mr-2"
-            :class="{ 'tile-active': assetInfoTiles[0] }"
-            @click="toggleAssetInfoTile(0)"
-          >
-            <div class="mb-2">
-              <span class="font-medium text-xl">Deposit</span>
-            </div>
-            <div>
-              <span class="text-bluegray-900 text-2xl"> 30000</span>
-            </div>
-          </div>
-          <div
-            class="tile mb-2"
-            :class="{ 'tile-active': assetInfoTiles[1] }"
-            @click="toggleAssetInfoTile(1)"
-          >
-            <div class="mb-2">
-              <span class="font-medium text-xl">Cash on Hand</span>
-            </div>
-            <div>
-              <span class="text-bluegray-900 text-2xl">2000</span>
-            </div>
-          </div>
-          <div
-            class="tile"
-            :class="{ 'tile-active': assetInfoTiles[4] }"
-            @click="toggleAssetInfoTile(4)"
-          >
-            <div class="mb-2">
-              <span class="font-medium text-xl">Portfolio Value</span>
-            </div>
-            <div>
-              <span class="text-bluegray-900 text-2xl">77000</span>
-            </div>
-          </div>
-        </div>
+        <ResourcesInfo class="mr-4 mb-3" />
         <div class="fees mr-4 mb-3">
           <h5 class="mb-2 title">Fees</h5>
           <div
@@ -137,12 +99,14 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Chart from "primevue/chart";
+import ResourcesInfo from "./ResourcesInfo.vue";
 
 export default defineComponent({
   name: "PortfolioDashboard",
 
   components: {
     Chart,
+    ResourcesInfo
   },
 
   data() {
@@ -249,19 +213,6 @@ export default defineComponent({
 
 .tile:hover {
   background-color: #ededed;
-}
-
-.resources {
-  display: inline-block;
-  width: 38.332em;
-  padding-left: 0.5rem;
-}
-
-.resources .title {
-  border-bottom: solid 2px;
-  border-bottom-color: #a4a4a4;
-  padding-left: 0.5rem;
-  padding-bottom: 0.5rem;
 }
 
 .fees {
