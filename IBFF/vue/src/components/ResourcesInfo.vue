@@ -42,13 +42,11 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Chart from "primevue/chart";
 
 export default defineComponent({
   name: "PortfolioDashboard",
 
   components: {
-    Chart,
   },
 
   data() {
