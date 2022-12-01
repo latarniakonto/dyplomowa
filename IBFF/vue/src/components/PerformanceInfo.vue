@@ -10,7 +10,7 @@
         <span class="font-medium text-xl">Annual Gain</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">47000</span>
+        <span class="text-bluegray-900 text-2xl">{{ portfolio.annualGain }}</span>
       </div>
     </div>
     <div
@@ -22,7 +22,7 @@
         <span class="font-medium text-xl">Annual Yield</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">156.67%</span>
+        <span class="text-bluegray-900 text-2xl">{{ portfolio.annualYield }}</span>
       </div>
     </div>
     <div
@@ -34,7 +34,7 @@
         <span class="font-medium text-xl">Total Annual Dividends</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">1200</span>
+        <span class="text-bluegray-900 text-2xl">{{ portfolio.annualDividends }}</span>
       </div>
     </div>
   </div>
@@ -47,6 +47,14 @@ export default defineComponent({
   name: "PerformanceInfo",
 
   components: {},
+
+  props: {
+    portfolio: {
+      type: Object,
+      required: true,
+      default: {}
+    }
+  },
 
   data() {
     return {

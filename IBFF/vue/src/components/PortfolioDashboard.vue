@@ -1,16 +1,16 @@
 <template>
   <div class="portfolio-dashboard">
     <div class="dashboard-header">
-      <h4 class="mb-3">Portfolio name</h4>
+      <h4 class="mb-3">{{ portfolio.name }}</h4>
     </div>
     <div class="dashboard-content">
       <div class="d-inline-block">
-        <ResourcesInfo class="mr-4 mb-3" />
-        <FeesInfo class="mr-4 mb-3" />
+        <ResourcesInfo :portfolio="portfolio" class="mr-4 mb-3" />
+        <FeesInfo :portfolio="portfolio" class="mr-4 mb-3" />
         <ChartsInfo />
       </div>
       <div class="d-inline-block align-top">
-        <PerformanceInfo />
+        <PerformanceInfo :portfolio="portfolio" />
       </div>
     </div>
   </div>
@@ -41,6 +41,17 @@ export default defineComponent({
         { label: "Transactions", icon: "bi bi-cash-coin" },
         { label: "Operations", icon: "bi bi-boxes" },
       ],
+      portfolio: {
+        name: "Portfolio name" as String,
+        deposit: "30000" as String,
+        cashOnHand: "2000" as String,
+        value: "77000",
+        transactionsCounter: 9 as Number,
+        transactionsCost: "120" as String,
+        annualGain: "47000" as String,
+        annualYield: "156.67%" as String,
+        annualDividends: "1200" as String
+      } as Object
     };
   },
 

@@ -10,7 +10,7 @@
         <span class="font-medium text-xl">Number of Transactions</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">9</span>
+        <span class="text-bluegray-900 text-2xl">{{ portfolio.transactionsCounter }}</span>
       </div>
     </div>
     <div
@@ -22,7 +22,7 @@
         <span class="font-medium text-xl">Transactions Cost</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">120</span>
+        <span class="text-bluegray-900 text-2xl">{{ portfolio.transactionsCost }}</span>
       </div>
     </div>
   </div>
@@ -35,6 +35,14 @@ export default defineComponent({
   name: "FeesInfo",
 
   components: {},
+
+  props: {
+    portfolio: {
+      type: Object,
+      required: true,
+      default: {}
+    }
+  },
 
   data() {
     return {

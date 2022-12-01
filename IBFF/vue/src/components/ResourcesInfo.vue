@@ -10,7 +10,7 @@
         <span class="font-medium text-xl">Deposit</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl"> 30000</span>
+        <span class="text-bluegray-900 text-2xl">{{ portfolio.deposit }}</span>
       </div>
     </div>
     <div
@@ -22,7 +22,7 @@
         <span class="font-medium text-xl">Cash on Hand</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">2000</span>
+        <span class="text-bluegray-900 text-2xl">{{ portfolio.cashOnHand }}</span>
       </div>
     </div>
     <div
@@ -34,7 +34,7 @@
         <span class="font-medium text-xl">Portfolio Value</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">77000</span>
+        <span class="text-bluegray-900 text-2xl">{{ portfolio.value }}</span>
       </div>
     </div>
   </div>
@@ -47,6 +47,14 @@ export default defineComponent({
   name: "PortfolioDashboard",
 
   components: {
+  },
+
+  props: {
+    portfolio: {
+      type: Object,
+      required: true,
+      default: {}
+    }
   },
 
   data() {
