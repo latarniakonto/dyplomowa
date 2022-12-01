@@ -7,23 +7,7 @@
       <div class="d-inline-block">
         <ResourcesInfo class="mr-4 mb-3" />
         <FeesInfo class="mr-4 mb-3" />
-        <div class="charts">
-          <div class="charts-header">
-            <h5 class="title mb-2">Allocation</h5>
-          </div>
-          <div
-            class="charts-content tile"
-            :class="{ 'tile-active': assetInfoTiles[8] }"
-            @click="toggleAssetInfoTile(8)"
-          >
-            <Chart
-              type="pie"
-              :data="chartData"
-              :options="lightOptions"
-              @click="$event.stopPropagation()"
-            />
-          </div>
-        </div>
+        <ChartsInfo />
       </div>
       <div class="d-inline-block align-top">
         <div class="performance">
@@ -72,17 +56,17 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Chart from "primevue/chart";
 import ResourcesInfo from "./ResourcesInfo.vue";
 import FeesInfo from "./FeesInfo.vue";
+import ChartsInfo from "./ChartsInfo.vue";
 
 export default defineComponent({
   name: "PortfolioDashboard",
 
   components: {
-    Chart,
     ResourcesInfo,
-    FeesInfo
+    FeesInfo,
+    ChartsInfo,
   },
 
   data() {
@@ -104,25 +88,6 @@ export default defineComponent({
         false,
         false,
       ] as Array<Boolean>,
-      chartData: {
-        labels: ["A", "B", "C"],
-        datasets: [
-          {
-            data: [20, 1, 79],
-            backgroundColor: ["#42A5F5", "#66BB6A", "#FFA726"],
-            hoverBackgroundColor: ["#64B5F6", "#81C784", "#FFB74D"],
-          },
-        ],
-      },
-      lightOptions: {
-        plugins: {
-          legend: {
-            labels: {
-              color: "#495057",
-            },
-          },
-        },
-      },
     };
   },
 
@@ -205,23 +170,5 @@ export default defineComponent({
 
 .portoflio-dashboard {
   display: flex;
-}
-
-.charts {
-  width: 19.16rem;
-  display: block;
-  padding-left: 0.5rem;
-}
-
-.charts .charts-content {
-  width: 18.66rem;
-  height: 18.66rem;
-}
-
-.charts .title {
-  border-bottom: solid 2px;
-  border-bottom-color: #a4a4a4;
-  padding-left: 0.5rem;
-  padding-bottom: 0.5rem;
 }
 </style>
