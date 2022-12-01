@@ -1,5 +1,5 @@
 <template>
-  <div class="resources mr-4 mb-3">
+  <div class="resources">
     <h5 class="mb-2 title">Resources</h5>
     <div
       class="tile mb-2 mr-2"
