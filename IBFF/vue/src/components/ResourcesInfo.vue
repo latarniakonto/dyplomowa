@@ -22,7 +22,9 @@
         <span class="font-medium text-xl">Cash on Hand</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">{{ portfolio.cashOnHand }}</span>
+        <span class="text-bluegray-900 text-2xl">{{
+          portfolio.cashOnHand
+        }}</span>
       </div>
     </div>
     <div
@@ -37,33 +39,39 @@
         <span class="text-bluegray-900 text-2xl">{{ portfolio.value }}</span>
       </div>
     </div>
+    <div class="resources-crud">
+      <EditDepositDialog
+        :editDepositDialog="resourcesInfoTiles[0]"
+        :portfolio="portfolio"
+        @deposit-edited="handleDepositEdited($event)"
+        @deposit-editing-canceled="handleDepositEditingCanceled()"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import EditDepositDialog from "./EditDepositDialog.vue";
 
 export default defineComponent({
   name: "PortfolioDashboard",
 
   components: {
+    EditDepositDialog,
   },
 
   props: {
     portfolio: {
       type: Object,
       required: true,
-      default: {}
-    }
+      default: {},
+    },
   },
 
   data() {
     return {
-      resourcesInfoTiles: [
-        false,
-        false,
-        false,
-      ] as Array<Boolean>,
+      resourcesInfoTiles: [false, false, false] as Array<Boolean>,
     };
   },
 
@@ -78,6 +86,29 @@ export default defineComponent({
 
       this.resourcesInfoTiles[index] = !this.resourcesInfoTiles[index];
     },
+
+    handleDepositEdited(deposit: any) {
+      if (deposit.deposit) {
+        this.portfolio.deposit = String(
+          Number(this.portfolio.deposit) + Number(deposit.check)
+        );
+      }
+
+      if (deposit.withdraw) {
+        this.portfolio.deposit = String(
+          Number(this.portfolio.deposit) - Number(deposit.check)
+        );
+      }
+
+      if (deposit.override) {
+        this.portfolio.deposit = String(Number(deposit.check));
+      }
+      this.resourcesInfoTiles[0] = false;
+    },
+
+    handleDepositEditingCanceled() {
+      this.resourcesInfoTiles[0] = false;
+    }
   },
 });
 </script>
