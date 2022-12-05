@@ -43,7 +43,6 @@
                 name="operationsTable"
                 value="Splits"
                 v-model="operationsTable"
-                aria-label="Splits"
               />
               <span id="splits-label" class="font-medium">Splits</span>
             </div>
@@ -54,12 +53,17 @@
         v-show="operationsTable === 'Dividends'"
         ref="dividendsTable"
       />
-      <SplitsTable v-show="operationsTable === 'Splits'"/>
+      <SplitsTable v-show="operationsTable === 'Splits'" ref="splitsTable" />
     </div>
     <AddDividendDialog
       :addDividendDialog="addDividendDialog"
       @dividendAdded="handleDividendAdded($event)"
       @dividendAddingCanceled="handleDividendAddingCanceled()"
+    />
+    <AddSplitDialog
+      :addSplitDialog="addSplitDialog"
+      @splitAdded="handleSplitAdded($event)"
+      @splitAddingCanceled="handleSplitAddingCanceled()"
     />
   </div>
 </template>
@@ -72,6 +76,7 @@ import RadioButton from "primevue/radiobutton";
 import DividendsTable from "./DividendsTable.vue";
 import AddDividendDialog from "./AddDividendDialog.vue";
 import SplitsTable from "./SplitsTable.vue";
+import AddSplitDialog from "./AddSplitDialog.vue";
 
 export default defineComponent({
   name: "OperationsTab",
@@ -83,11 +88,13 @@ export default defineComponent({
     DividendsTable,
     SplitsTable,
     AddDividendDialog,
+    AddSplitDialog,
   },
 
   data() {
     return {
       addDividendDialog: false as Boolean,
+      addSplitDialog: false as Boolean,
       operationsTable: "" as String,
     };
   },
@@ -97,8 +104,12 @@ export default defineComponent({
       this.addDividendDialog = true;
     },
 
+    addSplit() {
+      this.addSplitDialog = true;
+    },
+
     handleDividendAdded(dividend: any) {
-      let child = (this.$refs.dividendsTable as typeof DividendsTable);
+      let child = this.$refs.dividendsTable as typeof DividendsTable;
       if (child) {
         child.addDividend(dividend);
       }
@@ -106,8 +117,21 @@ export default defineComponent({
       this.addDividendDialog = false;
     },
 
+    handleSplitAdded(split: any) {
+      let child = this.$refs.splitsTable as typeof SplitsTable;
+      if (child) {
+        child.addSplit(split);
+      }
+
+      this.addSplitDialog = false;
+    },
+
     handleDividendAddingCanceled() {
       this.addDividendDialog = false;
+    },
+
+    handleSplitAddingCanceled() {
+      this.addSplitDialog = false;
     },
   },
 });
