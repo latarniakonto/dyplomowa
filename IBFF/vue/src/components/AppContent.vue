@@ -1,7 +1,7 @@
 <template>
   <div class="container app-content mt-3">
     <TabMenu :model="items" class="mb-3" />
-    <PortfolioDashboard />
+    <OperationsTab />
   </div>
 </template>
 
@@ -10,6 +10,7 @@ import { defineComponent } from "vue";
 import PortfolioDashboard from "./PortfolioDashboard.vue";
 import AssetsTable from "./AssetsTable.vue";
 import TabMenu from "primevue/tabmenu";
+import OperationsTab from "./OperationsTab.vue";
 
 export default defineComponent({
   name: "AppContent",
@@ -18,6 +19,7 @@ export default defineComponent({
     PortfolioDashboard,
     AssetsTable,
     TabMenu,
+    OperationsTab,
   },
 
   data() {
