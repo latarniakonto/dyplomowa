@@ -52,8 +52,14 @@
       </div>
       <DividendsTable
         v-show="operationsTable === 'Dividends'"
+        ref="dividendsTable"
       />
     </div>
+    <AddDividendDialog
+      :addDividendDialog="addDividendDialog"
+      @dividendAdded="handleDividendAdded($event)"
+      @dividendAddingCanceled="handleDividendAddingCanceled()"
+    />
   </div>
 </template>
 
@@ -63,6 +69,7 @@ import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
 import RadioButton from "primevue/radiobutton";
 import DividendsTable from "./DividendsTable.vue";
+import AddDividendDialog from "./AddDividendDialog.vue";
 
 export default defineComponent({
   name: "OperationsTab",
@@ -72,15 +79,33 @@ export default defineComponent({
     Toolbar,
     RadioButton,
     DividendsTable,
+    AddDividendDialog,
   },
 
   data() {
     return {
+      addDividendDialog: false as Boolean,
       operationsTable: "" as String,
     };
   },
 
   methods: {
+    addDividend() {
+      this.addDividendDialog = true;
+    },
+
+    handleDividendAdded(dividend: any) {
+      let child = (this.$refs.dividendsTable as typeof DividendsTable);
+      if (child) {
+        child.addDividend(dividend);
+      }
+
+      this.addDividendDialog = false;
+    },
+
+    handleDividendAddingCanceled() {
+      this.addDividendDialog = false;
+    },
   },
 });
 </script>
