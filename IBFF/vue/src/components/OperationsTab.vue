@@ -50,6 +50,9 @@
           </template>
         </Toolbar>
       </div>
+      <DividendsTable
+        v-show="operationsTable === 'Dividends'"
+      />
     </div>
   </div>
 </template>
@@ -59,6 +62,7 @@ import { defineComponent } from "vue";
 import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
 import RadioButton from "primevue/radiobutton";
+import DividendsTable from "./DividendsTable.vue";
 
 export default defineComponent({
   name: "OperationsTab",
@@ -67,6 +71,7 @@ export default defineComponent({
     Button,
     Toolbar,
     RadioButton,
+    DividendsTable,
   },
 
   data() {
