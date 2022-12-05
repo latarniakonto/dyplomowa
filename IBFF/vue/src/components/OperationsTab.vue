@@ -54,6 +54,7 @@
         v-show="operationsTable === 'Dividends'"
         ref="dividendsTable"
       />
+      <SplitsTable v-show="operationsTable === 'Splits'"/>
     </div>
     <AddDividendDialog
       :addDividendDialog="addDividendDialog"
@@ -70,6 +71,7 @@ import Toolbar from "primevue/toolbar";
 import RadioButton from "primevue/radiobutton";
 import DividendsTable from "./DividendsTable.vue";
 import AddDividendDialog from "./AddDividendDialog.vue";
+import SplitsTable from "./SplitsTable.vue";
 
 export default defineComponent({
   name: "OperationsTab",
@@ -79,6 +81,7 @@ export default defineComponent({
     Toolbar,
     RadioButton,
     DividendsTable,
+    SplitsTable,
     AddDividendDialog,
   },
 
