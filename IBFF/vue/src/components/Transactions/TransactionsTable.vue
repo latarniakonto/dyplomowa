@@ -12,6 +12,12 @@
       :rowsPerPageOptions="[5, 10]"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
     >
+      <Column field="ticker" header="Ticker">
+        <template #editor="{ data, field }">
+          <InputText v-model.trim="data[field]" required="true" autofocus>
+          </InputText>
+        </template>
+      </Column>
       <Column field="type" header="Type">
         <template #editor="{ data, field }">
           <Dropdown
@@ -151,6 +157,7 @@ export default defineComponent({
       transactions: [
         {
           id: "1000",
+          ticker: "$ITEM1" as String,
           date: new Date("2020-01-30") as Date,
           type: "Buy" as String,
           price: 0 as Number,
@@ -159,6 +166,7 @@ export default defineComponent({
         },
         {
           id: "1001",
+          ticker: "$ITEM1" as String,
           date: new Date("2020-08-12") as Date,
           type: "Buy" as String,
           price: 0 as Number,
@@ -167,6 +175,7 @@ export default defineComponent({
         },
         {
           id: "1002",
+          ticker: "$ITEM1" as String,
           date: new Date("2020-08-12") as Date,
           type: "Buy" as String,
           price: 0 as Number,
@@ -175,6 +184,7 @@ export default defineComponent({
         },
         {
           id: "1003",
+          ticker: "$ITEM1" as String,
           date: new Date("2021-04-07") as Date,
           type: "Buy" as String,
           price: 0 as Number,
@@ -183,6 +193,7 @@ export default defineComponent({
         },
         {
           id: "1004",
+          ticker: "$ITEM1" as String,
           date: new Date("2021-10-26") as Date,
           type: "Buy" as String,
           price: 0 as Number,
@@ -191,6 +202,7 @@ export default defineComponent({
         },
         {
           id: "1005",
+          ticker: "$ITEM1" as String,
           date: new Date("2022-02-24") as Date,
           type: "Buy" as String,
           price: 0 as Number,
@@ -199,6 +211,7 @@ export default defineComponent({
         },
         {
           id: "1006",
+          ticker: "$ITEM1" as String,
           date: new Date("2022-02-24") as Date,
           type: "Buy" as String,
           price: 0 as Number,
@@ -284,6 +297,12 @@ export default defineComponent({
 }
 
 .transactions-table .p-inputnumber .p-inputnumber-input {
+  width: 7rem;
+  height: 3rem;
+  padding: 0.5rem;
+}
+
+.transactions-table .p-inputtext {
   width: 7rem;
   height: 3rem;
   padding: 0.5rem;
