@@ -27,14 +27,6 @@
             optionValue="value"
             :placeholder="data[field]"
           >
-            <template #option="slotProps">
-              <span
-                :class="
-                  'product-badge status-' + slotProps.option.value.toLowerCase()
-                "
-                >{{ slotProps.option.label }}</span
-              >
-            </template>
           </Dropdown>
         </template>
       </Column>
