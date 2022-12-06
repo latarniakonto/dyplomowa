@@ -255,6 +255,9 @@ export default defineComponent({
       this.editingTransactions = [];
     },
 
+    addTransaction(transaction: any) {
+      this.transactions.push(transaction);
+    }
   },
 });
 </script>

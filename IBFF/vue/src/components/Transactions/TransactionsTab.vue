@@ -8,12 +8,18 @@
               label="Transaction"
               icon="pi pi-plus"
               class="p-button-success mr-2"
+              @click="addTransaction()"
             />
           </template>
         </Toolbar>
       </div>
-      <TransactionsTable/>
+      <TransactionsTable ref="transactionsTable" />
     </div>
+    <AddTransactionDialog
+      :addTransactionDialog="addTransactionDialog"
+      @transactionAdded="handleTransactionAdded($event)"
+      @transactionAddingCanceled="handleTransactionAddingCanceled()"
+    />
   </div>
 </template>
 
@@ -22,6 +28,8 @@ import { defineComponent } from "vue";
 import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
 import TransactionsTable from "./TransactionsTable.vue";
+import AddTransactionDialog from "./AddTransactionDialog.vue";
+
 export default defineComponent({
   name: "TransactionsTab",
 
@@ -29,14 +37,32 @@ export default defineComponent({
     Button,
     Toolbar,
     TransactionsTable,
+    AddTransactionDialog,
   },
 
   data() {
     return {
+      addTransactionDialog: false as Boolean,
     };
   },
 
   methods: {
+    addTransaction() {
+      this.addTransactionDialog = true;
+    },
+
+    handleTransactionAdded(transaction: any) {
+      let child = this.$refs.transactionsTable as typeof TransactionsTable;
+      if (child) {        
+        child.addTransaction(transaction);
+      }
+
+      this.addTransactionDialog = false;
+    },
+
+    handleTransactionAddingCanceled() {
+      this.addTransactionDialog = false;
+    }
   },
 });
 </script>
