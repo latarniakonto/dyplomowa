@@ -12,6 +12,7 @@
           </template>
         </Toolbar>
       </div>
+      <TransactionsTable/>
     </div>
   </div>
 </template>
@@ -20,12 +21,14 @@
 import { defineComponent } from "vue";
 import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
+import TransactionsTable from "./TransactionsTable.vue";
 export default defineComponent({
   name: "TransactionsTab",
 
   components: {
     Button,
     Toolbar,
+    TransactionsTable,
   },
 
   data() {
