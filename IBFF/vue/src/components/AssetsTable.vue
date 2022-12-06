@@ -1,18 +1,6 @@
 <template>
   <div class="assets-table">
     <div class="card" style="">
-      <div class="table-toolbar">
-        <Toolbar class="mb-4">
-          <template #start>
-            <Button
-              label="New"
-              icon="pi pi-plus"
-              class="p-button-success mr-2"
-              @click="createTransaction()"
-            />
-          </template>
-        </Toolbar>
-      </div>
       <div class="table-data">
         <DataTable
           ref="dt"
@@ -93,11 +81,6 @@
       </div>
     </div>
     <div class="table-crud">
-      <CreateTransactionDialog
-        :createTransactionDialog="createTransactionDialog"
-        @transactionCanceled="handleTransactionCanceled()"
-        @transactionSubmitted="handleTransactionSubmitted($event)"
-      />
       <DeleteAssetDialog
         :deleteAssetDialog="deleteAssetDialog"
         :asset="asset"
@@ -120,7 +103,6 @@ import Column from "primevue/column";
 import Row from "primevue/row";
 import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
-import CreateTransactionDialog from "./CreateTransactionDialog.vue";
 import DeleteAssetDialog from "./DeleteAssetDialog.vue";
 import AnalyzeAssetDialog from "./AnalyzeAssetDialog.vue";
 
@@ -133,14 +115,12 @@ export default defineComponent({
     Row,
     Button,
     Toolbar,
-    CreateTransactionDialog,
     DeleteAssetDialog,
     AnalyzeAssetDialog,
   },
 
   data() {
     return {
-      createTransactionDialog: false as Boolean,
       deleteAssetDialog: false as Boolean,
       analazyAssetDialog: false as Boolean,
       asset: {} as any,
@@ -227,10 +207,6 @@ export default defineComponent({
       this.deleteAssetDialog = true;
     },
 
-    createTransaction() {
-      this.createTransactionDialog = true;
-    },
-
     analazyAsset(asset: any) {
       this.asset = asset;
       this.analazyAssetDialog = true;
@@ -238,11 +214,6 @@ export default defineComponent({
 
     handleAssetDeletionCanceled() {
       this.deleteAssetDialog = false;
-      this.asset = {};
-    },
-
-    handleTransactionCanceled() {
-      this.createTransactionDialog = false;
       this.asset = {};
     },
 
@@ -260,18 +231,6 @@ export default defineComponent({
         severity: "success",
         summary: "Successful",
         detail: "Asset Deleted",
-        life: 3000,
-      });
-    },
-
-    handleTransactionSubmitted(asset: any) {
-      this.createTransactionDialog = false;
-      this.assets.push(asset);
-
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Transaction Submitted",
         life: 3000,
       });
     },
