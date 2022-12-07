@@ -76,7 +76,7 @@ import Calendar from "primevue/calendar";
 import Panel from "primevue/panel";
 
 export default defineComponent({
-  name: "OperationsTable",
+  name: "OperationsPanel",
 
   components: {
     Button,

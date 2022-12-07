@@ -151,7 +151,7 @@ import Calendar from "primevue/calendar";
 import Panel from "primevue/panel";
 
 export default defineComponent({
-  name: "TransactionsTable",
+  name: "TransactionsPanel",
 
   components: {
     Button,

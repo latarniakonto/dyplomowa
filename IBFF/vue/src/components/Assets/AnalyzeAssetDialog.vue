@@ -8,9 +8,9 @@
     <template #header>
       <h3>{{ asset.ticker }}</h3>
     </template>
-    <AssetInfo :asset="asset"/>
-    <OperationsTable/>
-    <TransactionsTable/>
+    <AssetInfo :asset="asset" />
+    <OperationsPanel />
+    <TransactionsPanel />
   </Dialog>
 </template>
 
@@ -19,8 +19,8 @@ import { defineComponent } from "vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputNumber from "primevue/inputnumber";
-import TransactionsTable from "./TransactionsTable.vue";
-import OperationsTable from "./OperationsTable.vue";
+import TransactionsPanel from "./TransactionsPanel.vue";
+import OperationsPanel from "./OperationsPanel.vue";
 import AssetInfo from "./AssetInfo.vue";
 
 export default defineComponent({
@@ -30,9 +30,9 @@ export default defineComponent({
     Button,
     Dialog,
     InputNumber,
-    TransactionsTable,
-    OperationsTable,
-    AssetInfo
+    TransactionsPanel,
+    OperationsPanel,
+    AssetInfo,
   },
 
   props: {
@@ -53,8 +53,7 @@ export default defineComponent({
   },
 
   data() {
-    return {
-    };
+    return {};
   },
 
   methods: {
