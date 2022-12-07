@@ -7,23 +7,23 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import PortfolioDashboard from "./PortfolioDashboard.vue";
 import AssetsTable from "./AssetsTable.vue";
 import TabMenu from "primevue/tabmenu";
 import OperationsTab from "./OperationsTab.vue";
 import TransactionsTab from "./Transactions/TransactionsTab.vue";
 import SnapshotsTab from "./Snapshots/SnapshotsTab.vue";
+import HomeTab from "./Home/HomeTab.vue";
 
 export default defineComponent({
   name: "AppContent",
 
   components: {
-    PortfolioDashboard,
     AssetsTable,
     TabMenu,
     OperationsTab,
     TransactionsTab,
     SnapshotsTab,
+    HomeTab
   },
 
   data() {
