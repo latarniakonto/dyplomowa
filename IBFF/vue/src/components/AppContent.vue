@@ -9,7 +9,7 @@
 import { defineComponent } from "vue";
 import AssetsTable from "./AssetsTable.vue";
 import TabMenu from "primevue/tabmenu";
-import OperationsTab from "./OperationsTab.vue";
+import OperationsTab from "./Operations/OperationsTab.vue";
 import TransactionsTab from "./Transactions/TransactionsTab.vue";
 import SnapshotsTab from "./Snapshots/SnapshotsTab.vue";
 import HomeTab from "./Home/HomeTab.vue";
