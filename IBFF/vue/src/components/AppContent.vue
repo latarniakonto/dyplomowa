@@ -1,7 +1,7 @@
 <template>
   <div class="container app-content mt-3">
     <TabMenu :model="items" class="mb-3" />
-    <TransactionsTab />
+    <SnapshotsTab />
   </div>
 </template>
 
@@ -12,6 +12,7 @@ import AssetsTable from "./AssetsTable.vue";
 import TabMenu from "primevue/tabmenu";
 import OperationsTab from "./OperationsTab.vue";
 import TransactionsTab from "./Transactions/TransactionsTab.vue";
+import SnapshotsTab from "./Snapshots/SnapshotsTab.vue";
 
 export default defineComponent({
   name: "AppContent",
@@ -22,6 +23,7 @@ export default defineComponent({
     TabMenu,
     OperationsTab,
     TransactionsTab,
+    SnapshotsTab,
   },
 
   data() {
@@ -31,6 +33,7 @@ export default defineComponent({
         { label: "Assets", icon: "bi bi-wallet2" },
         { label: "Transactions", icon: "bi bi-cash-coin" },
         { label: "Operations", icon: "bi bi-boxes" },
+        { label: "Snapshots", icon: "bi bi-camera" },
       ],
     };
   },
