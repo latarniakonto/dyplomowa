@@ -1,7 +1,11 @@
 <template>
   <div class="container app-content mt-3">
     <TabMenu :model="items" class="mb-3" />
-    <SnapshotsTab />
+    <HomeTab v-if="content === 'Home'" />
+    <AssetsTab v-if="content === 'Assets'" />
+    <TransactionsTab v-if="content === 'Transactions'" />
+    <OperationsTab v-if="content === 'Operations'" />
+    <SnapshotsTab v-if="content === 'Snapshots'" />
   </div>
 </template>
 
@@ -23,17 +27,25 @@ export default defineComponent({
     TransactionsTab,
     SnapshotsTab,
     HomeTab,
-    AssetsTab
+    AssetsTab,
+  },
+
+  props: {
+    content: {
+      type: String,
+      required: true,
+      default: "",
+    },
   },
 
   data() {
     return {
       items: [
-        { label: "Home", icon: "bi bi-house" },
-        { label: "Assets", icon: "bi bi-wallet2" },
-        { label: "Transactions", icon: "bi bi-cash-coin" },
-        { label: "Operations", icon: "bi bi-boxes" },
-        { label: "Snapshots", icon: "bi bi-camera" },
+        { label: "Home", icon: "bi bi-house", to: "/" },
+        { label: "Assets", icon: "bi bi-wallet2", to: "/assets" },
+        { label: "Transactions", icon: "bi bi-cash-coin", to: "/transactions" },
+        { label: "Operations", icon: "bi bi-boxes", to: "/operations" },
+        { label: "Snapshots", icon: "bi bi-camera", to: "/snapshots" },
       ],
     };
   },

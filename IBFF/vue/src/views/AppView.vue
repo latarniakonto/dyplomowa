@@ -1,6 +1,6 @@
 <template>
-  <app-bar/>
-  <app-content/>
+  <AppBar />
+  <AppContent :content="content" />
 </template>
 
 <script lang="ts">
@@ -11,11 +11,19 @@ import AppBar from "../components/AppBar.vue";
 import AppContent from "../components/AppContent.vue";
 
 export default defineComponent({
-  name: "HomeView",
+  name: "AppView",
 
   components: {
     AppBar,
     AppContent
+  },
+
+  props: {
+    content: {
+      type: String,
+      required: true,
+      default: ""
+    }
   },
 });
 </script>
