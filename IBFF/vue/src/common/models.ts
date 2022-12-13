@@ -1,11 +1,11 @@
 export interface PortfolioJSON {
   id: Number;
   slug: String;
-  cashOnHand: Number;
+  cashOnHand: number;
   uupid: String;
   name: String;
-  deposit: Number;
-  value: Number;
+  deposit: number;
+  value: number;
   annualGain: Number;
   annualYield: Number;
   annualDividends: Number;
@@ -16,10 +16,11 @@ export interface PortfolioJSON {
 
 export class Portfolio {
   id: String;
+  slug: String;
   name: String;
-  deposit: Number;
-  value: Number;
-  cashOnHand: Number;
+  deposit: number;
+  value: number;
+  cashOnHand: number;
   annualGain: Number;
   annualYield: Number;
   annualDividends: Number;
@@ -28,6 +29,7 @@ export class Portfolio {
 
   constructor(json: PortfolioJSON) {
     this.id = json.uupid;
+    this.slug = json.slug;
     this.name = json.name;
     this.deposit = json.deposit;
     this.value = json.value;
@@ -41,7 +43,7 @@ export class Portfolio {
 }
 
 export class Check {
-  value: Number;
+  value: number;
   deposit: Boolean;
   withdraw: Boolean;
   override: Boolean;

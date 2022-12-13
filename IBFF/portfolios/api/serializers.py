@@ -9,3 +9,12 @@ class PortfolioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Portfolio
         exclude = ['cash']
+
+    def update(self, instance, validated_data):
+        addend = validated_data.get('deposit') - instance.deposit
+        instance.deposit += addend
+        instance.cash += addend
+        instance.value += addend
+        instance.save()
+
+        return instance 

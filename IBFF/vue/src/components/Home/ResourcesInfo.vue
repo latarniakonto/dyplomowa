@@ -54,6 +54,7 @@
 import { defineComponent } from "vue";
 import EditDepositDialog from "./EditDepositDialog.vue";
 import { Portfolio, Check } from "../../common/models";
+import { axios } from "../../common/api.service";
 
 export default defineComponent({
   name: "PortfolioDashboard",
@@ -90,23 +91,40 @@ export default defineComponent({
 
     handleDepositEdited(check: Check) {
       if (check.deposit) {
-        this.portfolio.deposit =
-          Number(this.portfolio.deposit) + Number(check.value);
+        this.portfolio.deposit += check.value;
+        this.portfolio.cashOnHand += check.value;
+        this.portfolio.value += check.value;
       }
 
       if (check.withdraw) {
-        this.portfolio.deposit = 
-          Number(this.portfolio.deposit) - Number(check.value);
+        this.portfolio.deposit -= check.value;
+        this.portfolio.cashOnHand -= check.value;
+        this.portfolio.value -= check.value;
       }
 
       if (check.override) {
-        this.portfolio.deposit = Number(check.value);
+        this.portfolio.deposit = check.value;
       }
+      this.performDepositUpdateRequest();
       this.resourcesInfoTiles[0] = false;
     },
 
     handleDepositEditingCanceled() {
       this.resourcesInfoTiles[0] = false;
+    },
+
+    async performDepositUpdateRequest() {
+      let endpoint = `/api/v1/portfolios/${this.portfolio.slug}/`;
+      let method = "PATCH";
+      try {
+        const response = await axios({
+          method: method,
+          url: endpoint,
+          data: { deposit: this.portfolio.deposit },
+        });        
+      } catch (e: any) {
+        console.error(e.response.statusText);
+      }
     },
   },
 });
