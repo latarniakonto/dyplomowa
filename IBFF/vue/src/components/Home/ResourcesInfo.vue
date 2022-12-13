@@ -53,6 +53,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import EditDepositDialog from "./EditDepositDialog.vue";
+import { Portfolio, Check } from "../../common/models";
 
 export default defineComponent({
   name: "PortfolioDashboard",
@@ -63,7 +64,7 @@ export default defineComponent({
 
   props: {
     portfolio: {
-      type: Object,
+      type: Object as () => Portfolio,
       required: true,
       default: {},
     },
@@ -87,28 +88,26 @@ export default defineComponent({
       this.resourcesInfoTiles[index] = !this.resourcesInfoTiles[index];
     },
 
-    handleDepositEdited(deposit: any) {
-      if (deposit.deposit) {
-        this.portfolio.deposit = String(
-          Number(this.portfolio.deposit) + Number(deposit.check)
-        );
+    handleDepositEdited(check: Check) {
+      if (check.deposit) {
+        this.portfolio.deposit =
+          Number(this.portfolio.deposit) + Number(check.value);
       }
 
-      if (deposit.withdraw) {
-        this.portfolio.deposit = String(
-          Number(this.portfolio.deposit) - Number(deposit.check)
-        );
+      if (check.withdraw) {
+        this.portfolio.deposit = 
+          Number(this.portfolio.deposit) - Number(check.value);
       }
 
-      if (deposit.override) {
-        this.portfolio.deposit = String(Number(deposit.check));
+      if (check.override) {
+        this.portfolio.deposit = Number(check.value);
       }
       this.resourcesInfoTiles[0] = false;
     },
 
     handleDepositEditingCanceled() {
       this.resourcesInfoTiles[0] = false;
-    }
+    },
   },
 });
 </script>

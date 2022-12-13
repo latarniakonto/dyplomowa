@@ -22,6 +22,7 @@ import ResourcesInfo from "./ResourcesInfo.vue";
 import FeesInfo from "./FeesInfo.vue";
 import ChartsInfo from "./ChartsInfo.vue";
 import PerformanceInfo from "./PerformanceInfo.vue";
+import { Portfolio } from "../../common/models";
 
 export default defineComponent({
   name: "PortfolioDashboard",
@@ -33,6 +34,14 @@ export default defineComponent({
     PerformanceInfo
   },
 
+  props: {
+    portfolio: {
+      type: Object as () => Portfolio,
+      required: true,
+      default: {}
+    }
+  },
+
   data() {
     return {
       items: [
@@ -41,17 +50,6 @@ export default defineComponent({
         { label: "Transactions", icon: "bi bi-cash-coin" },
         { label: "Operations", icon: "bi bi-boxes" },
       ],
-      portfolio: {
-        name: "Portfolio name" as String,
-        deposit: "30000" as String,
-        cashOnHand: "2000" as String,
-        value: "77000",
-        transactionsCounter: 9 as Number,
-        transactionsCost: "120" as String,
-        annualGain: "47000" as String,
-        annualYield: "156.67%" as String,
-        annualDividends: "1200" as String
-      } as Object
     };
   },
 
