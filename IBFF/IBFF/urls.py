@@ -30,5 +30,6 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('api-auth/', include('rest_framework.urls')),
+    path('api/v1/', include('portfolios.api.urls')),
     re_path(r'^.*$', IndexTemplateView.as_view(), name='entry-point')
 ]
