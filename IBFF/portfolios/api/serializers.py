@@ -1,10 +1,18 @@
 from rest_framework import serializers
 from portfolios.models import Portfolio
+from users.models import IBFFUser
+
+
+class UserRelatedField(serializers.PrimaryKeyRelatedField):
+    def get_queryset(self):
+        user = self.context['request'].user
+        return IBFFUser.objects.filter(username=user)
 
 
 class PortfolioSerializer(serializers.ModelSerializer):
     slug = serializers.SlugField(read_only=True)
     cash_on_hand = serializers.FloatField(source='cash')
+    owner = UserRelatedField(required=True, allow_null=False)
 
     class Meta:
         model = Portfolio
