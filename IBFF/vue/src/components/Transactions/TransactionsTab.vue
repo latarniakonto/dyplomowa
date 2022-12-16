@@ -61,7 +61,7 @@ export default defineComponent({
     },
 
     async handleTransactionAdded(transaction: Transaction) {
-      transaction.slug = this.portfolioSlug;
+      transaction.portfolioSlug = this.portfolioSlug;
       if (await this.performTransactionCreateRequest(transaction)) {
         this.transactions.push(transaction);
       }

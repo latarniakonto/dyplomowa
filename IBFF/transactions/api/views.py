@@ -8,6 +8,7 @@ from transactions.api.filters import OwnedPortfoliosFilter
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
+
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
@@ -16,7 +17,9 @@ class TransactionViewSet(viewsets.ModelViewSet):
     filter_backends = [OwnedPortfoliosFilter]
 
     def perform_create(self, serializer):
-        portfolio = get_object_or_404(Portfolio, slug=self.request.data['slug'])
+        portfolio = get_object_or_404(
+            Portfolio, slug=self.request.data['portfolio_slug']
+        )
         serializer.save(portfolio=portfolio)
 
     def list(self, request, slug=None):

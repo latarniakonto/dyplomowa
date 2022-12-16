@@ -78,6 +78,7 @@ export class Transaction {
   date: Date;
   buy: Boolean;
   sell: Boolean
+  portfolioSlug: String;
 
   constructor(json?: TransactionJSON) {
     this.id = json?.uutid ?? "";
@@ -94,6 +95,7 @@ export class Transaction {
     }
     this.buy = false;
     this.sell = false;
+    this.portfolioSlug = "";
   }
 
 }
