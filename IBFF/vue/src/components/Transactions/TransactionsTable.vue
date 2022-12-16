@@ -158,8 +158,13 @@ export default defineComponent({
         { label: "Buy", value: 1 },
         { label: "Sell", value: 2 },
       ] as Array<any>,
-      editingTransactions: [] as Array<any>,
+      editingTransactions: [] as Array<Transaction>,
     };
+  },
+
+  emits: {
+    transactionDeleted: (transaction: Transaction) => true,
+    transactionEdited: (transaction: Transaction, index: number) => true,
   },
 
   methods: {
@@ -175,33 +180,29 @@ export default defineComponent({
 
     transactionType,
 
-    editTransaction(transaction: any) {
+    editTransaction(transaction: Transaction) {
       this.editingTransactions = [transaction];
     },
 
-    deleteTransaction(transaction: any) {
+    async deleteTransaction(transaction: Transaction) {
       this.editingTransactions = [];
-
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Transaction Deleted",
-        life: 3000,
-      });
+      this.$emit("transactionDeleted", transaction);
     },
 
     submitTransaction(transaction: any, index: number) {
       this.editingTransactions = [];
-
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Transaction Modified",
-        life: 3000,
-      });
+      if (
+        this.transactions[index].ticker !== transaction.ticker ||
+        this.transactions[index].type !== transaction.type ||
+        this.transactions[index].price !== transaction.price ||
+        this.transactions[index].amount !== transaction.amount ||
+        this.transactions[index].provision !== transaction.provision ||
+        this.transactions[index].date !== transaction.date
+      )
+        this.$emit("transactionEdited", transaction, index);
     },
 
-    revertTransaction(transaction: any) {
+    revertTransaction(transaction: Transaction) {
       this.editingTransactions = [];
     },
   },

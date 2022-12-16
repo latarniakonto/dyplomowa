@@ -13,7 +13,11 @@
           </template>
         </Toolbar>
       </div>
-      <TransactionsTable :transactions="transactions" ref="transactionsTable" />
+      <TransactionsTable 
+        :transactions="transactions"
+        @transactionDeleted="handleTransactionDeleted($event)"
+        @transactionEdited="handleTransactionEdited($event)"
+      />
     </div>
     <AddTransactionDialog
       :addTransactionDialog="addTransactionDialog"
@@ -73,6 +77,18 @@ export default defineComponent({
       this.addTransactionDialog = false;
     },
 
+    async handleTransactionDeleted(transaction: Transaction) {
+      if (await this.performTransactionDeleteRequest(transaction)) {
+        this.transactions = this.transactions.filter((val) => val.id !== transaction.id);
+      }
+    },
+
+    async handleTransactionEdited(transaction: Transaction, index: number) {      
+      if (await this.performTransactionPutRequest(transaction)) {
+        this.transactions.splice(index, 1, transaction);
+      }
+    },
+
     async getTransactions() {
       let endpoint = "api/v1/portfolios/";
 
@@ -119,6 +135,62 @@ export default defineComponent({
           detail: "Transaction was not created.",
           life: 3000,
         });
+        return false;
+      }
+    },
+
+    async performTransactionDeleteRequest(transaction: Transaction): Promise<Boolean> {
+      let endpoint = `/api/v1/transactions/${transaction.slug}/`;
+
+      try {
+        const response = await axios.delete(endpoint);
+        this.$toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: "Transaction deleted",
+          life: 3000,
+        });
+
+        return true;
+      } catch (e: any) {
+        console.error(e.response.statusText);
+        this.$toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: "Transaction was not deleted.",
+          life: 3000,
+        });
+
+        return false;
+      }
+    },
+
+    async performTransactionPutRequest(transaction: Transaction): Promise<Boolean> {
+      let endpoint = `/api/v1/transactions/${transaction.slug}/`;
+      let method = "PUT";
+      try {
+        const response = await axios({
+          method: method,
+          url: endpoint,
+          data: transaction,
+        });
+        this.$toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: "Transaction modified.",
+          life: 3000,
+        });
+
+        return true;
+      } catch (e: any) {
+        console.error(e.response.statusText);
+        this.$toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: "Transaction was not modified.",
+          life: 3000,
+        });
+
         return false;
       }
     },
