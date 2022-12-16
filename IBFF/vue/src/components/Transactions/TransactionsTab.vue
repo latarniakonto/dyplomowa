@@ -108,6 +108,8 @@ export default defineComponent({
           detail: "Transaction created",
           life: 3000,
         });
+        transaction.id = response.data.uutid;
+        transaction.slug = response.data.slug;
         return true;
       } catch (e: any) {
         console.error(e.response.statusText);
