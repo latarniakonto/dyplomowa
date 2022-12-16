@@ -19,6 +19,9 @@
         </template>
       </Column>
       <Column field="type" header="Type">
+        <template #body="slotProps">
+          {{ transactionType(slotProps.data.type) }}
+        </template>
         <template #editor="{ data, field }">
           <Dropdown
             v-model="data[field]"
@@ -123,6 +126,7 @@ import InputText from "primevue/inputtext";
 import InputNumber from "primevue/inputnumber";
 import Dropdown from "primevue/dropdown";
 import Calendar from "primevue/calendar";
+import { Transaction, transactionType } from "@/common/models";
 
 export default defineComponent({
   name: "TransactionsTable",
@@ -140,76 +144,19 @@ export default defineComponent({
     Calendar,
   },
 
+  props: {
+    transactions: {
+      type: Array as () => Array<Transaction>,
+      required: true,
+      default: [],
+    },
+  },
+
   data() {
     return {
       transactionTypes: [
-        { label: "Buy", value: "Buy" },
-        { label: "Sell", value: "Sell" },
-      ] as Array<any>,
-      transactions: [
-        {
-          id: "1000",
-          ticker: "$ITEM1" as String,
-          date: new Date("2020-01-30") as Date,
-          type: "Buy" as String,
-          price: 0 as Number,
-          amount: 20 as Number,
-          provision: 1.9 as Number,
-        },
-        {
-          id: "1001",
-          ticker: "$ITEM1" as String,
-          date: new Date("2020-08-12") as Date,
-          type: "Buy" as String,
-          price: 0 as Number,
-          amount: 22 as Number,
-          provision: 1.9 as Number,
-        },
-        {
-          id: "1002",
-          ticker: "$ITEM1" as String,
-          date: new Date("2020-08-12") as Date,
-          type: "Buy" as String,
-          price: 0 as Number,
-          amount: 13 as Number,
-          provision: 0 as Number,
-        },
-        {
-          id: "1003",
-          ticker: "$ITEM1" as String,
-          date: new Date("2021-04-07") as Date,
-          type: "Buy" as String,
-          price: 0 as Number,
-          amount: 70 as Number,
-          provision: 5 as Number,
-        },
-        {
-          id: "1004",
-          ticker: "$ITEM1" as String,
-          date: new Date("2021-10-26") as Date,
-          type: "Buy" as String,
-          price: 0 as Number,
-          amount: 75 as Number,
-          provision: 5.06 as Number,
-        },
-        {
-          id: "1005",
-          ticker: "$ITEM1" as String,
-          date: new Date("2022-02-24") as Date,
-          type: "Buy" as String,
-          price: 0 as Number,
-          amount: 100 as Number,
-          provision: 5.42 as Number,
-        },
-        {
-          id: "1006",
-          ticker: "$ITEM1" as String,
-          date: new Date("2022-02-24") as Date,
-          type: "Buy" as String,
-          price: 0 as Number,
-          amount: 50 as Number,
-          provision: 5 as Number,
-        },
+        { label: "Buy", value: 1 },
+        { label: "Sell", value: 2 },
       ] as Array<any>,
       editingTransactions: [] as Array<any>,
     };
@@ -226,14 +173,13 @@ export default defineComponent({
       );
     },
 
+    transactionType,
+
     editTransaction(transaction: any) {
       this.editingTransactions = [transaction];
     },
 
     deleteTransaction(transaction: any) {
-      this.transactions = this.transactions.filter(
-        (val) => val.id !== transaction.id
-      );
       this.editingTransactions = [];
 
       this.$toast.add({
@@ -245,7 +191,6 @@ export default defineComponent({
     },
 
     submitTransaction(transaction: any, index: number) {
-      this.transactions[index] = transaction;
       this.editingTransactions = [];
 
       this.$toast.add({
@@ -259,10 +204,6 @@ export default defineComponent({
     revertTransaction(transaction: any) {
       this.editingTransactions = [];
     },
-
-    addTransaction(transaction: any) {
-      this.transactions.push(transaction);
-    }
   },
 });
 </script>

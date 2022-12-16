@@ -13,7 +13,7 @@
           </template>
         </Toolbar>
       </div>
-      <TransactionsTable ref="transactionsTable" />
+      <TransactionsTable :transactions="transactions" ref="transactionsTable" />
     </div>
     <AddTransactionDialog
       :addTransactionDialog="addTransactionDialog"
@@ -29,6 +29,13 @@ import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
 import TransactionsTable from "./TransactionsTable.vue";
 import AddTransactionDialog from "./AddTransactionDialog.vue";
+import {
+  Portfolio,
+  PortfolioJSON,
+  Transaction,
+  TransactionJSON,
+} from "../../common/models";
+import { axios } from "../../common/api.service";
 
 export default defineComponent({
   name: "TransactionsTab",
@@ -43,6 +50,8 @@ export default defineComponent({
   data() {
     return {
       addTransactionDialog: false as Boolean,
+      portfolioSlug: "" as String,
+      transactions: [] as Array<Transaction>,
     };
   },
 
@@ -51,10 +60,10 @@ export default defineComponent({
       this.addTransactionDialog = true;
     },
 
-    handleTransactionAdded(transaction: any) {
-      let child = this.$refs.transactionsTable as typeof TransactionsTable;
-      if (child) {        
-        child.addTransaction(transaction);
+    async handleTransactionAdded(transaction: Transaction) {
+      transaction.slug = this.portfolioSlug;
+      if (await this.performTransactionCreateRequest(transaction)) {
+        this.transactions.push(transaction);
       }
 
       this.addTransactionDialog = false;
@@ -62,7 +71,59 @@ export default defineComponent({
 
     handleTransactionAddingCanceled() {
       this.addTransactionDialog = false;
-    }
+    },
+
+    async getTransactions() {
+      let endpoint = "api/v1/portfolios/";
+
+      try {
+        let response = await axios.get(endpoint);
+        let jsons = response.data;
+        this.portfolioSlug = new Portfolio(jsons[0] as PortfolioJSON).slug;
+
+        endpoint += `${this.portfolioSlug}/transactions/`;
+
+        response = await axios.get(endpoint);
+        jsons = response.data;
+        jsons.forEach((json: any) => {
+          this.transactions.push(new Transaction(json as TransactionJSON));
+        });
+      } catch (e: any) {
+        console.error(e.response);
+      }
+    },
+
+    async performTransactionCreateRequest(transaction: Transaction): Promise<Boolean> {
+      let endpoint = "/api/v1/transactions/";
+      let method = "POST";
+      try {
+        const response = await axios({
+          method: method,
+          url: endpoint,
+          data: transaction,
+        });
+        this.$toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: "Transaction created",
+          life: 3000,
+        });
+        return true;
+      } catch (e: any) {
+        console.error(e.response.statusText);
+        this.$toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: "Transaction was not created.",
+          life: 3000,
+        });
+        return false;
+      }
+    },
+  },
+
+  created() {
+    this.getTransactions();
   },
 });
 </script>

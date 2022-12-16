@@ -11,7 +11,7 @@ class PortfolioRelatedField(serializers.PrimaryKeyRelatedField):
 
 class TransactionSerializer(serializers.ModelSerializer):
     slug = serializers.SlugField(read_only=True)
-    portfolio = PortfolioRelatedField(required=True, allow_null=False)
+    portfolio = PortfolioRelatedField(read_only=True, allow_null=False)
 
     class Meta:
         model = Transaction

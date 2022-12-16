@@ -64,7 +64,7 @@
       </div>
     </div>
     <div class="d-inline-flex">
-      <div class="price mb-2 mr-2">
+      <div class="price mb-2 mr-2 w-6">
         <h6 class="mb-2">Price</h6>
         <InputNumber
           id="price"
@@ -84,7 +84,7 @@
           >You need to specify a transaction price.</small
         >
       </div>
-      <div class="amount mb-2">
+      <div class="amount mb-2 w-6">
         <h6 class="mb-2">Amount</h6>
         <InputNumber
           id="amount"
@@ -171,6 +171,7 @@ import Dialog from "primevue/dialog";
 import InputNumber from "primevue/inputnumber";
 import ToggleButton from "primevue/togglebutton";
 import Calendar from "primevue/calendar";
+import { Transaction, TransactionType } from "../../common/models";
 
 export default defineComponent({
   name: "AddTransactionDialog",
@@ -193,20 +194,20 @@ export default defineComponent({
   },
 
   emits: {
-    transactionAdded: (transaction: any) => true,
+    transactionAdded: (transaction: Transaction) => true,
     transactionAddingCanceled: () => true,
   },
 
   data() {
     return {
       transactionAdded: false as Boolean,
-      transaction: {} as any,
+      transaction: new Transaction(),
     };
   },
 
   methods: {
     cancelTransactionAdding() {
-      this.transaction = {};
+      this.transaction = new Transaction();
       this.transactionAdded = false;
       this.$emit("transactionAddingCanceled");
     },
@@ -218,15 +219,16 @@ export default defineComponent({
         this.transaction.price &&
         this.transaction.amount &&
         this.transaction.date &&
-        (this.transaction.provision ||
-        this.transaction.provision === 0) &&
+        (this.transaction.provision || this.transaction.provision === 0) &&
         (this.transaction.buy || this.transaction.sell)
       ) {
-        this.transaction.type = this.transaction.buy ? "Buy" : "Sell";
-
+        this.transaction.type = this.transaction.buy
+          ? TransactionType.Buy
+          : TransactionType.Sell;
+        
         this.$emit("transactionAdded", this.transaction);
 
-        this.transaction = {};
+        this.transaction = new Transaction();
         this.transactionAdded = false;
       }
     },

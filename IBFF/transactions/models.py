@@ -5,8 +5,8 @@ from portfolios.models import Portfolio
 
 
 class Types(models.IntegerChoices):
-    BUY = 0, 'Buy'
-    SELL = 1, 'Sell'
+    BUY = 1, 'Buy'
+    SELL = 2, 'Sell'
 
 
 class Transaction(models.Model):
@@ -21,7 +21,7 @@ class Transaction(models.Model):
     price = models.FloatField()
     amount = models.IntegerField()
     provision = models.FloatField()
-    date = models.DateField()
+    date = models.DateTimeField()
 
     def __str__(self):
         return self.ticker

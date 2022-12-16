@@ -55,3 +55,61 @@ export class Check {
     this.override = false;
   }
 }
+
+export interface TransactionJSON {
+  uutid: String;
+  slug: String;
+  ticker: String;
+  type: number;
+  price: number;
+  amount: number;
+  provision: number;
+  date: string;
+}
+
+export class Transaction {
+  id: String;
+  slug: String;
+  ticker: String;
+  type?: number;
+  price?: number;
+  amount?: number;
+  provision: number;
+  date: Date;
+  buy: Boolean;
+  sell: Boolean
+
+  constructor(json?: TransactionJSON) {
+    this.id = json?.uutid ?? "";
+    this.slug = json?.slug ?? "";
+    this.ticker = json?.ticker ?? "";
+    this.type = json?.type ?? undefined;
+    this.price = json?.price ?? undefined;
+    this.amount = json?.amount ?? undefined;
+    this.provision = json?.provision ?? 0;
+    if (json) {
+      this.date = new Date(json.date);
+    } else {
+      this.date = new Date();
+    }
+    this.buy = false;
+    this.sell = false;
+  }
+
+}
+
+export enum TransactionType {
+  Buy = 1,
+  Sell
+}
+
+export function transactionType(type: TransactionType): string {
+  switch (type) {
+    case TransactionType.Buy:
+      return "Buy";
+    case TransactionType.Sell:
+      return "Sell";
+    default:
+      return "";
+  }
+}

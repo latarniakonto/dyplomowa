@@ -16,7 +16,8 @@ class TransactionViewSet(viewsets.ModelViewSet):
     filter_backends = [OwnedPortfoliosFilter]
 
     def perform_create(self, serializer):
-        serializer.save()
+        portfolio = get_object_or_404(Portfolio, slug=self.request.data['slug'])
+        serializer.save(portfolio=portfolio)
 
     def list(self, request, slug=None):
         if slug is None:
