@@ -10,9 +10,19 @@ import PrimeVue from "primevue/config";
 import "primevue/resources/themes/md-light-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import ToastService from 'primevue/toastservice';
+import ToastService from "primevue/toastservice";
 import "primeflex/primeflex.css";
 
 loadFonts();
 
-createApp(App).use(router).use(store).use(vuetify).use(PrimeVue).use(ToastService).mount("#app");
+const app = createApp(App);
+
+app.use(router);
+app.use(store);
+app.use(vuetify);
+app.use(PrimeVue);
+app.use(ToastService);
+
+app.mount("#app");
+
+export const appToast = app.config.globalProperties.$toast;

@@ -40,6 +40,7 @@ import {
   TransactionJSON,
 } from "../../common/models";
 import { axios } from "../../common/api.service";
+import { toastSuccess, toastError } from "../../common/api.toast";
 
 export default defineComponent({
   name: "TransactionsTab",
@@ -118,23 +119,15 @@ export default defineComponent({
           url: endpoint,
           data: transaction,
         });
-        this.$toast.add({
-          severity: "success",
-          summary: "Successful",
-          detail: "Transaction created",
-          life: 3000,
-        });
         transaction.id = response.data.uutid;
         transaction.slug = response.data.slug;
+        toastSuccess("Transaction created.", 3000);
+
         return true;
       } catch (e: any) {
         console.error(e.response.statusText);
-        this.$toast.add({
-          severity: "error",
-          summary: "Error",
-          detail: "Transaction was not created.",
-          life: 3000,
-        });
+        toastError("Transaction was not created.", 3000);
+        
         return false;
       }
     },
@@ -144,22 +137,12 @@ export default defineComponent({
 
       try {
         const response = await axios.delete(endpoint);
-        this.$toast.add({
-          severity: "success",
-          summary: "Successful",
-          detail: "Transaction deleted",
-          life: 3000,
-        });
+        toastSuccess("Transaction deleted.", 3000);
 
         return true;
       } catch (e: any) {
         console.error(e.response.statusText);
-        this.$toast.add({
-          severity: "error",
-          summary: "Error",
-          detail: "Transaction was not deleted.",
-          life: 3000,
-        });
+        toastError("Transaction was not deleted.", 3000)
 
         return false;
       }
@@ -174,22 +157,12 @@ export default defineComponent({
           url: endpoint,
           data: transaction,
         });
-        this.$toast.add({
-          severity: "success",
-          summary: "Successful",
-          detail: "Transaction modified.",
-          life: 3000,
-        });
+        toastSuccess("Transaction modified.", 3000);
 
         return true;
       } catch (e: any) {
         console.error(e.response.statusText);
-        this.$toast.add({
-          severity: "error",
-          summary: "Error",
-          detail: "Transaction was not modified.",
-          life: 3000,
-        });
+        toastError("Transaction was not modified.", 3000);
 
         return false;
       }
