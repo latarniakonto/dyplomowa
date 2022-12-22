@@ -225,6 +225,9 @@ export default defineComponent({
         this.transaction.type = this.transaction.buy
           ? TransactionType.Buy
           : TransactionType.Sell;
+
+        this.transaction.value = 
+          this.transaction.price * this.transaction.amount;
         
         this.$emit("transactionAdded", this.transaction);
 

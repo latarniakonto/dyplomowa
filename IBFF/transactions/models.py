@@ -20,6 +20,7 @@ class Transaction(models.Model):
     type = models.IntegerField(choices=Types.choices, verbose_name='transaction type')
     price = models.FloatField()
     amount = models.IntegerField()
+    value = models.IntegerField()
     provision = models.FloatField()
     date = models.DateTimeField()
 

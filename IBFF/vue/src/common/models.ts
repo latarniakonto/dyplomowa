@@ -62,6 +62,7 @@ export interface TransactionJSON {
   ticker: String;
   type: number;
   price: number;
+  value: number;
   amount: number;
   provision: number;
   date: string;
@@ -74,6 +75,7 @@ export class Transaction {
   type?: number;
   price?: number;
   amount?: number;
+  value?: number;
   provision: number;
   date: Date;
   buy: Boolean;
@@ -87,6 +89,7 @@ export class Transaction {
     this.type = json?.type ?? undefined;
     this.price = json?.price ?? undefined;
     this.amount = json?.amount ?? undefined;
+    this.value = json?.value ?? undefined;
     this.provision = json?.provision ?? 0;
     if (json) {
       this.date = new Date(json.date);
