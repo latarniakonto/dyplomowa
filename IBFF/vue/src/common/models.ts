@@ -162,3 +162,7 @@ export class Asset {
     this.index = undefined;
   }
 }
+
+export function getPrintablePercantage(percantage: number): string {
+  return String(Math.round(percantage * 10000) / 100 ) + "%";
+}

@@ -65,7 +65,9 @@
         <span class="font-medium text-xl">Profit/Loss</span>
       </div>
       <div v-if="!assetInfoTiles[2]">
-        <span class="text-bluegray-900 text-2xl"> {{ asset.gain }}</span>
+        <span class="text-bluegray-900 text-2xl">
+          {{ getPrintablePercantage(asset.gain) }}
+        </span>
       </div>
       <div v-else class="p-inputgroup" @click="$event.stopPropagation()">
         <InputNumber
@@ -116,7 +118,7 @@
       </div>
       <div v-if="!assetInfoTiles[3]">
         <span class="text-bluegray-900 text-2xl">
-          {{ asset.initialWeight }}</span
+          {{ getPrintablePercantage(asset.initialWeight) }}</span
         >
       </div>
       <div v-else class="p-inputgroup" @click="$event.stopPropagation()">
@@ -142,7 +144,7 @@
       </div>
       <div v-if="!assetInfoTiles[4]">
         <span class="text-bluegray-900 text-2xl">
-          {{ asset.currentWeight }}</span
+          {{ getPrintablePercantage(asset.currentWeight) }}</span
         >
       </div>
       <div v-else class="p-inputgroup" @click="$event.stopPropagation()">
@@ -165,7 +167,7 @@
 import { defineComponent } from "vue";
 import InputNumber from "primevue/inputnumber";
 import Tooltip from "primevue/tooltip";
-import { Asset } from "../../common/models";
+import { Asset, getPrintablePercantage } from "../../common/models";
 
 export default defineComponent({
   name: "AssetInfo",
@@ -219,7 +221,9 @@ export default defineComponent({
     handleBlur(e: any) {
       let currentPrice = Number(e.value.replace(/\,/g, ""));
       this.$emit("currentPriceChanged", this.asset.index, currentPrice);
-    },    
+    },
+    
+    getPrintablePercantage,
   },
 });
 </script>

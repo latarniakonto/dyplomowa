@@ -45,7 +45,7 @@
             style="min-width: 8rem"
           >
             <template #body="slotProps">
-              {{ slotProps.data.gain }}
+              {{ getPrintablePercantage(slotProps.data.gain) }}
             </template>
           </Column>
           <Column
@@ -55,7 +55,7 @@
             style="min-width: 3rem"
           >
             <template #body="slotProps">
-              {{ slotProps.data.initialWeight }}
+              {{ getPrintablePercantage(slotProps.data.initialWeight) }}
             </template>
           </Column>
           <Column
@@ -65,7 +65,7 @@
             style="min-width: 3rem"
           >
             <template #body="slotProps">
-              {{ slotProps.data.currentWeight }}
+              {{ getPrintablePercantage(slotProps.data.currentWeight) }}
             </template>
           </Column>
           <Column style="min-width: 1rem">
@@ -106,6 +106,7 @@ import {
   Asset,
   Transaction,
   TransactionJSON,
+  getPrintablePercantage
 } from "../../common/models";
 import { axios } from "../../common/api.service";
 
@@ -163,6 +164,8 @@ export default defineComponent({
         console.error(e.response);
       }
     },
+
+    getPrintablePercantage
   },
 });
 </script>

@@ -22,7 +22,9 @@
         <span class="font-medium text-xl">Annual Yield</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">{{ portfolio.annualYield }}</span>
+        <span class="text-bluegray-900 text-2xl">
+          {{ getPrintablePercantage(portfolio.annualYield) }}
+        </span>
       </div>
     </div>
     <div
@@ -42,6 +44,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { getPrintablePercantage } from "../../common/models";
 
 export default defineComponent({
   name: "PerformanceInfo",
@@ -73,6 +76,8 @@ export default defineComponent({
 
       this.performanceInfoTiles[index] = !this.performanceInfoTiles[index];
     },
+
+    getPrintablePercantage,
   },
 });
 </script>
