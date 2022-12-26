@@ -16,3 +16,21 @@ class AssetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asset
         exclude = ['id']
+    
+    def update(self, instance, validated_data):
+        new_current_price = validated_data.get('current_price')
+        instance.current_price = new_current_price
+        instance.current_value = instance.current_price * instance.total
+        instance.gain = instance.current_value / instance.initial_value - 1
+        instance.save()
+
+        assets = Asset.objects.all()
+        total_current_value = 0
+        for asset in assets:
+            total_current_value += asset.current_value
+        
+        for asset in assets:
+            asset.current_weight = asset.current_value / total_current_value
+            asset.save()
+
+        return instance
