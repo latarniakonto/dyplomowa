@@ -24,7 +24,7 @@ class AssetViewSet(viewsets.ModelViewSet):
             return super().list(request)
         else:
             portfolio = get_object_or_404(Portfolio, slug=p_slug, owner=request.user)
-            queryset = portfolio.assets
+            queryset = portfolio.assets.filter(total__gt=0)
 
         serializer = AssetSerializer(queryset, many=True)
         return Response(serializer.data)
