@@ -118,3 +118,47 @@ export function transactionType(type: TransactionType): string {
       return "";
   }
 }
+
+export interface AssetJSON {
+  uuaid: String;
+  slug: String;
+  ticker: String;
+  total: number;
+  initialPrice: number;
+  currentPrice: number;
+  gain: number;
+  initialValue: number;
+  currentValue: number;
+  initialWeight: number;
+  currentWeight: number;
+}
+
+export class Asset {
+  id: String;
+  slug: String;
+  ticker: String;
+  total: number;
+  initialPrice: number;
+  currentPrice: number;
+  initialValue: number;
+  currentValue: number;
+  gain: number;
+  initialWeight: number;
+  currentWeight: number;
+  index?: number;
+  
+  constructor(json: AssetJSON) {
+    this.id = json.uuaid;
+    this.slug = json.slug;
+    this.ticker = json.ticker;
+    this.total = json.total;
+    this.initialPrice = json.initialPrice;
+    this.currentPrice = json.currentPrice;
+    this.initialValue = json.initialValue;
+    this.currentValue = json.currentValue;
+    this.gain = json.gain;
+    this.initialWeight = json.initialWeight;
+    this.currentWeight = json.currentWeight;
+    this.index = undefined;
+  }
+}

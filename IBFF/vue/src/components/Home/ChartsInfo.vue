@@ -12,6 +12,7 @@
         type="pie"
         :data="chartData"
         :options="lightOptions"
+        :plugins="plugins"
         @click="$event.stopPropagation()"
       />
     </div>
@@ -21,6 +22,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Chart from "primevue/chart";
+import { Asset, AssetJSON, Portfolio } from "../../common/models";
+import { axios } from "../../common/api.service";
 
 export default defineComponent({
   name: "ChartsInfo",
@@ -29,18 +32,26 @@ export default defineComponent({
     Chart,
   },
 
+  props: {
+    portfolio: {
+      type: Object as () => Portfolio,
+      required: true,
+      default: {},
+    },
+  },
+
   data() {
     return {
+      assets: [] as Array<Asset>,
       chartsInfoTiles: [false] as Array<Boolean>,
       chartData: {
-        labels: ["A", "B", "C"],
-        datasets: [
-          {
-            data: [20, 1, 79],
-            backgroundColor: ["#42A5F5", "#66BB6A", "#FFA726"],
-            hoverBackgroundColor: ["#64B5F6", "#81C784", "#FFB74D"],
-          },
-        ],
+        labels: [] as Array<String>,
+        datasets: [] as Array<any>,
+      },
+      plugins: {
+        colors: {
+          enabled: true
+        }
       },
       lightOptions: {
         plugins: {
@@ -65,6 +76,45 @@ export default defineComponent({
 
       this.chartsInfoTiles[index] = !this.chartsInfoTiles[index];
     },
+
+    async getAssets() {
+      let endpoint = `api/v1/portfolios/${this.portfolio.slug}/assets/`;
+
+      try {
+        let response = await axios.get(endpoint);
+
+        let jsons = response.data;
+        jsons.forEach((json: any) => {
+          this.assets.push(new Asset(json as AssetJSON));
+        });
+      } catch (e: any) {
+        console.error(e.response);
+      }
+    },
+
+    drawChart() {      
+      if (this.assets.length === 0) {
+        this.chartData.labels = ["NO ASSETS"];
+        this.chartData.datasets = [{ data: [100] }];
+        return;
+      }
+
+      this.chartData.labels = [];
+      this.chartData.datasets = [];
+      let allocation: number[] = [];
+      this.assets.forEach((asset: Asset) => {
+        this.chartData.labels.push(asset.ticker);
+        allocation.push(Math.round(asset.currentWeight * 1000) / 10);
+      });
+      this.chartData.datasets = [{
+        data: allocation
+      }];
+    },
+  },
+
+  async created() {
+    await this.getAssets();
+    this.drawChart();
   },
 });
 </script>

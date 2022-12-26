@@ -26,21 +26,12 @@
             style="min-width: 2rem"
           ></Column>
           <Column
-            field="buyPrice"
-            header="Buy Price"
+            field="initialPrice"
+            header="Initial Price"
             :sortable="true"
             style="min-width: 3rem"
           >
-            <!-- <template #body="slotProps">
-              {{ formatCurrency(slotProps.data.price) }}
-            </template> -->
           </Column>
-          <Column
-            field="initialWeight"
-            header="Initial Weight"
-            :sortable="true"
-            style="min-width: 3rem"
-          ></Column>
           <Column
             field="currentPrice"
             header="Current Price"
@@ -52,28 +43,39 @@
             header="Profit/Loss"
             :sortable="true"
             style="min-width: 8rem"
-          ></Column>
+          >
+            <template #body="slotProps">
+              {{ slotProps.data.gain }}
+            </template>
+          </Column>
+          <Column
+            field="initialWeight"
+            header="Initial Weight"
+            :sortable="true"
+            style="min-width: 3rem"
+          >
+            <template #body="slotProps">
+              {{ slotProps.data.initialWeight }}
+            </template>
+          </Column>
           <Column
             field="currentWeight"
             header="Current Weight"
             :sortable="true"
             style="min-width: 3rem"
-          ></Column>
+          >
+            <template #body="slotProps">
+              {{ slotProps.data.currentWeight }}
+            </template>
+          </Column>
           <Column style="min-width: 1rem">
             <template #body="slotProps">
               <button
                 type="button"
                 class="btn btn-warning btn-sm mr-1"
-                @click="analazyAsset(slotProps.data)"
+                @click="analazyAsset(slotProps.data, slotProps.index)"
               >
-                <i class="bi bi-pencil-fill"></i>
-              </button>
-              <button
-                type="button"
-                class="btn btn-danger btn-sm"
-                @click="deleteAsset(slotProps.data)"
-              >
-                <i class="bi bi-trash3-fill"></i>
+                <i class="bi bi-info-circle"></i>
               </button>
             </template>
           </Column>
@@ -81,16 +83,12 @@
       </div>
     </div>
     <div class="table-crud">
-      <DeleteAssetDialog
-        :deleteAssetDialog="deleteAssetDialog"
-        :asset="asset"
-        @assetDeletionCanceled="handleAssetDeletionCanceled()"
-        @assetDeletionConfirmed="handleAssetDeletionConfirmed($event)"
-      />
       <AnalyzeAssetDialog
         :analyzeAssetDialog="analazyAssetDialog"
         :asset="asset"
+        :transactions="assetTransactions"
         @asset-analysis-canceled="handleAssetAnalysisCanceled()"
+        v-bind="$attrs"
       />
     </div>
   </div>
@@ -103,8 +101,13 @@ import Column from "primevue/column";
 import Row from "primevue/row";
 import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
-import DeleteAssetDialog from "./DeleteAssetDialog.vue";
 import AnalyzeAssetDialog from "./AnalyzeAssetDialog.vue";
+import {
+  Asset,
+  Transaction,
+  TransactionJSON,
+} from "../../common/models";
+import { axios } from "../../common/api.service";
 
 export default defineComponent({
   name: "AssetsTable",
@@ -115,124 +118,50 @@ export default defineComponent({
     Row,
     Button,
     Toolbar,
-    DeleteAssetDialog,
     AnalyzeAssetDialog,
+  },
+
+  props: {
+    assets: {
+      type: Array as () => Array<Asset>,
+      required: true,
+      default: [],
+    },
   },
 
   data() {
     return {
-      deleteAssetDialog: false as Boolean,
       analazyAssetDialog: false as Boolean,
-      asset: {} as any,
-      assets: [
-        {
-          ticker: "$ITEM1" as String,
-          total: "93" as String,
-          buyPrice: "$" as String,
-          initialWeight: "22.68%" as String,
-          currentPrice: "$" as String,
-          gain: "-16.42%" as String,
-          currentWeight: "17.42%" as String,
-        },
-        {
-          ticker: "$ITEM2" as String,
-          total: "150" as String,
-          buyPrice: "$" as String,
-          initialWeight: "20.28%" as String,
-          currentPrice: "$" as String,
-          gain: "-12.01%" as String,
-          currentWeight: "16.41%" as String,
-        },
-        {
-          ticker: "$ITEM3" as String,
-          total: "86" as String,
-          buyPrice: "$" as String,
-          initialWeight: "5.62%" as String,
-          currentPrice: "$" as String,
-          gain: "-16.84%" as String,
-          currentWeight: "4.3%" as String,
-        },
-        {
-          ticker: "$ITEM4" as String,
-          total: "55" as String,
-          buyPrice: "$" as String,
-          initialWeight: "16.87%" as String,
-          currentPrice: "$" as String,
-          gain: "1.91%" as String,
-          currentWeight: "15.82%" as String,
-        },
-        {
-          ticker: "$ITEM5" as String,
-          total: "84" as String,
-          buyPrice: "$" as String,
-          initialWeight: "5.15%" as String,
-          currentPrice: "$" as String,
-          gain: "24.72%" as String,
-          currentWeight: "5.91%" as String,
-        },
-        {
-          ticker: "$ITEM6" as String,
-          total: "80" as String,
-          buyPrice: "$" as String,
-          initialWeight: "8.08%" as String,
-          currentPrice: "$" as String,
-          gain: "-16.42%" as String,
-          currentWeight: "6.76%" as String,
-        },
-        {
-          ticker: "$ITEM7" as String,
-          total: "9" as String,
-          buyPrice: "$" as String,
-          initialWeight: "1.75%" as String,
-          currentPrice: "$" as String,
-          gain: "39.53%" as String,
-          currentWeight: "2.25%" as String,
-        },
-        {
-          ticker: "$ITEM8" as String,
-          total: "350" as String,
-          buyPrice: "$" as String,
-          initialWeight: "19.57%" as String,
-          currentPrice: "$" as String,
-          gain: "70.15%" as String,
-          currentWeight: "30.78%" as String,
-        },
-      ] as Array<any>,
+      asset: {} as Asset,
+      assetTransactions: [] as Array<Transaction>,
     };
   },
 
   methods: {
-    deleteAsset(asset: any) {
+    analazyAsset(asset: Asset, index?: number) {
       this.asset = asset;
-      this.deleteAssetDialog = true;
-    },
-
-    analazyAsset(asset: any) {
-      this.asset = asset;
+      this.asset.index = index;
+      this.getAssetTransactions();
       this.analazyAssetDialog = true;
-    },
-
-    handleAssetDeletionCanceled() {
-      this.deleteAssetDialog = false;
-      this.asset = {};
     },
 
     handleAssetAnalysisCanceled() {
       this.analazyAssetDialog = false;
-      this.asset = {};
     },
 
-    handleAssetDeletionConfirmed(asset: any) {
-      this.assets = this.assets.filter((val) => val.ticker !== asset.ticker);
-      this.deleteAssetDialog = false;
+    async getAssetTransactions() {
+      let endpoint = `api/v1/assets/${this.asset.slug}/transactions/`;
+      this.assetTransactions = [];
 
-      this.asset = {};
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Asset Deleted",
-        life: 3000,
-      });
+      try {
+        let response = await axios.get(endpoint);
+        let jsons = response.data;
+        jsons.forEach((json: any) => {
+          this.assetTransactions.push(new Transaction(json as TransactionJSON));
+        });
+      } catch (e: any) {
+        console.error(e.response);
+      }
     },
   },
 });

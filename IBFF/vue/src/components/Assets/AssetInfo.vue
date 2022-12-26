@@ -1,8 +1,41 @@
 <template>
   <div class="tiles">
-    <div class="asset-info-tile mb-2 mr-2" :class="{ 'tile-active': assetInfoTiles[0] }" @click="toggleAssetInfoTile(0)">
-      <div class="mb-2"> 
-        <span class="font-medium text-xl">Current Price</span>
+    <div
+      class="asset-info-tile mb-2 mr-2"
+      :class="{ 'tile-active': assetInfoTiles[5] }"
+      @click="toggleAssetInfoTile(5)"
+    >
+      <div class="mb-2">
+        <span class="font-medium text-xl">Initial Price</span>
+      </div>
+      <div v-if="!assetInfoTiles[5]">
+        <span class="text-bluegray-900 text-2xl">
+          {{ asset.initialPrice }}</span
+        >
+      </div>
+      <div v-else class="p-inputgroup" @click="$event.stopPropagation()">
+        <InputNumber
+          id="init-price"
+          v-bind:modelValue="asset.initialPrice"
+          mode="decimal"
+          :readonly="true"
+          :min="0.001"
+          :maxFractionDigits="3"
+          autofocus
+          required="true"
+          class="input-blocked"
+          v-tooltip.bottom="`You can't edit this field directly.`"
+        />
+        <span class="p-inputgroup-addon">PLN</span>
+      </div>
+    </div>
+    <div
+      class="asset-info-tile mb-2 mr-2"
+      :class="{ 'tile-active': assetInfoTiles[0] }"
+      @click="toggleAssetInfoTile(0)"
+    >
+      <div class="mb-2 flex">
+        <span class="font-medium text-xl mr-2">Current Price</span>
       </div>
       <div v-if="!assetInfoTiles[0]">
         <span class="text-bluegray-900 text-2xl">
@@ -18,11 +51,41 @@
           :maxFractionDigits="3"
           autofocus
           required="true"
+          @blur="handleBlur($event)"
         />
         <span class="p-inputgroup-addon">PLN</span>
       </div>
+    </div>    
+    <div
+      class="asset-info-tile mb-2"
+      :class="{ 'tile-active': assetInfoTiles[2] }"
+      @click="toggleAssetInfoTile(2)"
+    >
+      <div class="mb-2">
+        <span class="font-medium text-xl">Profit/Loss</span>
+      </div>
+      <div v-if="!assetInfoTiles[2]">
+        <span class="text-bluegray-900 text-2xl"> {{ asset.gain }}</span>
+      </div>
+      <div v-else class="p-inputgroup" @click="$event.stopPropagation()">
+        <InputNumber
+          id="gain"
+          v-bind:modelValue="asset.gain * 100"
+          mode="decimal"
+          autofocus
+          required="true"
+          :readonly="true"
+          class="input-blocked"
+          v-tooltip.bottom="`You can't edit this field directly.`"
+        />
+        <span class="p-inputgroup-addon">%</span>
+      </div>
     </div>
-    <div class="asset-info-tile mb-2 mr-2" :class="{ 'tile-active': assetInfoTiles[1] }" @click="toggleAssetInfoTile(1)">
+    <div
+      class="asset-info-tile mb-2 mr-2"
+      :class="{ 'tile-active': assetInfoTiles[1] }"
+      @click="toggleAssetInfoTile(1)"
+    >
       <div class="mb-2">
         <span class="font-medium text-xl">Total</span>
       </div>
@@ -33,35 +96,21 @@
         <InputNumber
           id="total"
           v-bind:modelValue="asset.total"
+          :readonly="true"
           integeronly
           autofocus
           required="true"
+          class="input-blocked"
+          v-tooltip.bottom="`You can't edit this field directly.`"
         />
         <span class="p-inputgroup-addon">No.</span>
       </div>
     </div>
-    <div class="asset-info-tile mb-2" :class="{ 'tile-active': assetInfoTiles[2] }" @click="toggleAssetInfoTile(2)">
-      <div class="mb-2">
-        <span class="font-medium text-xl">Profit/Loss</span>
-      </div>
-      <div v-if="!assetInfoTiles[2]">
-        <span class="text-bluegray-900 text-2xl"> {{ asset.gain }}</span>
-      </div>
-      <div v-else class="p-inputgroup" @click="$event.stopPropagation()">
-        <InputNumber
-          id="gain"
-          v-bind:modelValue="asset.gain"
-          mode="decimal"
-          autofocus
-          required="true"
-          readonly="true"
-          class="input-blocked"
-          v-tooltip.bottom="`You can't edit this field.`"
-        />
-        <span class="p-inputgroup-addon">%</span>
-      </div>
-    </div>
-    <div class="asset-info-tile mb-2 mr-2" :class="{ 'tile-active': assetInfoTiles[3] }" @click="toggleAssetInfoTile(3)">
+    <div
+      class="asset-info-tile mb-2 mr-2"
+      :class="{ 'tile-active': assetInfoTiles[3] }"
+      @click="toggleAssetInfoTile(3)"
+    >
       <div class="mb-2">
         <span class="font-medium text-xl">Initial Weight</span>
       </div>
@@ -73,17 +122,21 @@
       <div v-else class="p-inputgroup" @click="$event.stopPropagation()">
         <InputNumber
           id="init-weight"
-          v-bind:modelValue="asset.initialWeight"
+          v-bind:modelValue="asset.initialWeight * 100"
           autofocus
           required="true"
-          readonly="true"
+          :readonly="true"
           class="input-blocked"
-          v-tooltip.bottom="`You can't edit this field.`"
+          v-tooltip.bottom="`You can't edit this field directly.`"
         />
         <span class="p-inputgroup-addon">%</span>
       </div>
     </div>
-    <div class="asset-info-tile mb-2 mr-2" :class="{ 'tile-active': assetInfoTiles[4] }" @click="toggleAssetInfoTile(4)">
+    <div
+      class="asset-info-tile mb-2"
+      :class="{ 'tile-active': assetInfoTiles[4] }"
+      @click="toggleAssetInfoTile(4)"
+    >
       <div class="mb-2">
         <span class="font-medium text-xl">Current Weight</span>
       </div>
@@ -95,34 +148,14 @@
       <div v-else class="p-inputgroup" @click="$event.stopPropagation()">
         <InputNumber
           id="curr-weight"
-          v-bind:modelValue="asset.currentWeight"
+          v-bind:modelValue="asset.currentWeight * 100"
           autofocus
           required="true"
-          readonly="true"
+          :readonly="true"
           class="input-blocked"
-          v-tooltip.bottom="`You can't edit this field.`"
+          v-tooltip.bottom="`You can't edit this field directly.`"
         />
         <span class="p-inputgroup-addon">%</span>
-      </div>
-    </div>
-    <div class="asset-info-tile mb-2" :class="{ 'tile-active': assetInfoTiles[5] }" @click="toggleAssetInfoTile(5)">
-      <div class="mb-2">
-        <span class="font-medium text-xl">Buy Price</span>
-      </div>
-      <div v-if="!assetInfoTiles[5]">
-        <span class="text-bluegray-900 text-2xl"> {{ asset.buyPrice }}</span>
-      </div>
-      <div v-else class="p-inputgroup" @click="$event.stopPropagation()">
-        <InputNumber
-          id="init-price"
-          v-bind:modelValue="asset.buyPrice"
-          mode="decimal"
-          :min="0.001"
-          :maxFractionDigits="3"
-          autofocus
-          required="true"
-        />
-        <span class="p-inputgroup-addon">PLN</span>
       </div>
     </div>
   </div>
@@ -132,6 +165,7 @@
 import { defineComponent } from "vue";
 import InputNumber from "primevue/inputnumber";
 import Tooltip from "primevue/tooltip";
+import { Asset } from "../../common/models";
 
 export default defineComponent({
   name: "AssetInfo",
@@ -141,13 +175,18 @@ export default defineComponent({
   },
 
   directives: {
-    "tooltip": Tooltip,
+    tooltip: Tooltip,
+  },
+
+  emits: {
+    currentPriceChanged: (asset: number | undefined, currentPrice: number) =>
+      true,
   },
 
   props: {
     asset: {
+      type: Object as () => Asset,
       required: true,
-      type: Object,
       default: {},
     },
   },
@@ -176,6 +215,11 @@ export default defineComponent({
 
       this.assetInfoTiles[index] = !this.assetInfoTiles[index];
     },
+
+    handleBlur(e: any) {
+      let currentPrice = Number(e.value.replace(/\,/g, ""));
+      this.$emit("currentPriceChanged", this.asset.index, currentPrice);
+    },    
   },
 });
 </script>
@@ -229,5 +273,4 @@ export default defineComponent({
 .asset-info-tile:hover {
   background-color: #ededed;
 }
-
 </style>
