@@ -19,12 +19,12 @@ class AssetViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save()
 
-    def list(self, request, slug=None):
-        if slug is None:
+    def list(self, request, p_slug=None):
+        if p_slug is None:
             return super().list(request)
         else:
-            user_portfolio = get_object_or_404(Portfolio, owner=request.user, slug=slug)
-            queryset = user_portfolio.assets
+            portfolio = get_object_or_404(Portfolio, slug=p_slug, owner=request.user)
+            queryset = portfolio.assets
 
         serializer = AssetSerializer(queryset, many=True)
         return Response(serializer.data)

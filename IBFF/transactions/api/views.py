@@ -22,12 +22,13 @@ class TransactionViewSet(viewsets.ModelViewSet):
         )
         serializer.save(portfolio=portfolio)
 
-    def list(self, request, slug=None):
-        if slug is None:
+    def list(self, request, p_slug=None):
+        if p_slug is None:
             return super().list(request)
-        else:
-            user_portfolio = get_object_or_404(Portfolio, owner=request.user, slug=slug)
-            queryset = user_portfolio.transactions
+
+        elif p_slug:
+            portfolio = get_object_or_404(Portfolio, slug=p_slug, owner=request.user)
+            queryset = portfolio.transactions
 
         serializer = TransactionSerializer(queryset, many=True)
         return Response(serializer.data)

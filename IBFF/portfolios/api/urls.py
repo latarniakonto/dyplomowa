@@ -12,12 +12,12 @@ router.register(r'portfolios', portfolios_views.PortfolioViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path(
-        'portfolios/<slug:slug>/transactions/',
+        'portfolios/<slug:p_slug>/transactions/',
         transactions_views.TransactionViewSet.as_view({'get': 'list'}),
         name='transactions-list',
     ),
     path(
-        'portfolios/<slug:slug>/assets/',
+        'portfolios/<slug:p_slug>/assets/',
         assets_views.AssetViewSet.as_view({'get': 'list'}),
         name='assets-list',
     ),
