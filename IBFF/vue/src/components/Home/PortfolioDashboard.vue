@@ -43,14 +43,7 @@ export default defineComponent({
   },
 
   data() {
-    return {
-      items: [
-        { label: "Home", icon: "bi bi-house" },
-        { label: "Assets", icon: "bi bi-wallet2" },
-        { label: "Transactions", icon: "bi bi-cash-coin" },
-        { label: "Operations", icon: "bi bi-boxes" },
-      ],
-    };
+    return {};
   },
 
   methods: {
