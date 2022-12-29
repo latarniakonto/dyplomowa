@@ -24,10 +24,16 @@ class AssetSerializer(serializers.ModelSerializer):
         instance.gain = instance.current_value / instance.initial_value - 1
         instance.save()
 
-        assets = Asset.objects.all()
+        portfolio = instance.portfolio
+        assets = portfolio.assets.all()
         total_current_value = 0
         for asset in assets:
             total_current_value += asset.current_value
+
+        portfolio.value = total_current_value + portfolio.cash
+        portfolio.annual_gain = portfolio.value - portfolio.deposit
+        portfolio.annual_yield = portfolio.value / portfolio.deposit - 1
+        portfolio.save()
         
         for asset in assets:
             asset.current_weight = asset.current_value / total_current_value
