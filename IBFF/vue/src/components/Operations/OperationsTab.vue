@@ -9,62 +9,19 @@
               icon="pi pi-plus"
               class="p-button-success mr-2"
               @click="addDividend()"
-            />
-            <Button
-              label="Split"
-              icon="pi pi-plus"
-              class="p-button-success mr-2"
-              @click="addSplit()"
-            />
-          </template>
-          <template #end>
-            <div
-              class="toolbar-tile mr-2"
-              :class="{ 'tile-active': operationsTable === 'Dividends' }"
-              @click="operationsTable = 'Dividends'"
-            >
-              <RadioButton
-                aria-labelledby="dividends-label"
-                class="mr-2"
-                name="operationsTable"
-                value="Dividends"
-                v-model="operationsTable"
-              />
-              <span id="dividends-label" class="font-medium">Dividends</span>
-            </div>
-            <div
-              class="toolbar-tile mr-2"
-              :class="{ 'tile-active': operationsTable === 'Splits' }"
-              @click="operationsTable = 'Splits'"
-            >
-              <RadioButton
-                aria-labelledby="splits-label"
-                class="mr-2"
-                name="operationsTable"
-                value="Splits"
-                v-model="operationsTable"
-              />
-              <span id="splits-label" class="font-medium">Splits</span>
-            </div>
-          </template>
+            />            
+          </template>          
         </Toolbar>
       </div>
-      <DividendsTable
-        v-show="operationsTable === 'Dividends'"
+      <DividendsTable        
         ref="dividendsTable"
-      />
-      <SplitsTable v-show="operationsTable === 'Splits'" ref="splitsTable" />
+      />      
     </div>
     <AddDividendDialog
       :addDividendDialog="addDividendDialog"
       @dividendAdded="handleDividendAdded($event)"
       @dividendAddingCanceled="handleDividendAddingCanceled()"
-    />
-    <AddSplitDialog
-      :addSplitDialog="addSplitDialog"
-      @splitAdded="handleSplitAdded($event)"
-      @splitAddingCanceled="handleSplitAddingCanceled()"
-    />
+    />    
   </div>
 </template>
 
@@ -75,8 +32,6 @@ import Toolbar from "primevue/toolbar";
 import RadioButton from "primevue/radiobutton";
 import DividendsTable from "./DividendsTable.vue";
 import AddDividendDialog from "./AddDividendDialog.vue";
-import SplitsTable from "./SplitsTable.vue";
-import AddSplitDialog from "./AddSplitDialog.vue";
 
 export default defineComponent({
   name: "OperationsTab",
@@ -85,27 +40,19 @@ export default defineComponent({
     Button,
     Toolbar,
     RadioButton,
-    DividendsTable,
-    SplitsTable,
-    AddDividendDialog,
-    AddSplitDialog,
+    DividendsTable,    
+    AddDividendDialog,    
   },
 
   data() {
     return {
-      addDividendDialog: false as Boolean,
-      addSplitDialog: false as Boolean,
-      operationsTable: "" as String,
+      addDividendDialog: false as Boolean,      
     };
   },
 
   methods: {
     addDividend() {
       this.addDividendDialog = true;
-    },
-
-    addSplit() {
-      this.addSplitDialog = true;
     },
 
     handleDividendAdded(dividend: any) {
@@ -117,22 +64,9 @@ export default defineComponent({
       this.addDividendDialog = false;
     },
 
-    handleSplitAdded(split: any) {
-      let child = this.$refs.splitsTable as typeof SplitsTable;
-      if (child) {
-        child.addSplit(split);
-      }
-
-      this.addSplitDialog = false;
-    },
-
     handleDividendAddingCanceled() {
       this.addDividendDialog = false;
-    },
-
-    handleSplitAddingCanceled() {
-      this.addSplitDialog = false;
-    },
+    },    
   },
 });
 </script>

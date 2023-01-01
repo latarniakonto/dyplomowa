@@ -51,11 +51,7 @@
             <div v-if="slotProps.data.type === 'Dividend'" class="operation-details">
                 <span class="title">Dividend per Share</span>
                 <span class="data">{{ slotProps.data.perShare }}</span>
-            </div>
-            <div v-if="slotProps.data.type === 'Split'" class="operation-details">
-                <span class="title">Split Factor</span>
-                <span class="data">{{ slotProps.data.factor }}</span>
-            </div>
+            </div>            
           </template>
         </DataTable>
       </div>
@@ -92,8 +88,7 @@ export default defineComponent({
 
   data() {
     return {
-      operationsTypes: [
-        { label: "Split", value: "Split" },
+      operationsTypes: [        
         { label: "Dividend", value: "Dividend" },
       ] as Array<any>,
       operations: [
@@ -105,23 +100,11 @@ export default defineComponent({
           yield: "3%" as String,
         },
         {
-          id: "1001",
-          date: new Date("2020-08-12") as Date,
-          type: "Split" as String,
-          factor: 4 as Number,
-        },
-        {
           id: "1002",
           date: new Date("2020-08-12") as Date,
           type: "Dividend" as String,
           perShare: 3 as Number,
           yield: "3%" as String,
-        },
-        {
-          id: "1003",
-          date: new Date("2021-04-07") as Date,
-          type: "Split" as String,
-          factor: 15 as Number,
         },
         {
           id: "1004",
@@ -136,13 +119,7 @@ export default defineComponent({
           type: "Dividend" as String,
           perShare: 3 as Number,
           yield: "7%" as String,
-        },
-        {
-          id: "1006",
-          date: new Date("2022-02-24") as Date,
-          type: "Split" as String,
-          factor: 15 as Number,
-        },
+        },        
       ] as Array<any>,
       expandedOperations: [] as Array<any>,
       operationsTableCollapsed: true as Boolean,
