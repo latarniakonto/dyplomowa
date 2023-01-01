@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 from portfolios.api import views as portfolios_views
 from transactions.api import views as transactions_views
 from assets.api import views as assets_views
+from operations.api import views as operations_views
 
 
 router = DefaultRouter()
@@ -20,5 +21,10 @@ urlpatterns = [
         'portfolios/<slug:p_slug>/assets/',
         assets_views.AssetViewSet.as_view({'get': 'list'}),
         name='assets-list',
+    ),
+    path(
+        'portfolios/<slug:p_slug>/dividends/',
+        operations_views.DividendViewSet.as_view({'get': 'list'}),
+        name='dividends-list',
     ),
 ]
