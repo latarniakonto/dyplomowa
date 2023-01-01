@@ -22,3 +22,10 @@ class Asset(models.Model):
 
     def __str__(self):
         return self.ticker
+
+
+class TempAsset:
+    def __init__(self):
+        self.ticker = ""
+        self.total = 0
+        self.initial_value = 0
