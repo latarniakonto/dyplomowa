@@ -33,5 +33,6 @@ urlpatterns = [
     path('api/v1/', include('portfolios.api.urls')),
     path('api/v1/', include('transactions.api.urls')),
     path('api/v1/', include('assets.api.urls')),
+    path('api/v1/', include('operations.api.urls')),
     re_path(r'^.*$', IndexTemplateView.as_view(), name='entry-point')
 ]

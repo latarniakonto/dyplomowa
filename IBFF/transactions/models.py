@@ -4,6 +4,8 @@ from django.db import models
 from portfolios.models import Portfolio
 from django.db.models import Q
 from assets.models import Asset
+from operations.models import Dividend
+from core.utils import get_asset_to_date
 
 
 class Types(models.IntegerChoices):
@@ -30,6 +32,10 @@ class Transaction(models.Model):
         return self.ticker
     
     def save(self, *args, **kwargs):
+        if 'normal_save' in kwargs:
+            super().save(args, kwargs)
+            return
+
         if (
             self.type == Types.BUY
             and self.portfolio.cash < self.value + self.provision
@@ -51,7 +57,9 @@ class Transaction(models.Model):
         update_asset_portfolio(asset, self)
 
         update_assets_weight()
-        
+
+        update_asset_dividends(asset, self)
+
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):        
@@ -65,6 +73,8 @@ class Transaction(models.Model):
             asset.delete()
 
         update_assets_weight()
+
+        update_asset_dividends(asset, self, True)
 
         super().delete(*args, **kwargs)
 
@@ -184,3 +194,49 @@ def update_asset(asset, transaction, transaction_deleted=False):
         asset.gain = asset.current_value / asset.initial_value - 1
         
     asset.save()
+
+
+def update_asset_dividends(asset, transaction, transaction_deleted=False):
+    dividends = Dividend.objects.filter(
+        asset__ticker=transaction.ticker, date__gte=transaction.date,
+        asset__portfolio=transaction.portfolio
+    )
+    portfolio = asset.portfolio
+    total_sum_difference = 0
+    if (transaction.type == Types.BUY and not transaction_deleted) or (
+        transaction.type == Types.SELL and transaction_deleted
+    ):
+        for dividend in dividends:
+            temp_asset = get_asset_to_date(dividend.asset, dividend.date)
+            temp_asset.total += transaction.amount               
+            new_dividend_value = temp_asset.total * dividend.per_share            
+            assert new_dividend_value > dividend.value
+
+            difference = new_dividend_value - dividend.value
+            dividend.value += difference
+            total_sum_difference += difference                
+
+    else:
+        for dividend in dividends:
+            temp_asset = get_asset_to_date(dividend.asset, dividend.date)            
+            temp_asset.total -= transaction.amount            
+            new_dividend_value = temp_asset.total * dividend.per_share            
+
+            assert new_dividend_value < dividend.value
+
+            difference = new_dividend_value - dividend.value
+            dividend.value += difference
+            total_sum_difference += difference
+
+        if portfolio.cash + total_sum_difference < 0:
+            raise Exception
+    
+    for dividend in dividends:
+        dividend.save(normal_save=True)
+
+    portfolio.cash += total_sum_difference
+    portfolio.value += total_sum_difference        
+    portfolio.annual_dividends += total_sum_difference
+    portfolio.annual_gain = portfolio.value - portfolio.deposit
+    portfolio.annual_yield = portfolio.value / portfolio.deposit - 1
+    portfolio.save()
