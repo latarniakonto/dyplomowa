@@ -10,7 +10,7 @@ class PortfolioRelatedField(serializers.PrimaryKeyRelatedField):
 
 
 class AssetSerializer(serializers.ModelSerializer):
-    slug = serializers.SlugField(read_only=True)
+    slug = serializers.SlugField()
     portfolio = PortfolioRelatedField(read_only=True, allow_null=False)
 
     class Meta:
