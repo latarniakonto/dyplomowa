@@ -29,26 +29,23 @@
           :scrollable="true"
         >
           <Column class="expander" :expander="true"></Column>
-          <Column field="type" header="Type"> </Column>
-          <Column field="date" header="Date">
+          <Column field="type" header="Type">
+            <template #body="slotProps">
+              {{ operationType(slotProps.data.type) }}
+            </template>
+          </Column>
+          <Column
+            headerClass="pr-6"
+            bodyClass="pr-6"
+            field="date"
+            header="Date"
+          >
             <template #body="slotProps">
               {{ getPrintableDate(slotProps.data.date) }}
             </template>
           </Column>
-          <Column>
-            <template #body="slotProps">
-              <button
-                type="button"
-                class="btn btn-warning btn-sm mr-1"                
-              >
-                <a :href="'test' + slotProps.data.id">
-                    <i class="bi bi-pencil-fill"></i>
-                </a>
-              </button>              
-            </template>
-          </Column>
           <template #expansion="slotProps">
-            <div v-if="slotProps.data.type === 'Dividend'" class="operation-details">
+            <div v-if="operationType(slotProps.data.type) === 'Dividend'" class="operation-details">
                 <span class="title">Dividend per Share</span>
                 <span class="data">{{ slotProps.data.perShare }}</span>
             </div>            
@@ -70,6 +67,7 @@ import InputNumber from "primevue/inputnumber";
 import Dropdown from "primevue/dropdown";
 import Calendar from "primevue/calendar";
 import Panel from "primevue/panel";
+import { Dividend, operationType } from "../../common/models";
 
 export default defineComponent({
   name: "OperationsPanel",
@@ -86,42 +84,15 @@ export default defineComponent({
     Panel,
   },
 
+  props: {
+    operations: {
+      type: Array as () => Array<Dividend>
+    }
+  },
+
   data() {
-    return {
-      operationsTypes: [        
-        { label: "Dividend", value: "Dividend" },
-      ] as Array<any>,
-      operations: [
-        {
-          id: "1000",
-          date: new Date("2020-01-30") as Date,
-          type: "Dividend" as String,
-          perShare: 1 as Number,
-          yield: "3%" as String,
-        },
-        {
-          id: "1002",
-          date: new Date("2020-08-12") as Date,
-          type: "Dividend" as String,
-          perShare: 3 as Number,
-          yield: "3%" as String,
-        },
-        {
-          id: "1004",
-          date: new Date("2021-10-26") as Date,
-          type: "Dividend" as String,
-          perShare: 2 as Number,
-          yield: "4%" as String,
-        },
-        {
-          id: "1005",
-          date: new Date("2022-02-24") as Date,
-          type: "Dividend" as String,
-          perShare: 3 as Number,
-          yield: "7%" as String,
-        },        
-      ] as Array<any>,
-      expandedOperations: [] as Array<any>,
+    return {        
+      expandedOperations: [] as Array<Dividend>,
       operationsTableCollapsed: true as Boolean,
     };
   },
@@ -140,6 +111,8 @@ export default defineComponent({
     toggleOperationsTable() {
       this.operationsTableCollapsed = !this.operationsTableCollapsed;
     },
+
+    operationType
   },
 });
 </script>
@@ -158,6 +131,10 @@ export default defineComponent({
 
 .operations-table .p-datatable .p-datatable-tbody .p-datatable-row-expansion {
   background-color: #f6f6f6;
+}
+
+.operations-table .p-datatable .p-datatable-tbody .p-datatable-row-expansion td {
+  padding-right: 3rem;
 }
 
 .operations-table .p-datatable .p-datatable-tbody tr td:not(.expander) {

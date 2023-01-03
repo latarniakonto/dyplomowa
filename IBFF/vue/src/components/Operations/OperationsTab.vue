@@ -9,19 +9,21 @@
               icon="pi pi-plus"
               class="p-button-success mr-2"
               @click="addDividend()"
-            />            
-          </template>          
+            />
+          </template>
         </Toolbar>
       </div>
-      <DividendsTable        
-        ref="dividendsTable"
-      />      
+      <DividendsTable
+        :dividends="dividends"
+        @dividendDeleted="handleDividendDeleted"
+      />
     </div>
     <AddDividendDialog
       :addDividendDialog="addDividendDialog"
+      :assets="assets"
       @dividendAdded="handleDividendAdded($event)"
       @dividendAddingCanceled="handleDividendAddingCanceled()"
-    />    
+    />
   </div>
 </template>
 
@@ -32,6 +34,16 @@ import Toolbar from "primevue/toolbar";
 import RadioButton from "primevue/radiobutton";
 import DividendsTable from "./DividendsTable.vue";
 import AddDividendDialog from "./AddDividendDialog.vue";
+import {
+  Asset,
+  AssetJSON,
+  Portfolio,
+  PortfolioJSON,
+  Dividend,
+  DividendJSON,
+} from "../../common/models";
+import { axios } from "../../common/api.service";
+import { toastSuccess, toastError } from "../../common/api.toast";
 
 export default defineComponent({
   name: "OperationsTab",
@@ -40,13 +52,16 @@ export default defineComponent({
     Button,
     Toolbar,
     RadioButton,
-    DividendsTable,    
-    AddDividendDialog,    
+    DividendsTable,
+    AddDividendDialog,
   },
 
   data() {
     return {
-      addDividendDialog: false as Boolean,      
+      addDividendDialog: false as Boolean,
+      assets: [] as Array<Asset>,
+      portfolioSlug: "" as String,
+      dividends: [] as Array<Dividend>,
     };
   },
 
@@ -55,18 +70,108 @@ export default defineComponent({
       this.addDividendDialog = true;
     },
 
-    handleDividendAdded(dividend: any) {
-      let child = this.$refs.dividendsTable as typeof DividendsTable;
-      if (child) {
-        child.addDividend(dividend);
+    async handleDividendAdded(dividend: Dividend) {
+      dividend.asset = this.assets.find(
+        (asset: Asset) => asset.ticker === dividend.ticker
+      ) as Asset;      
+      if (await this.performDividendCreateRequest(dividend)) {
+        this.dividends.push(dividend);
       }
-
       this.addDividendDialog = false;
+    },
+
+    async handleDividendDeleted(dividend: Dividend, index: number) {
+      if (await this.performDividendDeleteRequest(dividend)) {
+        this.dividends.splice(index, 1);
+      }
     },
 
     handleDividendAddingCanceled() {
       this.addDividendDialog = false;
-    },    
+    },
+
+    async getDividends() {
+      let endpoint = "api/v1/portfolios/";
+
+      try {
+        let response = await axios.get(endpoint);
+        let jsons = response.data;
+        this.portfolioSlug = new Portfolio(jsons[0] as PortfolioJSON).slug;
+
+        endpoint += `${this.portfolioSlug}/dividends/`;
+
+        response = await axios.get(endpoint);
+        jsons = response.data;
+        jsons.forEach((json: any) => {
+          this.dividends.push(new Dividend(json as DividendJSON));
+        });
+      } catch (e: any) {
+        console.error(e.response);
+      }
+    },
+
+    async getAssets() {
+      let endpoint = `api/v1/portfolios/${this.portfolioSlug}/assets/`;
+
+      try {
+        let response = await axios.get(endpoint);
+        let jsons = response.data;
+
+        jsons = response.data;
+        jsons.forEach((json: any) => {
+          this.assets.push(new Asset(json as AssetJSON));
+        });
+      } catch (e: any) {
+        console.error(e.response);
+      }
+    },
+
+    async performDividendCreateRequest(dividend: Dividend): Promise<Boolean> {
+      let endpoint = "/api/v1/dividends/";
+      let method = "POST";            
+      try {        
+        const response = await axios({
+          method: method,
+          url: endpoint,
+          data: dividend
+        });        
+        dividend.id = response.data.uuoid;
+        dividend.slug = response.data.slug;
+        toastSuccess("Dividend created.", 3000);
+
+        return true;
+      } catch (e: any) {
+        console.error(e.response.statusText);
+        toastError("Dividend was not created.", 3000);
+
+        return false;
+      }
+    },
+
+    async performDividendDeleteRequest(dividend: Dividend): Promise<Boolean> {
+      let endpoint = `/api/v1/dividends/${dividend.slug}/`;
+      let method = "DELETE";      
+      try {
+        const response = await axios({
+          method: method,
+          url: endpoint,
+          data: dividend
+        });        
+        toastSuccess("Dividend deleted.", 3000);
+
+        return true;
+      } catch (e: any) {
+        console.error(e.response.statusText);
+        toastError("Dividend was not deleted.", 3000);
+
+        return false;
+      }
+    },
+  },
+
+  async created() {
+    await this.getDividends();
+    this.getAssets();
   },
 });
 </script>

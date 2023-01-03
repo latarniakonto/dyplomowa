@@ -1,10 +1,8 @@
 <template>
   <div class="dividends-table">
     <DataTable
-      :value="dividends"
-      editMode="row"
-      dataKey="id"
-      v-model:editingRows="editingDividends"
+      :value="dividends"      
+      dataKey="id"      
       :scrollable="true"
       :paginator="true"
       :rows="5"
@@ -47,33 +45,10 @@
         <template #body="slotProps">
           <button
             type="button"
-            class="btn btn-warning btn-sm mr-1"
-            @click="editDividend(slotProps.data)"
-          >
-            <i class="bi bi-pencil-fill"></i>
-          </button>
-          <button
-            type="button"
             class="btn btn-danger btn-sm"
-            @click="deleteDividend(slotProps.data)"
+            @click="deleteDividend(slotProps.data, slotProps.index)"
           >
             <i class="bi bi-trash3-fill"></i>
-          </button>
-        </template>
-        <template #editor="slotProps">
-          <button
-            type="button"
-            class="btn btn-warning btn-sm mr-1"
-            @click="submitDividend(slotProps.data, slotProps.index)"
-          >
-            <i class="bi bi-check"></i>
-          </button>
-          <button
-            type="button"
-            class="btn btn-warning btn-sm"
-            @click="revertDividend(slotProps.data)"
-          >
-            <i class="bi bi-x"></i>
           </button>
         </template>
       </Column>
@@ -93,11 +68,10 @@ import Dropdown from "primevue/dropdown";
 import Calendar from "primevue/calendar";
 import Toolbar from "primevue/toolbar";
 import RadioButton from "primevue/radiobutton";
+import { Dividend } from "../../common/models";
 
 export default defineComponent({
   name: "DividendsTable",
-
-  expose: ["addDividend"],
 
   components: {
     Button,
@@ -112,39 +86,18 @@ export default defineComponent({
     RadioButton,
   },
 
+  props: {
+    dividends: {
+      type: Array as () => Array<Dividend>,
+    }
+  },
+
+  emits: {
+    dividendDeleted: (dividend: Dividend, index: number) => true,
+  },
+
   data() {
-    return {
-      dividends: [
-        {
-          id: "1000",
-          date: new Date("2020-01-30") as Date,
-          perShare: 1 as Number,
-          yield: "3%" as String,
-          ticker: "$ITEM1" as String,
-        },
-        {
-          id: "1002",
-          date: new Date("2020-08-12") as Date,
-          perShare: 3 as Number,
-          yield: "3%" as String,
-          ticker: "$ITEM1" as String,
-        },
-        {
-          id: "1004",
-          date: new Date("2021-10-26") as Date,
-          perShare: 2 as Number,
-          yield: "4%" as String,
-          ticker: "$ITEM1" as String,
-        },
-        {
-          id: "1005",
-          date: new Date("2022-02-24") as Date,
-          perShare: 3 as Number,
-          yield: "7%" as String,
-          ticker: "$ITEM1" as String,
-        },
-      ] as Array<any>,
-      editingDividends: [] as Array<any>,
+    return {      
     };
   },
 
@@ -159,41 +112,9 @@ export default defineComponent({
       );
     },
 
-    editDividend(dividend: any) {
-      this.editingDividends = [dividend];
+    deleteDividend(dividend: Dividend, index: number) {
+      this.$emit("dividendDeleted", dividend, index);
     },
-
-    deleteDividend(dividend: any) {
-      this.dividends = this.dividends.filter((val) => val.id !== dividend.id);
-      this.editingDividends = [];
-
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Dividend Deleted",
-        life: 3000,
-      });
-    },
-
-    submitDividend(dividend: any, index: number) {
-      this.dividends[index] = dividend;
-      this.editingDividends = [];
-
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Dividend Modified",
-        life: 3000,
-      });
-    },
-
-    revertDividend(dividend: any) {
-      this.editingDividends = [];
-    },
-
-    addDividend(dividend: any) {
-      this.dividends.push(dividend);
-    }
   },
 });
 

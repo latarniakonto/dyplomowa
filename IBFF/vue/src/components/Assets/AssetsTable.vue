@@ -87,6 +87,7 @@
         :analyzeAssetDialog="analazyAssetDialog"
         :asset="asset"
         :transactions="assetTransactions"
+        :operations="assetOperations"
         @asset-analysis-canceled="handleAssetAnalysisCanceled()"
         v-bind="$attrs"
       />
@@ -106,7 +107,9 @@ import {
   Asset,
   Transaction,
   TransactionJSON,
-  getPrintablePercantage
+  getPrintablePercantage,
+  Dividend,
+  DividendJSON
 } from "../../common/models";
 import { axios } from "../../common/api.service";
 
@@ -135,6 +138,7 @@ export default defineComponent({
       analazyAssetDialog: false as Boolean,
       asset: {} as Asset,
       assetTransactions: [] as Array<Transaction>,
+      assetOperations: [] as Array<Dividend>,
     };
   },
 
@@ -143,6 +147,7 @@ export default defineComponent({
       this.asset = asset;
       this.asset.index = index;
       this.getAssetTransactions();
+      this.getAssetOperations();
       this.analazyAssetDialog = true;
     },
 
@@ -160,6 +165,21 @@ export default defineComponent({
         jsons.forEach((json: any) => {
           this.assetTransactions.push(new Transaction(json as TransactionJSON));
         });
+      } catch (e: any) {
+        console.error(e.response);
+      }
+    },
+
+    async getAssetOperations() {
+      let endpoint = `api/v1/assets/${this.asset.slug}/dividends/`;
+      this.assetOperations = [];
+
+      try {
+        let response = await axios.get(endpoint);
+        let jsons = response.data;
+        jsons.forEach((json: any) => {
+          this.assetOperations.push(new Dividend(json as DividendJSON));
+        });        
       } catch (e: any) {
         console.error(e.response);
       }

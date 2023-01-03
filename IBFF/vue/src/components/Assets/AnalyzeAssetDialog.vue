@@ -9,7 +9,7 @@
       <h3>{{ asset.ticker }}</h3>
     </template>
     <AssetInfo :asset="asset" v-bind="$attrs" />
-    <OperationsPanel />
+    <OperationsPanel :operations="operations" />
     <TransactionsPanel :transactions="transactions" />
   </Dialog>
 </template>
@@ -22,7 +22,7 @@ import InputNumber from "primevue/inputnumber";
 import TransactionsPanel from "./TransactionsPanel.vue";
 import OperationsPanel from "./OperationsPanel.vue";
 import AssetInfo from "./AssetInfo.vue";
-import { Asset, Transaction } from "../../common/models";
+import { Asset, Transaction, Dividend } from "../../common/models";
 
 export default defineComponent({
   name: "AnalyzeAssetDialog",
@@ -49,6 +49,11 @@ export default defineComponent({
     },
     transactions: {
       type: Array as () => Array<Transaction>,
+      required: true,
+      default: {}
+    },
+    operations: {
+      type: Array as () => Array<Dividend>,
       required: true,
       default: {}
     }

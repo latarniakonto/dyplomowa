@@ -19,9 +19,9 @@
         <h6 class="mb-2">Asset Ticker</h6>
         <Dropdown
           v-model="dividend.ticker"
-          :options="tickers"
-          optionLabel="name"
-          optionValue="name"
+          :options="assets"
+          optionLabel="ticker"
+          optionValue="ticker"
           placeholder="Select a Ticker"
           :class="{
             'p-invalid': dividendAdded && !dividend.ticker,
@@ -102,6 +102,7 @@ import Dialog from "primevue/dialog";
 import InputNumber from "primevue/inputnumber";
 import Calendar from "primevue/calendar";
 import Dropdown from "primevue/dropdown";
+import { Dividend, Asset } from "../../common/models";
 
 export default defineComponent({
   name: "AddDividendDialog",
@@ -120,43 +121,45 @@ export default defineComponent({
       required: true,
       default: false,
     },
+    assets: {
+      type: Array as () => Array<Asset>,
+      required: true,
+      default: {},
+    },
   },
 
   emits: {
-    dividendAdded: (dividend: any) => true,
+    dividendAdded: (dividend: Dividend) => true,
     dividendAddingCanceled: () => true,
   },
 
   data() {
     return {
-      tickers: [
-        { name: "$ITEM1", code: "id1" },
-        { name: "$ITEM2", code: "id2" },
-        { name: "$ITEM3", code: "id3" },
-        { name: "$ITEM4", code: "id4" },
-        { name: "$ITEM5", code: "id5" },
-        { name: "$ITEM6", code: "id6" },
-        { name: "$ITEM7", code: "id7" },
-        { name: "$ITEM8", code: "id8" },
-      ] as Array<any>,
       dividendAdded: false as Boolean,
-      dividend: {} as any,
+      dividend: new Dividend(),
     };
   },
 
   methods: {
     cancelDividendAdding() {
-      this.dividend = {};
+      this.dividend = new Dividend();
       this.dividendAdded = false;
       this.$emit("dividendAddingCanceled");
     },
 
     addDividend() {
       this.dividendAdded = true;
-      if (this.dividend.perShare && this.dividend.date && this.dividend.ticker) {
+      if (
+        this.dividend.perShare &&
+        this.dividend.date &&
+        this.dividend.ticker
+      ) {
+        this.dividend.date.setMinutes(
+          this.dividend.date.getMinutes() -
+            this.dividend.date.getTimezoneOffset()
+        );
         this.$emit("dividendAdded", this.dividend);
-
-        this.dividend = {};
+        this.dividend = new Dividend();
         this.dividendAdded = false;
       }
     },

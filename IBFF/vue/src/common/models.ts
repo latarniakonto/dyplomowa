@@ -146,9 +146,11 @@ export class Asset {
   initialWeight: number;
   currentWeight: number;
   index?: number;
+  uuaid: String;
   
   constructor(json: AssetJSON) {
     this.id = json.uuaid;
+    this.uuaid = json.uuaid;
     this.slug = json.slug;
     this.ticker = json.ticker;
     this.total = json.total;
@@ -165,4 +167,52 @@ export class Asset {
 
 export function getPrintablePercantage(percantage: number): string {
   return String(Math.round(percantage * 10000) / 100 ) + "%";
+}
+
+export interface DividendJSON {
+  uuoid: String;
+  slug: String;
+  asset: AssetJSON;
+  perShare: number;
+  date: string;
+  type: number;
+}
+
+export class Dividend {
+  id: String;
+  slug: String;
+  perShare?: number
+  date: Date;
+  asset?: Asset;
+  ticker: String
+  type: number
+  
+  constructor(json?: DividendJSON) {
+    this.id = json?.uuoid ?? "";
+    this.slug = json?.slug ?? "";
+    this.perShare = json?.perShare ?? undefined;
+    if (json) {
+      this.date = new Date(json.date);
+      this.asset = new Asset(json.asset);
+    } else {
+      this.date = new Date();
+      this.asset = undefined;
+    }    
+    this.ticker = this.asset?.ticker ?? "";
+    this.type = json?.type ?? OperationType.Dividend;
+  }
+}
+
+export enum OperationType {
+  Dividend = 1,
+  Sell
+}
+
+export function operationType(type: OperationType): string {
+  switch (type) {
+    case OperationType.Dividend:
+      return "Dividend";
+    default:
+      return "";
+  }
 }
