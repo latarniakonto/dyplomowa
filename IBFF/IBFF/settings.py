@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'portfolios',
     'transactions',
     'assets',
-    'operations'
+    'operations',
+    'snapshots'
 ]
 
 MIDDLEWARE = [
