@@ -5,11 +5,14 @@ from core.utils import future_date
 from datetime import datetime
 from core.utils import get_asset_to_date
 
+class Types(models.IntegerChoices):
+    DIVIDEND = 1, 'Dividend'
 
 class Operation(models.Model):
     uuoid = models.UUIDField(db_index=True, default=uuid.uuid4, editable=False)
     slug = models.SlugField(max_length=63, unique=True)
     date = models.DateTimeField()
+    type = models.IntegerField(choices=Types.choices, verbose_name='operation type')
 
     class Meta:
         abstract = True
