@@ -1,4 +1,5 @@
 import uuid
+import datetime
 from django.conf import settings
 from django.db import models
 from portfolios.models import Portfolio
@@ -6,6 +7,7 @@ from django.db.models import Q
 from assets.models import Asset
 from operations.models import Dividend
 from core.utils import get_asset_to_date
+from snapshots.models import Snapshot
 
 
 class Types(models.IntegerChoices):
@@ -153,10 +155,15 @@ def update_asset_portfolio(asset, transaction, transaction_deleted=False):
         total_current_value += p_asset.current_value
 
     portfolio.value = total_current_value + portfolio.cash
-                                          # - snapshot.value
-    portfolio.annual_gain = portfolio.value - portfolio.deposit
-                                            # / snapshot.value
-    portfolio.annual_yield = portfolio.value / portfolio.deposit - 1
+    today = datetime.date.today()
+    try:
+        snapshot = Snapshot.objects.get(portfolio=portfolio, date__year=today.year - 1)
+        portfolio.annual_gain = portfolio.value - snapshot.value
+        portfolio.annual_yield = portfolio.value / snapshot.value - 1
+
+    except Snapshot.DoesNotExist:
+        portfolio.annual_gain = portfolio.value - portfolio.deposit
+        portfolio.annual_yield = portfolio.value / portfolio.deposit - 1
 
     portfolio.save()
 
@@ -237,6 +244,16 @@ def update_asset_dividends(asset, transaction, transaction_deleted=False):
     portfolio.cash += total_sum_difference
     portfolio.value += total_sum_difference        
     portfolio.annual_dividends += total_sum_difference
-    portfolio.annual_gain = portfolio.value - portfolio.deposit
-    portfolio.annual_yield = portfolio.value / portfolio.deposit - 1
+    today = datetime.date.today()
+    try:
+        snapshot = Snapshot.objects.get(
+            portfolio=portfolio, date__year=today.year - 1
+        )
+        portfolio.annual_gain = portfolio.value - snapshot.value
+        portfolio.annual_yield = portfolio.value / snapshot.value - 1
+
+    except Snapshot.DoesNotExist:
+        portfolio.annual_gain = portfolio.value - portfolio.deposit
+        portfolio.annual_yield = portfolio.value / portfolio.deposit - 1
+
     portfolio.save()

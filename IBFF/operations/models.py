@@ -1,9 +1,11 @@
 import uuid
+import datetime
 from django.db import models
 from assets.models import Asset
 from core.utils import future_date
-from datetime import datetime
 from core.utils import get_asset_to_date
+from snapshots.models import Snapshot
+
 
 class Types(models.IntegerChoices):
     DIVIDEND = 1, 'Dividend'
@@ -43,12 +45,19 @@ class Dividend(Operation):
         portfolio.cash += self.value
         portfolio.value += self.value
         portfolio.annual_dividends += self.value
-        portfolio.annual_gain = portfolio.value - portfolio.deposit
-        portfolio.annual_yield = portfolio.value / portfolio.deposit - 1
-        portfolio.save()
+        today = datetime.date.today()
+        try:
+            snapshot = Snapshot.objects.get(
+                portfolio=portfolio, date__year=today.year - 1
+            )
+            portfolio.annual_gain = portfolio.value - snapshot.value
+            portfolio.annual_yield = portfolio.value / snapshot.value - 1
 
-        # update snapshots???
+        except Snapshot.DoesNotExist:
+            portfolio.annual_gain = portfolio.value - portfolio.deposit
+            portfolio.annual_yield = portfolio.value / portfolio.deposit - 1
 
+        portfolio.save()        
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -59,9 +68,17 @@ class Dividend(Operation):
         portfolio.cash -= self.value
         portfolio.value -= self.value
         portfolio.annual_dividends -= self.value
-        portfolio.annual_gain = portfolio.value - portfolio.deposit
-        portfolio.annual_yield = portfolio.value / portfolio.deposit - 1
-        portfolio.save()
+        today = datetime.date.today()
+        try:
+            snapshot = Snapshot.objects.get(
+                portfolio=portfolio, date__year=today.year - 1
+            )
+            portfolio.annual_gain = portfolio.value - snapshot.value
+            portfolio.annual_yield = portfolio.value / snapshot.value - 1
 
-        # update snapshots???
+        except Snapshot.DoesNotExist:
+            portfolio.annual_gain = portfolio.value - portfolio.deposit
+            portfolio.annual_yield = portfolio.value / portfolio.deposit - 1
+
+        portfolio.save()        
         super().delete(*args, **kwargs)

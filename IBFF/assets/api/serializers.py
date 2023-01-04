@@ -1,6 +1,8 @@
+import datetime
 from rest_framework import serializers
 from assets.models import Asset
 from portfolios.models import Portfolio
+from snapshots.models import Snapshot
 
 
 class PortfolioRelatedField(serializers.PrimaryKeyRelatedField):
@@ -31,8 +33,18 @@ class AssetSerializer(serializers.ModelSerializer):
             total_current_value += asset.current_value
 
         portfolio.value = total_current_value + portfolio.cash
-        portfolio.annual_gain = portfolio.value - portfolio.deposit
-        portfolio.annual_yield = portfolio.value / portfolio.deposit - 1
+        today = datetime.date.today()
+        try:
+            snapshot = Snapshot.objects.get(
+                portfolio=portfolio, date__year=today.year - 1
+            )
+            portfolio.annual_gain = portfolio.value - snapshot.value
+            portfolio.annual_yield = portfolio.value / snapshot.value - 1
+
+        except Snapshot.DoesNotExist:
+            portfolio.annual_gain = portfolio.value - portfolio.deposit
+            portfolio.annual_yield = portfolio.value / portfolio.deposit - 1
+        
         portfolio.save()
         
         for asset in assets:
