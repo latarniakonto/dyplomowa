@@ -8,6 +8,7 @@ from assets.models import Asset
 from operations.models import Dividend
 from core.utils import get_asset_to_date
 from snapshots.models import Snapshot
+from django.utils import timezone
 
 
 class Types(models.IntegerChoices):
@@ -21,6 +22,7 @@ class Transaction(models.Model):
     portfolio = models.ForeignKey(
         Portfolio, on_delete=models.CASCADE, related_name='transactions'
     )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     ticker = models.CharField(max_length=31)
     type = models.IntegerField(choices=Types.choices, verbose_name='transaction type')
@@ -55,30 +57,32 @@ class Transaction(models.Model):
         elif self.type == Types.SELL and asset.total < self.amount:
             raise Exception
 
-        update_asset(asset, self)
-        update_asset_portfolio(asset, self)
-
-        update_assets_weight()
+        to_date_asset = get_asset_to_date(asset, self.date)
+        if self.type == Types.SELL and to_date_asset.total < self.amount:
+            raise Exception
 
         update_asset_dividends(asset, self)
 
         super().save(*args, **kwargs)
 
+        update_asset(asset, self)
+        update_assets_weight()
+        update_asset_portfolio(asset, self)
+
     def delete(self, *args, **kwargs):        
         asset = Asset.objects.get(ticker=self.ticker, portfolio=self.portfolio)
-
-        update_asset(asset, self, True)
-        update_asset_portfolio(asset, self, True)
 
         transactions = Transaction.objects.all()
         if not transactions.filter(~Q(uutid=self.uutid), ticker=asset.ticker).exists():
             asset.delete()
 
-        update_assets_weight()
-
         update_asset_dividends(asset, self, True)
 
         super().delete(*args, **kwargs)
+
+        update_asset(asset, self)
+        update_assets_weight()
+        update_asset_portfolio(asset, self, True)
 
 
 def get_asset_initial_weight(asset):
@@ -168,29 +172,15 @@ def update_asset_portfolio(asset, transaction, transaction_deleted=False):
     portfolio.save()
 
 
-def update_asset(asset, transaction, transaction_deleted=False):
+def update_asset(asset, transaction):
+    today = timezone.now()
+    to_date_asset = get_asset_to_date(asset, today)
     asset.current_price = transaction.price
-
-    if transaction_deleted and transaction.type == Types.BUY:
-        asset.total -= transaction.amount
-        asset.initial_value -= asset.initial_price * transaction.amount
-
-    elif transaction_deleted and transaction.type == Types.SELL:
-        asset.total += transaction.amount
-        asset.initial_value += asset.initial_price * transaction.amount
-
-    elif not transaction_deleted and transaction.type == Types.BUY:
-        asset.total += transaction.amount
-        asset.initial_value += transaction.value
-
-    elif not transaction_deleted and transaction.type == Types.SELL:
-        asset.total -= transaction.amount
-        asset.initial_value -= asset.initial_price * transaction.amount
+    asset.total = to_date_asset.total
+    asset.initial_value = to_date_asset.initial_value
 
     if asset.total > 0:
         asset.initial_price = asset.initial_value / asset.total
-
-    asset.initial_value = asset.initial_price * asset.total
 
     asset.current_value = asset.current_price * asset.total
 
@@ -199,7 +189,7 @@ def update_asset(asset, transaction, transaction_deleted=False):
 
     else:
         asset.gain = asset.current_value / asset.initial_value - 1
-        
+
     asset.save()
 
 
