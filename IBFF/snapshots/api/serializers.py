@@ -11,8 +11,9 @@ class PortfolioRelatedField(serializers.PrimaryKeyRelatedField):
 
 class SnapshotSerializer(serializers.ModelSerializer):
     slug = serializers.SlugField(read_only=True)
+    cash_on_hand = serializers.FloatField(source='cash')
     portfolio = PortfolioRelatedField(read_only=True, allow_null=False)
 
     class Meta:
         model = Snapshot
-        exclude = ['id']
+        exclude = ['id', 'cash']
