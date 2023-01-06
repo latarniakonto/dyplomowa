@@ -24,7 +24,7 @@ class SnapshotViewSet(viewsets.ModelViewSet):
             return super().list(request)
 
         portfolio = get_object_or_404(Portfolio, slug=p_slug, owner=request.user)
-        queryset = portfolio.snapshots
+        queryset = portfolio.snapshots.order_by('-date')
         serializer = SnapshotSerializer(queryset, many=True)
         return Response(serializer.data)
 
