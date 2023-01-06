@@ -1,5 +1,5 @@
 <template>
-  <div class="assets-tab">
+  <div class="card">
     <AssetsTable
       :assets="assets"
       @currentPriceChanged="handleCurrentPriceChanged"

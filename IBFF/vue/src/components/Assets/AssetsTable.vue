@@ -1,6 +1,5 @@
 <template>
   <div class="assets-table">
-    <div class="card" style="">
       <div class="table-data">
         <DataTable
           ref="dt"
@@ -80,8 +79,7 @@
             </template>
           </Column>
         </DataTable>
-      </div>
-    </div>
+      </div>    
     <div class="table-crud">
       <AnalyzeAssetDialog
         :analyzeAssetDialog="analazyAssetDialog"
@@ -191,20 +189,9 @@ export default defineComponent({
 </script>
 
 <style>
-.assets-table .table-toolbar {
-  background-color: #f6f6f6;
-  height: 60px;
-}
-
-.table-toolbar .p-toolbar {
-  background-color: #f6f6f6;
-  border-color: #a4a4a4;
-  padding: 0.3rem 0 0 0.3rem;
-}
-
 .p-datatable-tbody {
-  min-height: 27.2rem;
-  max-height: 27.2rem;
+  min-height: 29.45rem;
+  max-height: 29.45rem;
 }
 
 .table-data .p-datatable .p-datatable-thead tr th {
