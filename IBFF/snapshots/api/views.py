@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from snapshots.models import Snapshot, update_or_create_snapshots
+from snapshots.models import Snapshot, get_or_create_snapshot
 from snapshots.api.serializers import SnapshotSerializer
 from rest_framework.permissions import IsAuthenticated
 from snapshots.api.permissions import IsPortfolioOwner
@@ -41,7 +41,6 @@ class SnapshotUOCViewSet(viewsets.ModelViewSet):
 
     def list(self, request, p_slug):
         portfolio = get_object_or_404(Portfolio, slug=p_slug, owner=request.user)
-        update_or_create_snapshots(portfolio)    
-        queryset = portfolio.snapshots
-        serializer = SnapshotSerializer(queryset, many=True)
+        snapshot = get_or_create_snapshot(portfolio)        
+        serializer = SnapshotSerializer(snapshot)
         return Response(serializer.data)

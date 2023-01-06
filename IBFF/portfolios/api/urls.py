@@ -34,7 +34,7 @@ urlpatterns = [
         name='snaphot-list',
     ),
     path(
-        'portfolios/<slug:p_slug>/snapshots/update_or_create/',
+        'portfolios/<slug:p_slug>/snapshots/get_or_create/',
         snapshots_views.SnapshotUOCViewSet.as_view({'get': 'list'}),
         name='generate-snaphot-list',
     ),

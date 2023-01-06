@@ -25,7 +25,7 @@ class Snapshot(models.Model):
         return self.slug
 
 
-def update_or_create_snapshots(portfolio):
+def get_or_create_snapshot(portfolio):
     today = datetime.date.today()
     try:
         snapshot = Snapshot.objects.get(date__year=today.year)
@@ -52,3 +52,5 @@ def update_or_create_snapshots(portfolio):
             transactions_counter=portfolio.transactions_counter,
             transactions_cost=portfolio.transactions_cost
         )
+    
+    return Snapshot.objects.get(date__year=today.year)
