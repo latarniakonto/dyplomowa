@@ -1,6 +1,8 @@
+import datetime
 from rest_framework import serializers
 from portfolios.models import Portfolio
 from users.models import IBFFUser
+from snapshots.models import Snapshot
 
 
 class UserRelatedField(serializers.PrimaryKeyRelatedField):
@@ -23,6 +25,18 @@ class PortfolioSerializer(serializers.ModelSerializer):
         instance.deposit += addend
         instance.cash += addend
         instance.value += addend
-        instance.save()
 
+        today = datetime.date.today()
+        try:
+            snapshot = Snapshot.objects.get(
+                portfolio=instance, date__year=today.year - 1
+            )
+            instance.annual_gain = instance.value - snapshot.value
+            instance.annual_yield = instance.value / snapshot.value - 1
+
+        except Snapshot.DoesNotExist:
+            instance.annual_gain = instance.value - instance.deposit
+            instance.annual_yield = instance.value / instance.deposit - 1
+        
+        instance.save()
         return instance 

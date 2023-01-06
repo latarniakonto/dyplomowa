@@ -90,22 +90,7 @@ export default defineComponent({
     },
 
     handleDepositEdited(check: Check) {
-      if (check.deposit) {
-        this.portfolio.deposit += check.value;
-        this.portfolio.cashOnHand += check.value;
-        this.portfolio.value += check.value;
-      }
-
-      if (check.withdraw) {
-        this.portfolio.deposit -= check.value;
-        this.portfolio.cashOnHand -= check.value;
-        this.portfolio.value -= check.value;
-      }
-
-      if (check.override) {
-        this.portfolio.deposit = check.value;
-      }
-      this.performDepositUpdateRequest();
+      this.performDepositUpdateRequest(check);
       this.resourcesInfoTiles[0] = false;
     },
 
@@ -113,15 +98,26 @@ export default defineComponent({
       this.resourcesInfoTiles[0] = false;
     },
 
-    async performDepositUpdateRequest() {
+    async performDepositUpdateRequest(check: Check) {
       let endpoint = `/api/v1/portfolios/${this.portfolio.slug}/`;
       let method = "PATCH";
+      let deposit = this.portfolio.deposit;
+      if (check.deposit) {
+        deposit += check.value;
+      } else if (check.withdraw) {
+        deposit -= check.value;
+      }
       try {
         const response = await axios({
           method: method,
           url: endpoint,
-          data: { deposit: this.portfolio.deposit },
-        });        
+          data: { deposit: deposit },
+        });
+
+        this.portfolio.deposit = response.data.deposit;
+        this.portfolio.value = response.data.value;
+        this.portfolio.annualGain = response.data.annualGain;
+        this.portfolio.annualYield = response.data.annualYield;
       } catch (e: any) {
         console.error(e.response.statusText);
       }

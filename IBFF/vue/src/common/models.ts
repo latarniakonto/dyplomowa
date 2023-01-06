@@ -46,13 +46,11 @@ export class Check {
   value: number;
   deposit: Boolean;
   withdraw: Boolean;
-  override: Boolean;
 
   constructor() {
     this.value = 0;
     this.deposit = false;
-    this.withdraw = false;
-    this.override = false;
+    this.withdraw = false;    
   }
 }
 

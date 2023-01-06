@@ -43,8 +43,7 @@
             'p-invalid':
               depositEdited &&
               !check.deposit &&
-              !check.withdraw &&
-              !check.override,
+              !check.withdraw,
           }"
         >
           <ToggleButton
@@ -59,8 +58,7 @@
               'p-invalid':
                 depositEdited &&
                 !check.deposit &&
-                !check.withdraw &&
-                !check.override,
+                !check.withdraw,
             }"
             @change="check.deposit = setDepositAction()"
           />
@@ -76,35 +74,17 @@
               'p-invalid':
                 depositEdited &&
                 !check.deposit &&
-                !check.withdraw &&
-                !check.override,
+                !check.withdraw,
             }"
             @change="check.withdraw = setDepositAction()"
-          />
-          <ToggleButton
-            id="override"
-            v-model="check.override"
-            onLabel="Override money"
-            offLabel="Override money"
-            onIcon="pi pi-check"
-            offIcon="pi pi-times"
-            :class="{
-              'p-invalid':
-                depositEdited &&
-                !check.deposit &&
-                !check.withdraw &&
-                !check.override,
-            }"
-            @change="check.override = setDepositAction()"
-          />
+          />          
         </div>
         <small
           class="p-error"
           v-if="
             depositEdited &&
             !check.deposit &&
-            !check.withdraw &&
-            !check.override
+            !check.withdraw
           "
           >You need to specify a deposit action.</small
         >
@@ -129,8 +109,7 @@
         </div>
         <div class="operation-line mb-1 text-2xl">
           <span v-if="check.deposit" class="mdi mdi-plus"></span>
-          <span v-if="check.withdraw" class="mdi mdi-minus"></span>
-          <span v-if="check.override" class="mdi mdi-equal"></span>
+          <span v-if="check.withdraw" class="mdi mdi-minus"></span>          
         </div>
         <div>
           <span class="text-muted variable">New deposit value</span>
@@ -138,8 +117,7 @@
             v-if="
               check.value &&
               (check.deposit ||
-                check.withdraw ||
-                check.override)
+                check.withdraw)
             "
             class="font-medium variable-value"
           >
@@ -222,8 +200,7 @@ export default defineComponent({
       if (
         this.check.value &&
         (this.check.deposit ||
-          this.check.withdraw ||
-          this.check.override)
+          this.check.withdraw)
       ) {
         this.$emit("depositEdited", this.check);
 
@@ -234,8 +211,7 @@ export default defineComponent({
 
     setDepositAction(): Boolean {
       this.check.deposit = false;
-      this.check.withdraw = false;
-      this.check.override = false;
+      this.check.withdraw = false;      
 
       return true;
     },
@@ -273,10 +249,6 @@ export default defineComponent({
 
 #withdraw.p-togglebutton.p-button.p-highlight {
   background: red;
-}
-
-#override.p-togglebutton.p-button.p-highlight {
-  background: yellow;
 }
 
 .p-togglebutton.p-button.p-invalid {
