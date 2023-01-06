@@ -216,3 +216,45 @@ export function operationType(type: OperationType): string {
       return "";
   }
 }
+
+export interface SnapshotJSON {
+  uusid: String;
+  slug: String;
+  deposit: number;
+  value: number;
+  cashOnHand: number;
+  annualGain: Number;
+  annualYield: Number;
+  annualDividends: Number;
+  transactionsCost: Number;
+  transactionsCounter: Number;
+  date: string;
+}
+
+export class Snapshot {
+  id: String;
+  slug: String;
+  deposit: number;
+  value: number;
+  cashOnHand: number;
+  annualGain: Number;
+  annualYield: Number;
+  annualDividends: Number;
+  transactionsCost: Number;
+  transactionsCounter: Number;
+  date: Date;
+  
+  constructor(json: SnapshotJSON) {
+    this.id = json.uusid;
+    this.slug = json.slug;
+    this.deposit = json.deposit;
+    this.value = json.value;
+    this.cashOnHand = json.cashOnHand;
+    this.annualGain = json.annualGain;
+    this.annualYield = json.annualYield;
+    this.annualDividends = json.annualDividends;
+    this.transactionsCost = json.transactionsCost;
+    this.transactionsCounter = json.transactionsCounter;
+    this.date = new Date(json.date);
+  }
+}
