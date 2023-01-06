@@ -50,7 +50,7 @@ export class Check {
   constructor() {
     this.value = 0;
     this.deposit = false;
-    this.withdraw = false;    
+    this.withdraw = false;
   }
 }
 
@@ -77,7 +77,7 @@ export class Transaction {
   provision: number;
   date: Date;
   buy: Boolean;
-  sell: Boolean
+  sell: Boolean;
   portfolioSlug: String;
 
   constructor(json?: TransactionJSON) {
@@ -98,12 +98,11 @@ export class Transaction {
     this.sell = false;
     this.portfolioSlug = "";
   }
-
 }
 
 export enum TransactionType {
   Buy = 1,
-  Sell
+  Sell,
 }
 
 export function transactionType(type: TransactionType): string {
@@ -145,7 +144,7 @@ export class Asset {
   currentWeight: number;
   index?: number;
   uuaid: String;
-  
+
   constructor(json: AssetJSON) {
     this.id = json.uuaid;
     this.uuaid = json.uuaid;
@@ -164,7 +163,16 @@ export class Asset {
 }
 
 export function getPrintablePercantage(percantage: number): string {
-  return String(Math.round(percantage * 10000) / 100 ) + "%";
+  return String(Math.round(percantage * 10000) / 100) + "%";
+}
+
+export function getPrintableValue(value: number, decimalPlace: number): string {
+  let precision = 1;
+  while (decimalPlace > 0) {
+    precision *= 10;
+    decimalPlace--;
+  }
+  return String(Math.round(value * precision) / precision);
 }
 
 export interface DividendJSON {
@@ -179,12 +187,12 @@ export interface DividendJSON {
 export class Dividend {
   id: String;
   slug: String;
-  perShare?: number
+  perShare?: number;
   date: Date;
   asset?: Asset;
-  ticker: String
-  type: number
-  
+  ticker: String;
+  type: number;
+
   constructor(json?: DividendJSON) {
     this.id = json?.uuoid ?? "";
     this.slug = json?.slug ?? "";
@@ -195,7 +203,7 @@ export class Dividend {
     } else {
       this.date = new Date();
       this.asset = undefined;
-    }    
+    }
     this.ticker = this.asset?.ticker ?? "";
     this.type = json?.type ?? OperationType.Dividend;
   }
@@ -203,7 +211,7 @@ export class Dividend {
 
 export enum OperationType {
   Dividend = 1,
-  Sell
+  Sell,
 }
 
 export function operationType(type: OperationType): string {
@@ -241,7 +249,7 @@ export class Snapshot {
   transactionsCost: Number;
   transactionsCounter: Number;
   date: Date;
-  
+
   constructor(json: SnapshotJSON) {
     this.id = json.uusid;
     this.slug = json.slug;

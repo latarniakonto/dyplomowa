@@ -10,7 +10,9 @@
         <span class="font-medium text-xl">Number of Transactions</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">{{ portfolio.transactionsCounter }}</span>
+        <span class="text-bluegray-900 text-2xl">
+          {{ portfolio.transactionsCounter }}
+        </span>
       </div>
     </div>
     <div
@@ -22,7 +24,9 @@
         <span class="font-medium text-xl">Transactions Cost</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">{{ portfolio.transactionsCost }}</span>
+        <span class="text-bluegray-900 text-2xl">
+          {{ getPrintableValue(portfolio.transactionsCost, 2) }}
+        </span>
       </div>
     </div>
   </div>
@@ -30,6 +34,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { getPrintableValue } from "../../common/models";
 
 export default defineComponent({
   name: "FeesInfo",
@@ -40,8 +45,8 @@ export default defineComponent({
     portfolio: {
       type: Object,
       required: true,
-      default: {}
-    }
+      default: {},
+    },
   },
 
   data() {
@@ -61,6 +66,8 @@ export default defineComponent({
 
       this.feesInfoTiles[index] = !this.feesInfoTiles[index];
     },
+
+    getPrintableValue,
   },
 });
 </script>

@@ -10,7 +10,9 @@
         <span class="font-medium text-xl">Annual Gain</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">{{ portfolio.annualGain }}</span>
+        <span class="text-bluegray-900 text-2xl">
+          {{ getPrintableValue(portfolio.annualGain, 2) }}
+        </span>
       </div>
     </div>
     <div
@@ -36,7 +38,9 @@
         <span class="font-medium text-xl">Total Annual Dividends</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">{{ portfolio.annualDividends }}</span>
+        <span class="text-bluegray-900 text-2xl">
+          {{ getPrintableValue(portfolio.annualDividends, 2) }}
+        </span>
       </div>
     </div>
   </div>
@@ -44,7 +48,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { getPrintablePercantage } from "../../common/models";
+import { getPrintablePercantage, getPrintableValue } from "../../common/models";
 
 export default defineComponent({
   name: "PerformanceInfo",
@@ -55,8 +59,8 @@ export default defineComponent({
     portfolio: {
       type: Object,
       required: true,
-      default: {}
-    }
+      default: {},
+    },
   },
 
   data() {
@@ -78,6 +82,7 @@ export default defineComponent({
     },
 
     getPrintablePercantage,
+    getPrintableValue,
   },
 });
 </script>

@@ -10,8 +10,8 @@
       </div>
       <div v-if="!assetInfoTiles[5]">
         <span class="text-bluegray-900 text-2xl">
-          {{ asset.initialPrice }}</span
-        >
+          {{ getPrintableValue(asset.initialPrice, 3) }}
+        </span>
       </div>
       <div v-else class="p-inputgroup" @click="$event.stopPropagation()">
         <InputNumber
@@ -55,7 +55,7 @@
         />
         <span class="p-inputgroup-addon">PLN</span>
       </div>
-    </div>    
+    </div>
     <div
       class="asset-info-tile mb-2"
       :class="{ 'tile-active': assetInfoTiles[2] }"
@@ -167,7 +167,11 @@
 import { defineComponent } from "vue";
 import InputNumber from "primevue/inputnumber";
 import Tooltip from "primevue/tooltip";
-import { Asset, getPrintablePercantage } from "../../common/models";
+import {
+  Asset,
+  getPrintablePercantage,
+  getPrintableValue,
+} from "../../common/models";
 
 export default defineComponent({
   name: "AssetInfo",
@@ -222,8 +226,9 @@ export default defineComponent({
       let currentPrice = Number(e.value.replace(/\,/g, ""));
       this.$emit("currentPriceChanged", this.asset.index, currentPrice);
     },
-    
+
     getPrintablePercantage,
+    getPrintableValue,
   },
 });
 </script>

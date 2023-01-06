@@ -10,7 +10,9 @@
         <span class="font-medium text-xl">Deposit</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">{{ portfolio.deposit }}</span>
+        <span class="text-bluegray-900 text-2xl">
+          {{ getPrintableValue(portfolio.deposit, 2) }}
+        </span>
       </div>
     </div>
     <div
@@ -22,9 +24,9 @@
         <span class="font-medium text-xl">Cash on Hand</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">{{
-          portfolio.cashOnHand
-        }}</span>
+        <span class="text-bluegray-900 text-2xl">
+          {{ getPrintableValue(portfolio.cashOnHand, 2) }}
+        </span>
       </div>
     </div>
     <div
@@ -36,7 +38,9 @@
         <span class="font-medium text-xl">Portfolio Value</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">{{ portfolio.value }}</span>
+        <span class="text-bluegray-900 text-2xl">
+          {{ getPrintableValue(portfolio.value, 2) }}
+        </span>
       </div>
     </div>
     <div class="resources-crud">
@@ -53,7 +57,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import EditDepositDialog from "./EditDepositDialog.vue";
-import { Portfolio, Check } from "../../common/models";
+import { Portfolio, Check, getPrintableValue } from "../../common/models";
 import { axios } from "../../common/api.service";
 
 export default defineComponent({
@@ -122,6 +126,8 @@ export default defineComponent({
         console.error(e.response.statusText);
       }
     },
+
+    getPrintableValue,
   },
 });
 </script>

@@ -1,85 +1,88 @@
 <template>
   <div class="assets-table">
-      <div class="table-data">
-        <DataTable
-          ref="dt"
-          :value="assets"
-          dataKey="id"
-          :paginator="true"
-          :rows="5"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[5, 10]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} assets"
-          :scrollable="true"
+    <div class="table-data">
+      <DataTable
+        ref="dt"
+        :value="assets"
+        dataKey="id"
+        :paginator="true"
+        :rows="5"
+        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+        :rowsPerPageOptions="[5, 10]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} assets"
+        :scrollable="true"
+      >
+        <Column
+          field="ticker"
+          header="Ticker"
+          :sortable="true"
+          style="min-width: 2rem"
+        ></Column>
+        <Column
+          field="total"
+          header="Total"
+          :sortable="true"
+          style="min-width: 2rem"
+        ></Column>
+        <Column
+          field="initialPrice"
+          header="Initial Price"
+          :sortable="true"
+          style="min-width: 3rem"
         >
-          <Column
-            field="ticker"
-            header="Ticker"
-            :sortable="true"
-            style="min-width: 2rem"
-          ></Column>
-          <Column
-            field="total"
-            header="Total"
-            :sortable="true"
-            style="min-width: 2rem"
-          ></Column>
-          <Column
-            field="initialPrice"
-            header="Initial Price"
-            :sortable="true"
-            style="min-width: 3rem"
-          >
-          </Column>
-          <Column
-            field="currentPrice"
-            header="Current Price"
-            :sortable="true"
-            style="min-width: 3rem"
-          ></Column>
-          <Column
-            field="gain"
-            header="Profit/Loss"
-            :sortable="true"
-            style="min-width: 8rem"
-          >
-            <template #body="slotProps">
-              {{ getPrintablePercantage(slotProps.data.gain) }}
-            </template>
-          </Column>
-          <Column
-            field="initialWeight"
-            header="Initial Weight"
-            :sortable="true"
-            style="min-width: 3rem"
-          >
-            <template #body="slotProps">
-              {{ getPrintablePercantage(slotProps.data.initialWeight) }}
-            </template>
-          </Column>
-          <Column
-            field="currentWeight"
-            header="Current Weight"
-            :sortable="true"
-            style="min-width: 3rem"
-          >
-            <template #body="slotProps">
-              {{ getPrintablePercantage(slotProps.data.currentWeight) }}
-            </template>
-          </Column>
-          <Column style="min-width: 1rem">
-            <template #body="slotProps">
-              <button
-                type="button"
-                class="btn btn-warning btn-sm mr-1"
-                @click="analazyAsset(slotProps.data, slotProps.index)"
-              >
-                <i class="bi bi-info-circle"></i>
-              </button>
-            </template>
-          </Column>
-        </DataTable>
-      </div>    
+          <template #body="slotProps">
+            {{ getPrintableValue(slotProps.data.initialPrice, 3) }}
+          </template>
+        </Column>
+        <Column
+          field="currentPrice"
+          header="Current Price"
+          :sortable="true"
+          style="min-width: 3rem"
+        ></Column>
+        <Column
+          field="gain"
+          header="Profit/Loss"
+          :sortable="true"
+          style="min-width: 8rem"
+        >
+          <template #body="slotProps">
+            {{ getPrintablePercantage(slotProps.data.gain) }}
+          </template>
+        </Column>
+        <Column
+          field="initialWeight"
+          header="Initial Weight"
+          :sortable="true"
+          style="min-width: 3rem"
+        >
+          <template #body="slotProps">
+            {{ getPrintablePercantage(slotProps.data.initialWeight) }}
+          </template>
+        </Column>
+        <Column
+          field="currentWeight"
+          header="Current Weight"
+          :sortable="true"
+          style="min-width: 3rem"
+        >
+          <template #body="slotProps">
+            {{ getPrintablePercantage(slotProps.data.currentWeight) }}
+          </template>
+        </Column>
+        <Column style="min-width: 1rem">
+          <template #body="slotProps">
+            <button
+              type="button"
+              class="btn btn-warning btn-sm mr-1"
+              @click="analazyAsset(slotProps.data, slotProps.index)"
+            >
+              <i class="bi bi-info-circle"></i>
+            </button>
+          </template>
+        </Column>
+      </DataTable>
+    </div>
     <div class="table-crud">
       <AnalyzeAssetDialog
         :analyzeAssetDialog="analazyAssetDialog"
@@ -107,7 +110,8 @@ import {
   TransactionJSON,
   getPrintablePercantage,
   Dividend,
-  DividendJSON
+  DividendJSON,
+  getPrintableValue,
 } from "../../common/models";
 import { axios } from "../../common/api.service";
 
@@ -177,13 +181,14 @@ export default defineComponent({
         let jsons = response.data;
         jsons.forEach((json: any) => {
           this.assetOperations.push(new Dividend(json as DividendJSON));
-        });        
+        });
       } catch (e: any) {
         console.error(e.response);
       }
     },
 
-    getPrintablePercantage
+    getPrintablePercantage,
+    getPrintableValue,
   },
 });
 </script>

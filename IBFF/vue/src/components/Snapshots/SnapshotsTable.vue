@@ -21,15 +21,21 @@
         <div class="snapshot-details">
           <div class="d-inline-block mr-4 p-1">
             <span class="title">Deposit</span>
-            <span class="data">{{ slotProps.data.deposit }}</span>
+            <span class="data">
+              {{ getPrintableValue(slotProps.data.deposit, 2) }}
+            </span>
           </div>
           <div class="d-inline-block mr-4 p-1">
             <span class="title">Cash on Hand</span>
-            <span class="data">{{ slotProps.data.cashOnHand }}</span>
+            <span class="data">
+              {{ getPrintableValue(slotProps.data.cashOnHand, 2) }}
+            </span>
           </div>
           <div class="d-inline-block mr-4 p-1">
             <span class="title">Portfolio Value</span>
-            <span class="data">{{ slotProps.data.value }}</span>
+            <span class="data">
+              {{ getPrintableValue(slotProps.data.value, 2) }}
+            </span>
           </div>
           <div class="d-inline-block mr-4 p-1">
             <span class="title">No. of Transactions</span>
@@ -37,19 +43,27 @@
           </div>
           <div class="d-inline-block mr-4 p-1">
             <span class="title">Transactions Cost</span>
-            <span class="data">{{ slotProps.data.transactionsCost }}</span>
+            <span class="data">
+              {{ getPrintableValue(slotProps.data.transactionsCost, 2) }}
+            </span>
           </div>
           <div class="d-inline-block mr-4 p-1">
             <span class="title">Total Annual Gain</span>
-            <span class="data">{{ slotProps.data.annualGain }}</span>
+            <span class="data">
+              {{ getPrintableValue(slotProps.data.annualGain, 2) }}
+            </span>
           </div>
           <div class="d-inline-block mr-4 p-1">
             <span class="title">Total Annual Yield</span>
-            <span class="data">{{ slotProps.data.annualYield }}</span>
+            <span class="data">
+              {{ getPrintablePercantage(slotProps.data.annualYield, 2) }}
+            </span>
           </div>
           <div class="d-inline-block p-1">
             <span class="title">Total Annual Dividends</span>
-            <span class="data">{{ slotProps.data.annualDividends }}</span>
+            <span class="data">
+              {{ getPrintableValue(slotProps.data.annualDividends, 2) }}
+            </span>
           </div>
         </div>
       </template>
@@ -67,7 +81,11 @@ import InputText from "primevue/inputtext";
 import InputNumber from "primevue/inputnumber";
 import Dropdown from "primevue/dropdown";
 import Calendar from "primevue/calendar";
-import { Snapshot } from "../../common/models";
+import {
+  Snapshot,
+  getPrintableValue,
+  getPrintablePercantage,
+} from "../../common/models";
 
 export default defineComponent({
   name: "SnapshotsTable",
@@ -87,13 +105,13 @@ export default defineComponent({
     snapshots: {
       type: Array as () => Array<Snapshot>,
       required: true,
-      default: []
-    }
+      default: [],
+    },
   },
 
   data() {
-    return {      
-      expandedSnapshots: [] as Array<Snapshot>,      
+    return {
+      expandedSnapshots: [] as Array<Snapshot>,
     };
   },
 
@@ -106,7 +124,10 @@ export default defineComponent({
         "." +
         date.getFullYear().toString()
       );
-    },    
+    },
+
+    getPrintableValue,
+    getPrintablePercantage,
   },
 });
 </script>
@@ -127,7 +148,7 @@ export default defineComponent({
   background-color: #f6f6f6;
 }
 
-.snapshots-table .p-datatable .p-datatable-tbody .p-datatable-row-expansion  td {
+.snapshots-table .p-datatable .p-datatable-tbody .p-datatable-row-expansion td {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
