@@ -10,12 +10,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import AssetsTable from "./AssetsTable.vue";
-import {
-  Asset,
-  AssetJSON,
-  Portfolio,
-  PortfolioJSON,
-} from "../../common/models";
+import { Asset, AssetJSON } from "../../common/models";
 import { axios } from "../../common/api.service";
 
 export default defineComponent({
@@ -27,24 +22,18 @@ export default defineComponent({
 
   data() {
     return {
-      assets: [] as Array<Asset>,
-      portfolioSlug: "" as String,
+      assets: [] as Array<Asset>,      
     };
   },
 
   methods: {
     async getAssets() {
-      let endpoint = "api/v1/portfolios/";
+      let endpoint = `api/v1/portfolios/${this.$store.state.portfolio.slug}/assets/`;
 
       try {
         let response = await axios.get(endpoint);
         let jsons = response.data;
-        this.portfolioSlug = new Portfolio(jsons[0] as PortfolioJSON).slug;
 
-        endpoint += `${this.portfolioSlug}/assets/`;
-
-        response = await axios.get(endpoint);
-        jsons = response.data;
         jsons.forEach((json: any) => {
           this.assets.push(new Asset(json as AssetJSON));
         });

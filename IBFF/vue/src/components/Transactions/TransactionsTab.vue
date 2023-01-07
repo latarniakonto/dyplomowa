@@ -33,12 +33,7 @@ import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
 import TransactionsTable from "./TransactionsTable.vue";
 import AddTransactionDialog from "./AddTransactionDialog.vue";
-import {
-  Portfolio,
-  PortfolioJSON,
-  Transaction,
-  TransactionJSON,
-} from "../../common/models";
+import { Transaction, TransactionJSON } from "../../common/models";
 import { axios } from "../../common/api.service";
 import { toastSuccess, toastError } from "../../common/api.toast";
 
@@ -54,8 +49,7 @@ export default defineComponent({
 
   data() {
     return {
-      addTransactionDialog: false as Boolean,
-      portfolioSlug: "" as String,
+      addTransactionDialog: false as Boolean,      
       transactions: [] as Array<Transaction>,
     };
   },
@@ -66,7 +60,7 @@ export default defineComponent({
     },
 
     async handleTransactionAdded(transaction: Transaction) {
-      transaction.portfolioSlug = this.portfolioSlug;
+      transaction.portfolioSlug = this.$store.state.portfolio.slug;
       if (await this.performTransactionCreateRequest(transaction)) {
         this.transactions.push(transaction);
       }
@@ -91,17 +85,11 @@ export default defineComponent({
     },
 
     async getTransactions() {
-      let endpoint = "api/v1/portfolios/";
+      let endpoint = `api/v1/portfolios/${this.$store.state.portfolio.slug}/transactions/`;
 
       try {
         let response = await axios.get(endpoint);
         let jsons = response.data;
-        this.portfolioSlug = new Portfolio(jsons[0] as PortfolioJSON).slug;
-
-        endpoint += `${this.portfolioSlug}/transactions/`;
-
-        response = await axios.get(endpoint);
-        jsons = response.data;
         jsons.forEach((json: any) => {
           this.transactions.push(new Transaction(json as TransactionJSON));
         });

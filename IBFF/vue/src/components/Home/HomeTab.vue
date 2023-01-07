@@ -1,14 +1,13 @@
 <template>
   <div class="home-tab">
-    <PortfolioDashboard :portfolio="portfolios[0]" />
+    <PortfolioDashboard :portfolio="$store.state.portfolio" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import PortfolioDashboard from "./PortfolioDashboard.vue";
-import { Portfolio, PortfolioJSON } from "../../common/models";
-import { axios } from "../../common/api.service";
+import { Portfolio } from "../../common/models";
 
 export default defineComponent({
   name: "HomeTab",
@@ -17,32 +16,24 @@ export default defineComponent({
     PortfolioDashboard,
   },
 
-  props: {
-  },
-
   data() {
     return {
-      portfolios: [] as Array<Portfolio>
+      portfolio: new Object() as Portfolio
     };
   },
 
   methods: {
-    async getPortfolios() {
-      let endpoint = "api/v1/portfolios/";
-
-      try {
-        let response = await axios.get(endpoint);
-        let jsons = response.data as PortfolioJSON[];
-        this.portfolios.push(new Portfolio(jsons[0]));
-      } catch (e: any) {
-        console.error(e.response);
-      }
-    },
   },
 
-  created() {
-    this.getPortfolios();
-  },
+  async created() {
+    if (this.$store.state.portfolios.length === 0) {
+      await this.$store.dispatch("getPortfolios");
+    } else {
+      await this.$store.dispatch("getPortfolio");
+    }
+  }
+
+
 });
 </script>
 

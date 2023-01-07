@@ -34,14 +34,7 @@ import Toolbar from "primevue/toolbar";
 import RadioButton from "primevue/radiobutton";
 import DividendsTable from "./DividendsTable.vue";
 import AddDividendDialog from "./AddDividendDialog.vue";
-import {
-  Asset,
-  AssetJSON,
-  Portfolio,
-  PortfolioJSON,
-  Dividend,
-  DividendJSON,
-} from "../../common/models";
+import { Asset, AssetJSON, Dividend, DividendJSON } from "../../common/models";
 import { axios } from "../../common/api.service";
 import { toastSuccess, toastError } from "../../common/api.toast";
 
@@ -59,8 +52,7 @@ export default defineComponent({
   data() {
     return {
       addDividendDialog: false as Boolean,
-      assets: [] as Array<Asset>,
-      portfolioSlug: "" as String,
+      assets: [] as Array<Asset>,      
       dividends: [] as Array<Dividend>,
     };
   },
@@ -91,17 +83,11 @@ export default defineComponent({
     },
 
     async getDividends() {
-      let endpoint = "api/v1/portfolios/";
+      let endpoint = `api/v1/portfolios/${this.$store.state.portfolio.slug}/dividends/`;
 
       try {
         let response = await axios.get(endpoint);
         let jsons = response.data;
-        this.portfolioSlug = new Portfolio(jsons[0] as PortfolioJSON).slug;
-
-        endpoint += `${this.portfolioSlug}/dividends/`;
-
-        response = await axios.get(endpoint);
-        jsons = response.data;
         jsons.forEach((json: any) => {
           this.dividends.push(new Dividend(json as DividendJSON));
         });
@@ -111,7 +97,7 @@ export default defineComponent({
     },
 
     async getAssets() {
-      let endpoint = `api/v1/portfolios/${this.portfolioSlug}/assets/`;
+      let endpoint = `api/v1/portfolios/${this.$store.state.portfolio.slug}/assets/`;
 
       try {
         let response = await axios.get(endpoint);

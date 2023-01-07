@@ -24,12 +24,7 @@ import SnapshotsTable from "./SnapshotsTable.vue";
 import Toolbar from "primevue/toolbar";
 import Button from "primevue/button";
 import { axios } from "../../common/api.service";
-import {
-  Snapshot,
-  SnapshotJSON,
-  Portfolio,
-  PortfolioJSON,
-} from "../../common/models";
+import { Snapshot, SnapshotJSON } from "../../common/models";
 
 export default defineComponent({
   name: "TransactionsTab",
@@ -49,16 +44,11 @@ export default defineComponent({
 
   methods: {
     async getSnapshots() {
-      let endpoint = "api/v1/portfolios/";
+      let endpoint = `api/v1/portfolios/${this.$store.state.portfolio.slug}/snapshots/`;
 
       try {
         let response = await axios.get(endpoint);
-        let jsons = response.data as PortfolioJSON[];
-        this.portfolioSlug = new Portfolio(jsons[0]).slug;
-        endpoint += `${this.portfolioSlug}/snapshots/`;
-
-        response = await axios.get(endpoint);
-        jsons = response.data;
+        let jsons = response.data;
         jsons.forEach((json: any) => {
           this.snapshots.push(new Snapshot(json as SnapshotJSON));
         });
@@ -68,7 +58,7 @@ export default defineComponent({
     },
 
     async takeSnapshot() {
-      let endpoint = `api/v1/portfolios/${this.portfolioSlug}/snapshots/get_or_create/`;
+      let endpoint = `api/v1/portfolios/${this.$store.state.portfolio.slug}/snapshots/get_or_create/`;
 
       try {
         let response = await axios.get(endpoint);
