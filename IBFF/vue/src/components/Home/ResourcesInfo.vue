@@ -120,6 +120,7 @@ export default defineComponent({
 
         this.portfolio.deposit = response.data.deposit;
         this.portfolio.value = response.data.value;
+        this.portfolio.cashOnHand = response.data.cashOnHand;
         this.portfolio.annualGain = response.data.annualGain;
         this.portfolio.annualYield = response.data.annualYield;
       } catch (e: any) {
