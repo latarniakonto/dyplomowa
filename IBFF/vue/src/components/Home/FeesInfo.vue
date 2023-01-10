@@ -11,7 +11,7 @@
       </div>
       <div>
         <span class="text-bluegray-900 text-2xl">
-          {{ portfolio.transactionsCounter }}
+          {{ getPrintableValue(portfolio.transactionsCounter, 0) }}
         </span>
       </div>
     </div>
