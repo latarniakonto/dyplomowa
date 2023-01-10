@@ -1,6 +1,8 @@
 <template>
-  <AppBar />
-  <AppContent :content="content" />
+  <div>
+    <AppBar />
+    <AppContent :content="content" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -25,5 +27,9 @@ export default defineComponent({
       default: ""
     }
   },
+
+  async created() {
+    await this.$store.dispatch("getPortfolios", this.$route.query.slug);
+  }
 });
 </script>

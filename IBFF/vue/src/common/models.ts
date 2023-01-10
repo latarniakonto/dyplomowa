@@ -27,18 +27,18 @@ export class Portfolio {
   transactionsCost: Number;
   transactionsCounter: Number;
 
-  constructor(json: PortfolioJSON) {
-    this.id = json.uupid;
-    this.slug = json.slug;
-    this.name = json.name;
-    this.deposit = json.deposit;
-    this.value = json.value;
-    this.cashOnHand = json.cashOnHand;
-    this.annualGain = json.annualGain;
-    this.annualYield = json.annualYield;
-    this.annualDividends = json.annualDividends;
-    this.transactionsCost = json.transactionsCost;
-    this.transactionsCounter = json.transactionsCounter;
+  constructor(json?: PortfolioJSON) {
+    this.id = json?.uupid ?? "";
+    this.slug = json?.slug ?? "";
+    this.name = json?.name ?? "";
+    this.deposit = json?.deposit ?? 0;
+    this.value = json?.value ?? 0;
+    this.cashOnHand = json?.cashOnHand ?? 0;
+    this.annualGain = json?.annualGain ?? 0;
+    this.annualYield = json?.annualYield ?? 0;
+    this.annualDividends = json?.annualDividends ?? 0;
+    this.transactionsCost = json?.transactionsCost ?? 0;
+    this.transactionsCounter = json?.transactionsCounter ?? 0;
   }
 }
 

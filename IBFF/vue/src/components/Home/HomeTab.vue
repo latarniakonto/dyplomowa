@@ -24,16 +24,6 @@ export default defineComponent({
 
   methods: {
   },
-
-  async created() {
-    if (this.$store.state.portfolios.length === 0) {
-      await this.$store.dispatch("getPortfolios");
-    } else {
-      await this.$store.dispatch("getPortfolio");
-    }
-  }
-
-
 });
 </script>
 

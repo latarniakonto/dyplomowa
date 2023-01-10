@@ -9,6 +9,12 @@ const routes: Array<RouteRecordRaw> = [
     props: { content: "Home" }
   },
   {
+    path: "/:slug",    
+    redirect: to => {
+      return { path: "/", query: { slug: to.params.slug }};
+    }
+  },
+  {
     path: "/assets",
     name: "assets",
     component: AppView,

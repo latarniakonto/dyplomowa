@@ -14,11 +14,10 @@ class UserRelatedField(serializers.PrimaryKeyRelatedField):
 class PortfolioSerializer(serializers.ModelSerializer):
     slug = serializers.SlugField(read_only=True)
     cash_on_hand = serializers.FloatField(source='cash')
-    owner = UserRelatedField(required=True, allow_null=False)
 
     class Meta:
         model = Portfolio
-        exclude = ['cash']
+        exclude = ['cash', 'owner']
 
     def update(self, instance, validated_data):
         addend = validated_data.get('deposit') - instance.deposit

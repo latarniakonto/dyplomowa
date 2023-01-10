@@ -7,24 +7,26 @@ export default createStore({
   plugins: [createPersistedState()],
 
   state: {
-    portfolio: new Object() as Portfolio,
-    portfolios: [] as Array<Portfolio>
+    portfolio: {} as Portfolio,
+    portfolios: [] as Array<Portfolio>,
+    selectedPortfolio: -1 as number,
   },
 
   getters: {},
-  
+
   mutations: {
     setPortfolio(state: any, portfolio: Portfolio) {
       state.portfolio = portfolio;
+      state.selectedPortfolio = state.portfolios.indexOf(state.portfolio);      
     },
-    
+
     setPortfolios(state: any, portfolios: Array<Portfolio>) {
       state.portfolios = portfolios;
-    }
+    },
   },
 
   actions: {
-    async getPortfolios({ commit }): Promise<Boolean> {
+    async getPortfolios({ commit }, slug: String): Promise<Boolean> {
       let endpoint = "api/v1/portfolios/";
 
       try {
@@ -32,9 +34,26 @@ export default createStore({
         let jsons = response.data as PortfolioJSON[];
 
         let portfolios: Array<Portfolio> = [];
-        portfolios.push(new Portfolio(jsons[0]));
-        commit("setPortfolios", portfolios);
-        commit("setPortfolio", portfolios[0]);
+        jsons.forEach((json: any) => {
+          portfolios.push(new Portfolio(json));
+        });        
+        if (portfolios.length > 0) {
+          commit("setPortfolios", portfolios);
+          if (slug === undefined) {            
+            commit("setPortfolio", portfolios[0]);
+          } else {
+            commit(
+              "setPortfolio",
+              portfolios[
+                portfolios.findIndex(
+                  (portfolio: Portfolio) => portfolio.slug === slug
+                )
+              ]
+            );
+          }
+        } else {
+          commit("setPortfolio", {});
+        }
 
         return true;
       } catch (e: any) {
@@ -51,7 +70,7 @@ export default createStore({
         let response = await axios.get(endpoint);
         let json = response.data as PortfolioJSON;
 
-        let portfolio: Portfolio = new Object() as Portfolio;
+        let portfolio: Portfolio = {} as Portfolio;
         portfolio = new Portfolio(json);
         commit("setPortfolio", portfolio);
 
