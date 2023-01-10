@@ -21,10 +21,22 @@ const routes: Array<RouteRecordRaw> = [
     props: { content: "Assets" }
   },
   {
+    path: "/assets/:slug",    
+    redirect: to => {
+      return { path: "/assets", query: { slug: to.params.slug }};
+    }
+  },
+  {
     path: "/transactions",
     name: "transactions",
     component: AppView,
     props: { content: "Transactions" }
+  },
+  {
+    path: "/transactions/:slug",
+    redirect: to => {
+      return { path: "/transactions", query: { slug: to.params.slug }};
+    }
   },
   {
     path: "/operations",
@@ -33,11 +45,23 @@ const routes: Array<RouteRecordRaw> = [
     props: { content: "Operations" }
   },
   {
+    path: "/operations/:slug",    
+    redirect: to => {
+      return { path: "/operations", query: { slug: to.params.slug }};
+    }
+  },
+  {
     path: "/snapshots",
     name: "snapshots",
     component: AppView,
     props: { content: "Snapshots" }
     
+  },
+  {
+    path: "/snapshots/:slug",
+    redirect: to => {
+      return { path: "/snapshots", query: { slug: to.params.slug }};
+    }
   },
   {
     path: "/about",
