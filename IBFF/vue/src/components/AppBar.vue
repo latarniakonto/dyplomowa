@@ -47,6 +47,7 @@
           </v-card>
         </v-row>
       </v-container>
+      <v-btn class="absolute right-0 pr-3" href="/accounts/logout/">Logout</v-btn>
     </v-app-bar>
     <AddPortfolioDialog
       :addPortfolioDialog="addPortfolioDialog"
