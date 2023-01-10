@@ -1,8 +1,11 @@
 import { createStore } from "vuex";
+import createPersistedState from "vuex-persistedstate";
 import { Portfolio, PortfolioJSON } from "../common/models";
 import { axios } from "../common/api.service";
 
 export default createStore({
+  plugins: [createPersistedState()],
+
   state: {
     portfolio: new Object() as Portfolio,
     portfolios: [] as Array<Portfolio>
