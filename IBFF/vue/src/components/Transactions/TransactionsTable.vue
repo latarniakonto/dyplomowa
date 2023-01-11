@@ -82,35 +82,12 @@
         <template #body="slotProps">
           <button
             type="button"
-            class="btn btn-warning btn-sm mr-1"
-            @click="editTransaction(slotProps.data)"
-          >
-            <i class="bi bi-pencil-fill"></i>
-          </button>
-          <button
-            type="button"
             class="btn btn-danger btn-sm"
             @click="deleteTransaction(slotProps.data)"
           >
             <i class="bi bi-trash3-fill"></i>
           </button>
-        </template>
-        <template #editor="slotProps">
-          <button
-            type="button"
-            class="btn btn-warning btn-sm mr-1"
-            @click="submitTransaction(slotProps.data, slotProps.index)"
-          >
-            <i class="bi bi-check"></i>
-          </button>
-          <button
-            type="button"
-            class="btn btn-warning btn-sm"
-            @click="revertTransaction(slotProps.data)"
-          >
-            <i class="bi bi-x"></i>
-          </button>
-        </template>
+        </template>        
       </Column>
     </DataTable>
   </div>
@@ -180,31 +157,10 @@ export default defineComponent({
 
     transactionType,
 
-    editTransaction(transaction: Transaction) {
-      this.editingTransactions = [transaction];
-    },
-
     async deleteTransaction(transaction: Transaction) {
       this.editingTransactions = [];
       this.$emit("transactionDeleted", transaction);
-    },
-
-    submitTransaction(transaction: any, index: number) {
-      this.editingTransactions = [];
-      if (
-        this.transactions[index].ticker !== transaction.ticker ||
-        this.transactions[index].type !== transaction.type ||
-        this.transactions[index].price !== transaction.price ||
-        this.transactions[index].amount !== transaction.amount ||
-        this.transactions[index].provision !== transaction.provision ||
-        this.transactions[index].date !== transaction.date
-      )
-        this.$emit("transactionEdited", transaction, index);
-    },
-
-    revertTransaction(transaction: Transaction) {
-      this.editingTransactions = [];
-    },
+    },    
   },
 });
 </script>
@@ -228,29 +184,5 @@ export default defineComponent({
 
 .transactions-table .card {
   border-color: #a4a4a4;
-}
-
-.transactions-table .p-inputnumber .p-inputnumber-input {
-  width: 7rem;
-  height: 3rem;
-  padding: 0.5rem;
-}
-
-.transactions-table .p-inputtext {
-  width: 7rem;
-  height: 3rem;
-  padding: 0.5rem;
-}
-
-.transactions-table .p-calendar .p-inputtext {
-  width: 6.5rem;
-  height: 3rem;
-  padding: 0.5rem;
-}
-
-.transactions-table .p-dropdown .p-dropdown-label {
-  width: 3rem;
-  height: 3rem;
-  padding: 0.5rem;
 }
 </style>
