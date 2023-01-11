@@ -142,17 +142,18 @@ export default defineComponent({
       if (await this.performPortfolioDeleteRequest(portfolio)) {
         this.portfolios = this.portfolios.filter(
           (val) => val.id !== portfolio.id
-        );        
+        );
         await this.$store.commit("setPortfolios", this.portfolios);
         if (this.portfolios.length > 0) {
-          let portfolio = this.portfolios[Math.max(this.selectedPortfolio - 1, 0)];
+          let portfolio =
+            this.portfolios[Math.max(this.selectedPortfolio - 1, 0)];
           await this.$store.commit("setPortfolio", portfolio);
           await this.$router.replace(this.getPortfolioTabLink(portfolio));
           await this.$router.go(0);
-        } else {          
+        } else {
           await this.$store.commit("setPortfolio", {});
           await this.$router.replace(this.$route.path);
-          await this.$router.go(0);          
+          await this.$router.go(0);
         }
       }
       this.deletePortfolioDialog = false;
@@ -188,9 +189,7 @@ export default defineComponent({
       if (this.$route.path === "/") {
         return this.$route.path + portfolio.slug + "/";
       } else {
-        return (
-          this.$route.path + "/" + portfolio.slug + "/"
-        );
+        return this.$route.path + "/" + portfolio.slug + "/";
       }
     },
 
@@ -208,7 +207,10 @@ export default defineComponent({
   },
 
   async created() {
-    this.portfolios = await this.$store.state.portfolios;
+    if (this.$store.state.portfolios.length === 0) {
+      await this.$store.dispatch("getPortfolios");
+    }
+    this.portfolios = this.$store.state.portfolios;
     if (this.portfolios.length > 0) {
       if (this.$route.query.slug !== undefined) {
         this.selectedPortfolio = this.portfolios.findIndex(

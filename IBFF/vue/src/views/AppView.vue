@@ -27,9 +27,5 @@ export default defineComponent({
       default: ""
     }
   },
-
-  async created() {
-    await this.$store.dispatch("getPortfolios", this.$route.query.slug);
-  }
 });
 </script>
