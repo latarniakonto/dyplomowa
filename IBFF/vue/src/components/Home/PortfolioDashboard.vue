@@ -7,7 +7,7 @@
       <div class="d-inline-block">
         <ResourcesInfo :portfolio="portfolio" class="mr-4 mb-3" />
         <FeesInfo :portfolio="portfolio" class="mr-4 mb-3" />
-        <ChartsInfo v-if="portfolio.slug !== undefined" :portfolio="portfolio" />
+        <ChartsInfo v-if="portfolio.slug !== undefined" :portfolio="portfolio" class="mb-3"/>
       </div>
       <div class="d-inline-block align-top">
         <PerformanceInfo :portfolio="portfolio" />

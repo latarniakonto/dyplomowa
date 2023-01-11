@@ -7,10 +7,10 @@
       @click="toggleResourcesInfoTile(0)"
     >
       <div class="mb-2">
-        <span class="font-medium text-xl">Deposit</span>
+        <span class="title">Deposit</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">
+        <span class="text-bluegray-900 value">
           {{ getPrintableValue(portfolio.deposit, 2) }}
         </span>
       </div>
@@ -21,10 +21,10 @@
       @click="toggleResourcesInfoTile(1)"
     >
       <div class="mb-2">
-        <span class="font-medium text-xl">Cash on Hand</span>
+        <span class="title">Cash on Hand</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">
+        <span class="text-bluegray-900 value">
           {{ getPrintableValue(portfolio.cashOnHand, 2) }}
         </span>
       </div>
@@ -35,10 +35,10 @@
       @click="toggleResourcesInfoTile(2)"
     >
       <div class="mb-2">
-        <span class="font-medium text-xl">Portfolio Value</span>
+        <span class="title">Portfolio Value</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">
+        <span class="text-bluegray-900 value">
           {{ getPrintableValue(portfolio.value, 2) }}
         </span>
       </div>
@@ -164,10 +164,19 @@ export default defineComponent({
   padding-left: 0.5rem;
 }
 
-.resources .title {
+.resources h5.title {
   border-bottom: solid 2px;
   border-bottom-color: #a4a4a4;
   padding-left: 0.5rem;
   padding-bottom: 0.5rem;
+}
+
+.resources span.title {
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.resources span.value {
+  font-size: 1.5rem;
 }
 </style>

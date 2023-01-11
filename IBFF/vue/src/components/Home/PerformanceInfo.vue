@@ -7,10 +7,10 @@
       @click="togglePerformanceInfoTile(0)"
     >
       <div class="mb-2">
-        <span class="font-medium text-xl">Annual Gain</span>
+        <span class="title">Annual Gain</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">
+        <span class="text-bluegray-900 value">
           {{ getPrintableValue(portfolio.annualGain, 2) }}
         </span>
       </div>
@@ -21,10 +21,10 @@
       @click="togglePerformanceInfoTile(1)"
     >
       <div class="mb-2">
-        <span class="font-medium text-xl">Annual Yield</span>
+        <span class="title">Annual Yield</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">
+        <span class="text-bluegray-900 value">
           {{ getPrintablePercantage(portfolio.annualYield) }}
         </span>
       </div>
@@ -35,10 +35,10 @@
       @click="togglePerformanceInfoTile(2)"
     >
       <div class="mb-2">
-        <span class="font-medium text-xl">Total Annual Dividends</span>
+        <span class="title">Total Annual Dividends</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">
+        <span class="text-bluegray-900 value">
           {{ getPrintableValue(portfolio.annualDividends, 2) }}
         </span>
       </div>
@@ -142,10 +142,19 @@ export default defineComponent({
   width: 18.66rem;
 }
 
-.performance .title {
+.performance h5.title {
   border-bottom: solid 2px;
   border-bottom-color: #a4a4a4;
   padding-left: 0.5rem;
   padding-bottom: 0.5rem;
+}
+
+.performance span.title {
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.performance span.value {  
+  font-size: 1.5rem;
 }
 </style>

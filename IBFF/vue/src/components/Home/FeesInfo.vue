@@ -7,10 +7,10 @@
       @click="toggleFeesInfoTile(0)"
     >
       <div class="mb-2">
-        <span class="font-medium text-xl">Number of Transactions</span>
+        <span class="title">Number of Transactions</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">
+        <span class="text-bluegray-900 value">
           {{ getPrintableValue(portfolio.transactionsCounter, 0) }}
         </span>
       </div>
@@ -21,10 +21,10 @@
       @click="toggleFeesInfoTile(1)"
     >
       <div class="mb-2">
-        <span class="font-medium text-xl">Transactions Cost</span>
+        <span class="title">Transactions Cost</span>
       </div>
       <div>
-        <span class="text-bluegray-900 text-2xl">
+        <span class="text-bluegray-900 value">
           {{ getPrintableValue(portfolio.transactionsCost, 2) }}
         </span>
       </div>
@@ -102,10 +102,19 @@ export default defineComponent({
   width: 18.66rem;
 }
 
-.fees .title {
+.fees h5.title {
   border-bottom: solid 2px;
   border-bottom-color: #a4a4a4;
   padding-left: 0.5rem;
   padding-bottom: 0.5rem;
+}
+
+.fees span.title {
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.fees span.value {  
+  font-size: 1.5rem;
 }
 </style>
