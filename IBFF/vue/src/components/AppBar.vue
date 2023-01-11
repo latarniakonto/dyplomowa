@@ -47,7 +47,13 @@
           </v-card>
         </v-row>
       </v-container>
-      <v-btn class="absolute right-0 pr-3" href="/accounts/logout/">Logout</v-btn>
+      <v-btn
+        class="absolute right-0 pr-3"
+        href="/accounts/logout/"
+        @click="logout"
+      >
+        Logout
+      </v-btn>
     </v-app-bar>
     <AddPortfolioDialog
       :addPortfolioDialog="addPortfolioDialog"
@@ -190,6 +196,11 @@ export default defineComponent({
 
     changePortfolio(portfolio: Portfolio) {
       this.$store.commit("setPortfolio", portfolio);
+    },
+
+    logout() {
+      this.$store.commit("setPortfolios", []);
+      this.$store.commit("setPortfolio", {});
     },
 
     toastError,
