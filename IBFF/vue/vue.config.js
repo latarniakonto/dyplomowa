@@ -10,7 +10,7 @@ module.exports = defineConfig({
   publicPath:
     process.env.NODE_ENV === "production"
       ? "/static/dist/"
-      : "http://127.0.0.1:8080",
+      : "http://0.0.0.0:8080",
   outputDir: "../static/dist",
   indexPath: "../../templates/index.html",
   pages: {
@@ -21,10 +21,13 @@ module.exports = defineConfig({
   },
   devServer: {
     devMiddleware: {
-      publicPath: "http://127.0.0.1:8080",
+      publicPath: "http://0.0.0.0:8080",
       writeToDisk: (filePath) => filePath.endsWith("index.html"),
     },
     hot: "only",
     headers: { "Access-Control-Allow-Origin": "*" },
-  },
+    client: {
+      webSocketURL: "ws://0.0.0.0:8080/ws",
+    }
+  },  
 });

@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  backend:
+    build: ./IBFF      
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ./IBFF/vue
+    ports:
+      - "8080:8080"    
