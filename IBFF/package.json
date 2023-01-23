@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@vue/cli": "^5.0.8",
-    "vuex-persistedstate": "^4.1.0"
+    "@vue/cli": "^5.0.8"
   }
 }
