@@ -28,6 +28,10 @@ export default defineComponent({
 
   methods: {
     async getAssets() {
+      if (this.$store.state.portfolio.slug === undefined) {
+        return;
+      }
+
       let endpoint = `api/v1/portfolios/${this.$store.state.portfolio.slug}/assets/`;
 
       try {

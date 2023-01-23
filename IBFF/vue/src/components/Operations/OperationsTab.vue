@@ -59,6 +59,10 @@ export default defineComponent({
 
   methods: {
     addDividend() {
+      if (this.$store.state.portfolio.slug === undefined) {
+        return;
+      }
+
       this.addDividendDialog = true;
     },
 
@@ -83,6 +87,10 @@ export default defineComponent({
     },
 
     async getDividends() {
+      if (this.$store.state.portfolio.slug === undefined) {
+        return;
+      }
+
       let endpoint = `api/v1/portfolios/${this.$store.state.portfolio.slug}/dividends/`;
 
       try {
@@ -97,6 +105,10 @@ export default defineComponent({
     },
 
     async getAssets() {
+      if (this.$store.state.portfolio.slug === undefined) {
+        return;
+      }
+
       let endpoint = `api/v1/portfolios/${this.$store.state.portfolio.slug}/assets/`;
 
       try {

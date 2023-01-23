@@ -78,6 +78,10 @@ export default defineComponent({
     },
 
     async getAssets() {
+      if (this.portfolio.slug === undefined) {
+        return;
+      }
+  
       let endpoint = `api/v1/portfolios/${this.portfolio.slug}/assets/`;
 
       try {

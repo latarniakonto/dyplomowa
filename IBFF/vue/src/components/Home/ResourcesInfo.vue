@@ -83,6 +83,10 @@ export default defineComponent({
 
   methods: {
     toggleResourcesInfoTile(index: number) {
+      if (this.$store.state.portfolio.slug === undefined) {
+        return;
+      }
+
       for (let i = 0; i < this.resourcesInfoTiles.length; i++) {
         if (i == index) {
           continue;

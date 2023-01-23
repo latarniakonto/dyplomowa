@@ -56,6 +56,10 @@ export default defineComponent({
 
   methods: {
     addTransaction() {
+      if (this.$store.state.portfolio.slug === undefined) {
+        return;
+      }
+
       this.addTransactionDialog = true;
     },
 
@@ -85,6 +89,10 @@ export default defineComponent({
     },
 
     async getTransactions() {
+      if (this.$store.state.portfolio.slug === undefined) {
+        return;
+      }
+
       let endpoint = `api/v1/portfolios/${this.$store.state.portfolio.slug}/transactions/`;
 
       try {
