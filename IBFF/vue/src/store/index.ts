@@ -4,7 +4,9 @@ import { Portfolio, PortfolioJSON } from "../common/models";
 import { axios } from "../common/api.service";
 
 export default createStore({
-  plugins: [createPersistedState()],
+  plugins: [createPersistedState({
+    storage: window.sessionStorage
+  })],
 
   state: {
     portfolio: {} as Portfolio,
