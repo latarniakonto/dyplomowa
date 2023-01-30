@@ -46,11 +46,11 @@ export default defineComponent({
       }
     },
 
-    handleCurrentPriceChanged(asset: number, currentPrice: number) {
+    async handleCurrentPriceChanged(asset: number, currentPrice: number) {
       if (asset === undefined) {
         return;
       }
-      this.performCurrentPriceChangedRequest(asset, currentPrice)
+      await this.performCurrentPriceChangedRequest(asset, currentPrice)
       this.assets[asset].currentPrice = currentPrice;
 
       this.assets[asset].currentValue =
