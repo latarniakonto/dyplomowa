@@ -63,6 +63,12 @@ const routes: Array<RouteRecordRaw> = [
       return { path: "/snapshots", query: { slug: to.params.slug }};
     }
   },
+  {
+    path: "/:catchAll(.*)",
+    name: "404",
+    component: () =>
+      import("../views/NotFound.vue"),
+  },
 ];
 
 const router = createRouter({
