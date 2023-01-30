@@ -28,6 +28,20 @@ export default createStore({
   },
 
   actions: {
+    async refreshActivePortfolio({ commit, state }) {
+      if (state.portfolio === undefined || state.portfolio.slug === undefined) {
+        return;
+      }
+
+      let endpoint = `api/v1/portfolios/${state.portfolio.slug}/`;
+      try {
+        let response = await axios.get(endpoint);
+        let json = response.data as PortfolioJSON;        
+        commit("setPortfolio", new Portfolio(json));
+      } catch (e: any) {
+        console.error(e.response);
+      }
+    },
     async getPortfolios({ commit }, slug: String): Promise<Boolean> {
       let endpoint = "api/v1/portfolios/";
 

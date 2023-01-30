@@ -24,6 +24,10 @@ export default defineComponent({
 
   methods: {
   },
+
+  async created() {
+    await this.$store.dispatch("refreshActivePortfolio");
+  }
 });
 </script>
 
