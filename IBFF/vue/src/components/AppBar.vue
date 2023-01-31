@@ -103,7 +103,7 @@ export default defineComponent({
     async handlePortfolioAdded(portfolio: Portfolio) {
       if (await this.performPortfolioCreateRequest(portfolio)) {
         this.$store.commit("setPortfolio", portfolio);
-        this.portfolios = await this.$store.dispatch("getPortfolios");
+        this.portfolios = await this.$store.dispatch("getPortfolios", portfolio.slug);
         await this.$router.push(this.getPortfolioTabLink(portfolio));
         await this.$router.go(0);
       }
