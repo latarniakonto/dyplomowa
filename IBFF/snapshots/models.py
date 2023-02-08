@@ -28,7 +28,7 @@ class Snapshot(models.Model):
 def get_or_create_snapshot(portfolio):
     today = datetime.date.today()
     try:
-        snapshot = Snapshot.objects.get(date__year=today.year)
+        snapshot = Snapshot.objects.get(portfolio=portfolio, date__year=today.year)
         snapshot.annual_dividends = portfolio.annual_dividends
         snapshot.annual_gain = portfolio.annual_gain
         snapshot.annual_yield = portfolio.annual_yield
@@ -53,4 +53,4 @@ def get_or_create_snapshot(portfolio):
             transactions_cost=portfolio.transactions_cost
         )
     
-    return Snapshot.objects.get(date__year=today.year)
+    return Snapshot.objects.get(portfolio=portfolio, date__year=today.year)
