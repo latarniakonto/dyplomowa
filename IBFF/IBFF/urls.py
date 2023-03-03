@@ -18,6 +18,7 @@ from django.urls import include, path, re_path
 from django_registration.backends.one_step.views import RegistrationView
 from users.forms import IBFFUserForm
 from core.views import IndexTemplateView
+from django.contrib.auth.views import LoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +28,7 @@ urlpatterns = [
         RegistrationView.as_view(form_class=IBFFUserForm, success_url='/'),
         name='django_registration_register'
     ),
+    path('accounts/login/', LoginView.as_view(), name='accounts_login'),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('api-auth/', include('rest_framework.urls')),
