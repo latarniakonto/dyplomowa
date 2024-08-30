@@ -1,0 +1,461 @@
+@{
+    ViewData["Title"] = "Operation Page";
+}
+
+<div class="container">
+    <div class="row h-100">
+        <div class="col-sm h-100 d-flex flex-column">
+            <div class="box flex-fill p-0">
+               <div class="table">
+                    <section class="table__header">
+                        <h1 class="">Operations</h1>
+                        <div class="search-group">
+                            <input type="search" placeholder="Search Data...">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+</svg>
+                            <button class="add_operation">+ Add New</button>
+                        </div>
+                    </section>
+                    <section class="table__body">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>ID <span class="icon-arrow">&UpArrow;</span></th>
+                                <th>Type <span class="icon-arrow">&UpArrow;</span></th>
+                                <th>Date <span class="icon-arrow">&UpArrow;</span></th>
+                                <th>Actions <span class="icon-arrow">&UpArrow;</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <p class="operation__type deposit">Deposit</p>
+                                </td>
+                                <td>08.08.2024</td>
+                                <td>
+                                    <div id="btn-group">
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-check"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-clock-history"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>
+                                    <p class="operation__type deposit">Deposit</p>
+                                </td>
+                                <td>08.09.2024</td>
+                                <td>
+                                    <div id="btn-group">
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-check"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-clock-history"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>
+                                    <p class="operation__type withdraw">Withdraw</p>
+                                </td>
+                                <td>08.09.2025</td>
+                                <td>
+                                    <div id="btn-group">
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-check"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-clock-history"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>
+                                    <p class="operation__type withdraw">Withdraw</p>
+                                </td>
+                                <td>08.09.2026</td>
+                                <td>
+                                    <div id="btn-group">
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-check"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-clock-history"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>
+                                  <p class="operation__type deposit">Deposit</p>
+                                </td>
+                                <td>08.09.2027</td>
+                                <td>
+                                    <div id="btn-group">
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-check"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-clock-history"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>
+                                    <p class="operation__type deposit">Deposit</p>
+                                </td>
+                                <td>08.09.2028</td>
+                                <td>
+                                    <div id="btn-group">
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-check"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-clock-history"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </section>
+               </div> 
+            </div>
+            <div class="box flex-fill">
+               Box 3 
+            </div>
+        </div>
+        <div class="col-sm h-100 d-flex flex-column">
+            <div class="box flex-fill">Box 1</div>
+            <div class="box flex-fill">Box 2</div> 
+        </div>
+    </div>
+</div>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+table {
+    width: 100%;
+}
+
+table, th td {
+    //padding: 1rem;
+    //border-collapes: collapse;
+    //text-align: left;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    //left: 0;
+    background-color: #dcdcdc;
+    cursor: pointer;
+}
+
+thead th span.icon-arrow {
+    width: 1.3rem;
+    height: 1.3rem;
+    display: inline-block;
+    border: 1.4px solid transparent;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 1rem;
+    margin-left: .5rem;
+    transition: .2s ease-in-out;
+}
+
+thead th.active, tbody td.active {
+    color: #6c00bd;
+}
+
+thead th:hover span.icon-arrow {
+    border: 1.4px solid #6c00bd; 
+}
+
+thead th:hover {
+    color: #6c00bd;
+}
+
+thead th.active span.icon-arrow {
+    background-color: #6c00bd;
+    color: #fff;
+
+}
+
+thead th.asc span.icon-arrow {
+    transform: rotate(180deg);
+}
+
+tbody tr:nth-child(even) {
+    background-color: #c8c8c8;
+}
+
+tbody tr {
+    --delay: .1s;
+    transition: .5s ease-in-out var(--delay), background-color 0s;
+}
+
+tbody tr.hide {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+tbody tr:hover {
+    background-color: #fff6 !important;
+}
+
+tbody tr td,
+tbody tr td p,
+tbody tr td svg {
+    transition: .2s ease-in-out
+}
+
+tbody tr.hide td,
+tbody tr.hide td p {
+    padding: 0;
+    font: 0 / 0 sans-serif;
+    transition: .2s ease-in-out .5s;
+}
+
+tbody tr.hide td svg {
+    width: 0;
+    height: 0;
+    transition .2s ease-in-out .5s;
+}
+
+div.table {
+    background-color: #ededed;
+    backdrop-filter: blur(7px);
+    border-radius: 10px;
+    overflow: auto;
+}
+
+.table__header {
+    width: 100%;
+    //height: 10%;
+    background-color: #b5b5b5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table__header .search-group {
+    width: 45%;
+    background-color: #fff5;
+    padding: 0 0 0 .8rem;
+    border-radius: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .2s;
+}
+
+.table__header .search-group:hover {
+    width: 55%;
+    background-color: #fff7;
+    box-shadow: 0 .1rem .4rem #0002;
+}
+
+.table__header .search-group svg {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.table__header .search-group input {
+    width: 100%;
+    padding: 0 .5rem 0 .3rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.table__header .search-group button {
+    outline: none;
+    border: none;
+    border-radius: 2rem;
+    white-space: nowrap;
+}
+
+.add_operation {
+    padding: 0 .8rem;
+    color: #ffffff;
+    background-color: #0298cf !important;
+}
+
+
+.table__body {
+    width: 95%;
+    max-height: calc((100vh - 80px - 200px) / 2);
+    background-color: #dcdcdc;
+    margin: .8rem auto;
+    border-radius: 10px;
+    overflow: auto;
+    overflow: overlay;
+}
+
+.table__body::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+
+.table__body::-webkit-scrollbar-thumb {
+    background-radius: 5px;
+    background-color: #0004;
+    visibility: hidden;
+}
+
+.table__body:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+}
+
+.operation__type {
+    margin: 0.4rem;
+    padding: 0.2rem 0.8rem;
+    border-radius: 2rem;
+    text-align: center;
+    display: inline-block;
+}
+
+.operation__type.deposit {
+    background-color: #86e49d;
+    color: #006b21;
+}
+
+.operation__type.withdraw {
+    background-color: #d893a3;
+    color: #b30021;
+}
+
+@@media (max-width: 1000px) {
+    td:not(:first-of-type) {
+        min-width: 12.1rem;
+    }
+}
+
+.container {
+    max-width: 100%;
+    height: 100%;
+    padding: 20px 60px 20px 60px;
+}
+
+.row {
+    height: 100%;
+}
+
+.box {
+	margin: 10px 0;
+	padding: 20px;
+	border-radius: 10px;
+	background-color: #ededed;
+	width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    height: calc((100vh - 80px) / 2);
+}
+
+</style>
+
+<script>
+const search = document.querySelector('.search-group input'),
+    table_rows = document.querySelectorAll('tbody tr'),
+    table_headings = document.querySelectorAll('thead th');
+
+search.addEventListener('input', searchTable);
+function searchTable() {
+    table_rows.forEach((row, i) => {
+        let table_data = row.textContent.toLowerCase(),
+            search_data = search.value.toLowerCase();
+
+        row.classList.toggle('hide', table_data.indexOf(search_data) < 0)
+        row.style.setProperty('--delay', i / 25 + 's');
+    });
+
+    document.querySelectorAll('tbody tr:not(.hide)').forEach((visible_row, i) => {
+        visible_row.style.backgroundColor = (i % 2 == 0) ? 'transparent' : '#c8c8c8';
+    });
+}
+
+table_headings.forEach((head, i) => {
+    let sort_asc = true;
+    head.onclick = () => {
+        table_headings.forEach(head => head.classList.remove('active'));
+        head.classList.add('active');
+        
+        document.querySelectorAll('td').forEach(td => td.classList.remove('active'));
+        table_rows.forEach(row => {
+            row.querySelectorAll('td')[i].classList.add('active');
+        });
+
+        head.classList.toggle('asc', sort_asc);
+        sort_asc = head.classList.contains('asc') ? false : true;
+
+        sortTable(i, sort_asc);
+    }
+});
+
+function sortTable(column, sort_asc) {
+    [...table_rows].sort((a, b) => {
+        let first_row = a.querySelectorAll('td')[column].textContent.toLowerCase(),
+            second_row = b.querySelectorAll('td')[column].textContent.toLowerCase();
+        return sort_asc ? (first_row < second_row ? 1 : -1) : (first_row < second_row ? -1 : 1);
+    }).map(sorted_row => document.querySelector('tbody').appendChild(sorted_row));
+}
+</script>
+
